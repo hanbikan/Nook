@@ -15,5 +15,5 @@ dependencyResolutionManagement {
 
 rootProject.name = "NookNook"
 include(":app")
-include(":feature:apps")
+include(":feature:phone")
 include(":feature:tutorial")

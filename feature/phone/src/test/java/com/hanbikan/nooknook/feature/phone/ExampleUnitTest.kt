@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.feature.apps
+package com.hanbikan.nooknook.feature.phone
 
 import org.junit.Test
 
