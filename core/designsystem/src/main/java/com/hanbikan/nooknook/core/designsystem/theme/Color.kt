@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.ui.theme
+package com.hanbikan.nooknook.core.designsystem.theme
 
 import androidx.compose.ui.graphics.Color
 

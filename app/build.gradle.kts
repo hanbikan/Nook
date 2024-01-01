@@ -58,6 +58,9 @@ android {
 
 dependencies {
 
+    implementation(project(mapOf("path" to ":feature:phone")))
+    implementation(project(mapOf("path" to ":core:designsystem")))
+
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -69,7 +72,6 @@ dependencies {
     implementation(libs.androidx.navigation.fragment.ktx)
     implementation(libs.androidx.navigation.ui.ktx)
     implementation(libs.androidx.navigation.compose)
-    implementation(project(mapOf("path" to ":feature:phone")))
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

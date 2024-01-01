@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.feature.phone"
+    namespace = "com.hanbikan.nooknook.core.designsystem"
     compileSdk = 34
 
     defaultConfig {
@@ -41,9 +41,6 @@ android {
 
 dependencies {
 
-    implementation(project(mapOf("path" to ":feature:tutorial")))
-    implementation(project(mapOf("path" to ":core:designsystem")))
-
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
     implementation(libs.activity.compose)
@@ -52,9 +49,6 @@ dependencies {
     implementation(libs.ui.graphics)
     implementation(libs.ui.tooling.preview)
     implementation(libs.material3)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.navigation.compose)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)

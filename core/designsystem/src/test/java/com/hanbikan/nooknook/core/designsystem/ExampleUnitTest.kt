@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.feature.phone
+package com.hanbikan.nooknook.core.designsystem
 
 import org.junit.Assert.assertEquals
 import org.junit.Test

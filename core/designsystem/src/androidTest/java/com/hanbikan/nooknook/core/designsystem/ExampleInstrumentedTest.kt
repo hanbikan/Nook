@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.feature.phone
+package com.hanbikan.nooknook.core.designsystem
 
 import androidx.test.ext.junit.runners.AndroidJUnit4
 import androidx.test.platform.app.InstrumentationRegistry
@@ -17,6 +17,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.hanbikan.nooknook.feature.phone.test", appContext.packageName)
+        assertEquals("com.hanbikan.nooknook.core.designsystem.test", appContext.packageName)
     }
 }

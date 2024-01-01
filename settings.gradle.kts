@@ -17,3 +17,4 @@ rootProject.name = "NookNook"
 include(":app")
 include(":feature:phone")
 include(":feature:tutorial")
+include(":core:designsystem")
