@@ -3,7 +3,10 @@ package com.hanbikan.nooknook.core.designsystem.theme
 import android.app.Activity
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Shapes
+import androidx.compose.material3.Typography
 import androidx.compose.material3.darkColorScheme
 import androidx.compose.material3.dynamicDarkColorScheme
 import androidx.compose.material3.dynamicLightColorScheme
@@ -16,15 +19,21 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+    primary = Brown,
+    secondary = DarkBlue,
+    tertiary = DarkYellow,
+    primaryContainer = CrimeWhite,
+    background = CrimeWhite,
+    onBackground = Brown,
 )
 
 private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+    primary = Brown,
+    secondary = DarkBlue,
+    tertiary = DarkYellow,
+    primaryContainer = CrimeWhite,
+    background = CrimeWhite,
+    onBackground = Brown,
 
     /* Other default colors to override
     background = Color(0xFFFFFBFE),
@@ -67,4 +76,19 @@ fun NnTheme(
         typography = Typography,
         content = content
     )
+}
+
+object NnTheme {
+
+    val colorScheme: ColorScheme
+        @Composable
+        get() = MaterialTheme.colorScheme
+
+    val typography: Typography
+        @Composable
+        get() = MaterialTheme.typography
+
+    val shapes: Shapes
+        @Composable
+        get() = MaterialTheme.shapes
 }
