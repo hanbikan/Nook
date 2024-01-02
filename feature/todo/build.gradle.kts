@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.feature.phone"
+    namespace = "com.hanbikan.nooknook.feature.todo"
     compileSdk = 34
 
     defaultConfig {
@@ -41,9 +41,12 @@ android {
 
 dependencies {
 
-    implementation(project(mapOf("path" to ":feature:tutorial")))
-    implementation(project(mapOf("path" to ":feature:todo")))
-    implementation(project(mapOf("path" to ":core:designsystem")))
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
