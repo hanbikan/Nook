@@ -1,4 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="welcome_text">%s님~ 안녕하세요!</string>
+    <string name="progress">진행도</string>
+    <string name="task_count">%d개의 할일</string>
+    <string name="done_task_percent">%d%% 완료</string>
 </resources>
