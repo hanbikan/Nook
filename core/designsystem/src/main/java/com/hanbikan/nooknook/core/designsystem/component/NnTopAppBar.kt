@@ -53,11 +53,10 @@ fun NnTopAppBar(
         },
         title = {
             titleRes?.let {
-                Text(
+                NnPrimaryText(
                     text = stringResource(id = titleRes),
                     style = NnTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
-                    color = NnTheme.colorScheme.primary,
                 )
             }
         },
