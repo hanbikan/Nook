@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.feature.todo"
+    namespace = "com.hanbikan.nooknook.core.database"
     compileSdk = 34
 
     defaultConfig {
@@ -27,41 +27,26 @@ android {
         }
     }
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_17
-        targetCompatibility = JavaVersion.VERSION_17
+        sourceCompatibility = JavaVersion.VERSION_1_8
+        targetCompatibility = JavaVersion.VERSION_1_8
     }
     kotlinOptions {
-        jvmTarget = "17"
-    }
-    buildFeatures {
-        compose = true
-    }
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.4.3"
+        jvmTarget = "1.8"
     }
 }
 
 dependencies {
 
-    implementation(project(mapOf("path" to ":core:designsystem")))
     implementation(project(mapOf("path" to ":core:domain")))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
     implementation(libs.material)
 
-    implementation(libs.core.ktx)
-    implementation(libs.lifecycle.runtime.ktx)
-    implementation(libs.lifecycle.runtime.compose)
-    implementation(libs.activity.compose)
-    implementation(platform(libs.compose.bom))
-    implementation(libs.ui)
-    implementation(libs.ui.graphics)
-    implementation(libs.ui.tooling.preview)
-    implementation(libs.material3)
-    implementation(libs.androidx.navigation.fragment.ktx)
-    implementation(libs.androidx.navigation.ui.ktx)
-    implementation(libs.androidx.navigation.compose)
+    implementation(libs.room.runtime)
+    annotationProcessor(libs.room.compiler)
+    kapt(libs.room.compiler)
+    implementation(libs.room.ktx)
 
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
@@ -70,14 +55,6 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-    androidTestImplementation(platform(libs.compose.bom))
-    androidTestImplementation(libs.ui.test.junit4)
-
-    debugImplementation(libs.ui.tooling)
-    debugImplementation(libs.ui.test.manifest)
 }
 
 // Allow references to generated code
