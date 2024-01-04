@@ -22,6 +22,5 @@ object DatabaseModule {
         context,
         NnDatabase::class.java,
         "nn-database"
-    )
-        .build()
+    ).build()
 }

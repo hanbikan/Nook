@@ -3,17 +3,21 @@ package com.hanbikan.nooknook.core.database.dao
 import androidx.room.Dao
 import androidx.room.Insert
 import androidx.room.Query
-import com.hanbikan.nooknook.core.database.entity.Task
+import androidx.room.Update
+import com.hanbikan.nooknook.core.database.entity.TaskEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TaskDao {
     @Query("SELECT * FROM task")
-    fun getAllTasks(): Flow<List<Task>>
+    fun getAllTasks(): Flow<List<TaskEntity>>
 
     @Insert
-    fun insertTasks(vararg tasks: Task)
+    suspend fun insertTasks(vararg taskEntities: TaskEntity)
+
+    @Update
+    suspend fun updateTask(taskEntity: TaskEntity)
 
     @Query("DELETE FROM task WHERE task.id == :id")
-    fun deleteTaskById(id: Int)
+    suspend fun deleteTaskById(id: Int)
 }
