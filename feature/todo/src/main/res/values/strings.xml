@@ -4,4 +4,5 @@
     <string name="progress">진행도</string>
     <string name="task_count">%d개의 할일</string>
     <string name="done_task_percent">%d%% 완료</string>
+    <string name="todo">TODO</string>
 </resources>
