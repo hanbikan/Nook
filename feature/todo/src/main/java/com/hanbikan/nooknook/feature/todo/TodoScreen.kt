@@ -25,6 +25,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nooknook.core.designsystem.component.NnPrimaryText
 import com.hanbikan.nooknook.core.designsystem.component.NnSecondaryText
@@ -34,7 +35,9 @@ import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 
 @Composable
-fun TodoScreen() {
+fun TodoScreen(
+    viewModel: TodoViewModel = hiltViewModel(),
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()

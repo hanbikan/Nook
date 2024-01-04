@@ -4,17 +4,19 @@ import androidx.lifecycle.ViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 
-class TodoViewModel: ViewModel() {
+class TodoViewModel : ViewModel() {
     val userName: String = "Isabelle"
 
-    private val _taskList: MutableStateFlow<List<Task>> = MutableStateFlow(listOf(
-        Task(false, "Daily meeting"),
-        Task(false, "Daily meeting"),
-        Task(true, "Daily meeting"),
-        Task(false, "Daily meeting"),
-        Task(false, "Daily meeting"),
-        Task(false, "Daily meeting"),
-    ))
+    private val _taskList: MutableStateFlow<List<Task>> = MutableStateFlow(
+        listOf(
+            Task(false, "Daily meeting"),
+            Task(false, "Daily meeting"),
+            Task(true, "Daily meeting"),
+            Task(false, "Daily meeting"),
+            Task(false, "Daily meeting"),
+            Task(false, "Daily meeting"),
+        )
+    )
     val taskList = _taskList.asStateFlow()
 
     fun addTask(task: Task) {
