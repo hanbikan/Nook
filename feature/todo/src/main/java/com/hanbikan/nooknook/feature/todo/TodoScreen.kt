@@ -9,6 +9,9 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
@@ -21,11 +24,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.input.nestedscroll.nestedScroll
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nooknook.core.designsystem.component.NnPrimaryText
 import com.hanbikan.nooknook.core.designsystem.component.NnSecondaryText
@@ -38,6 +43,10 @@ import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 fun TodoScreen(
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
+    val userName = viewModel.userName.collectAsStateWithLifecycle().value
+    val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
+    val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -51,30 +60,43 @@ fun TodoScreen(
                 AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
             ),
         )
-        TodoScreenContents()
+        TodoScreenContents(
+            userName = userName,
+            taskList = taskList,
+            doneTaskCount = doneTaskCount,
+            onClickCheckbox = viewModel::switchTask
+        )
     }
 }
 
 @Composable
-fun TodoScreenContents() {
-    val scrollState = rememberScrollState()
-
+fun TodoScreenContents(
+    userName: String,
+    taskList: List<Task>,
+    doneTaskCount: Int,
+    onClickCheckbox: (Int) -> Unit,
+) {
     Column(
         modifier = Modifier
-            .verticalScroll(scrollState)
             .padding(Dimens.SideMargin),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingLarge)
     ) {
         NnPrimaryText(
-            text = stringResource(id = R.string.welcome_text, "Isabelle"),
+            text = stringResource(id = R.string.welcome_text, userName),
             style = NnTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
         )
         WithTitle(title = stringResource(id = R.string.progress)) {
-            ProgressCard(10, 7)
+            ProgressCard(
+                taskCount = taskList.size,
+                doneTaskCount = doneTaskCount,
+            )
         }
         WithTitle(title = stringResource(id = R.string.todo)) {
-            TodoList()
+            TodoList(
+                taskList = taskList,
+                onClickCheckbox = onClickCheckbox,
+            )
         }
     }
 }
@@ -111,40 +133,41 @@ fun ProgressCard(
 }
 
 @Composable
-fun TodoList() {
-    Column(
+fun TodoList(
+    taskList: List<Task>,
+    onClickCheckbox: (Int) -> Unit,
+) {
+    LazyColumn(
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
     ) {
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
-        TaskCard(false, "Daily meeting")
+        itemsIndexed(taskList) { index, item ->
+            TaskCard(
+                task = item,
+                onClickCheckbox = { onClickCheckbox(index) }
+            )
+        }
     }
 }
 
 @Composable
 fun TaskCard(
-    isDone: Boolean,
-    name: String,
+    task: Task,
+    onClickCheckbox: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
-            .clickable { /* TODO: Switch checkbox */ }
+            .clickable { onClickCheckbox() }
             .padding(Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         Checkbox(
-            checked = isDone,
-            onCheckedChange = {},
+            checked = task.isDone,
+            onCheckedChange = { onClickCheckbox() },
         )
         NnPrimaryText(
-            text = name,
+            text = task.name,
             style = NnTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
