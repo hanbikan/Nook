@@ -1,18 +1,17 @@
 package com.hanbikan.nooknook.feature.todo
 
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
@@ -49,14 +48,17 @@ fun TodoScreen() {
                 AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
             ),
         )
-        TodoContents()
+        TodoScreenContents()
     }
 }
 
 @Composable
-fun TodoContents() {
+fun TodoScreenContents() {
+    val scrollState = rememberScrollState()
+
     Column(
         modifier = Modifier
+            .verticalScroll(scrollState)
             .padding(Dimens.SideMargin),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingLarge)
     ) {
@@ -108,12 +110,16 @@ fun ProgressCard(
 @Composable
 fun TodoList() {
     Column(
-        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
+        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
     ) {
         TaskCard(false, "Daily meeting")
-        TaskCard(false, "Checkout")
-        TaskCard(true, "Break stones")
-        TaskCard(false, "Visit museum")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
+        TaskCard(false, "Daily meeting")
     }
 }
 
