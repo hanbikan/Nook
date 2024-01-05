@@ -6,4 +6,5 @@
     <string name="done_task_percent">%d%% 완료</string>
     <string name="todo">TODO</string>
     <string name="add_task">할 일 추가</string>
+    <string name="sure_to_delete_task">할 일을 삭제합니다.</string>
 </resources>

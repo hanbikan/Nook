@@ -1,7 +1,8 @@
 package com.hanbikan.nooknook.feature.todo
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,8 +23,6 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -34,7 +33,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
-import com.hanbikan.nooknook.core.designsystem.component.DialogWithTextField
+import com.hanbikan.nooknook.core.designsystem.component.NnDialog
+import com.hanbikan.nooknook.core.designsystem.component.NnDialogWithTextField
 import com.hanbikan.nooknook.core.designsystem.component.NnText
 import com.hanbikan.nooknook.core.designsystem.component.NnTopAppBar
 import com.hanbikan.nooknook.core.designsystem.component.WithTitle
@@ -46,7 +46,8 @@ import com.hanbikan.nooknook.core.domain.model.Task
 fun TodoScreen(
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
-    val isAddDialogShown = remember { mutableStateOf(false) }
+    val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
+    val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
 
     val userName = viewModel.userName.collectAsStateWithLifecycle().value
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
@@ -70,7 +71,8 @@ fun TodoScreen(
                 userName = userName,
                 taskList = taskList,
                 doneTaskCount = doneTaskCount,
-                onClickCheckbox = viewModel::switchTask
+                onClickCheckbox = viewModel::switchTask,
+                onLongClickTask = viewModel::onLongClickTask
             )
         }
 
@@ -78,7 +80,7 @@ fun TodoScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.SpacingLarge),
-            onClick = { isAddDialogShown.value = true },
+            onClick = viewModel::switchAddTaskDialog,
             containerColor = NnTheme.colorScheme.primary,
         ) {
             Icon(
@@ -87,14 +89,19 @@ fun TodoScreen(
             )
         }
 
-        if (isAddDialogShown.value) {
-            DialogWithTextField(
-                onDismissRequest = { isAddDialogShown.value = false },
-                onConfirmation = {
-                    viewModel.addTask(it)
-                    isAddDialogShown.value = false
-                },
-                title = stringResource(id = R.string.add_task)
+        if (isAddTaskDialogShown) {
+            NnDialogWithTextField(
+                title = stringResource(id = R.string.add_task),
+                onDismissRequest = viewModel::switchAddTaskDialog,
+                onConfirmation = { viewModel.addTask(it) }
+            )
+        }
+
+        if (isDeleteTaskDialogShown) {
+            NnDialog(
+                description = stringResource(id = R.string.sure_to_delete_task),
+                onDismissRequest = viewModel::switchDeleteTaskDialog,
+                onConfirmation = viewModel::deleteTask
             )
         }
     }
@@ -106,6 +113,7 @@ fun TodoScreenContents(
     taskList: List<Task>,
     doneTaskCount: Int,
     onClickCheckbox: (Int) -> Unit,
+    onLongClickTask: (Task) -> Unit,
 ) {
     Column(
         modifier = Modifier
@@ -127,6 +135,7 @@ fun TodoScreenContents(
             TodoList(
                 taskList = taskList,
                 onClickCheckbox = onClickCheckbox,
+                onLongClickTask = onLongClickTask,
             )
         }
     }
@@ -169,6 +178,7 @@ fun ProgressCard(
 fun TodoList(
     taskList: List<Task>,
     onClickCheckbox: (Int) -> Unit,
+    onLongClickTask: (Task) -> Unit,
 ) {
     LazyColumn(
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
@@ -176,22 +186,28 @@ fun TodoList(
         itemsIndexed(taskList) { index, item ->
             TaskCard(
                 task = item,
-                onClickCheckbox = { onClickCheckbox(index) }
+                onClickCheckbox = { onClickCheckbox(index) },
+                onLongClickTask = { onLongClickTask(item) }
             )
         }
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCard(
     task: Task,
     onClickCheckbox: () -> Unit,
+    onLongClickTask: () -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
-            .clickable { onClickCheckbox() }
+            .combinedClickable(
+                onClick = onClickCheckbox,
+                onLongClick = onLongClickTask
+            )
             .padding(Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {
