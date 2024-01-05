@@ -37,8 +37,9 @@ class TodoViewModel @Inject constructor(
         taskList.count { it.isDone }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
 
-    fun addTask(task: Task) {
+    fun addTask(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
+            val task = Task(0, name, false)
             addTaskUseCase(task)
         }
     }

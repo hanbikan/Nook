@@ -7,7 +7,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextLayoutResult
 import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
@@ -16,9 +15,10 @@ import com.hanbikan.nooknook.core.designsystem.theme.Fonts
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 
 @Composable
-fun NnPrimaryText(
+fun NnText(
     text: String,
     modifier: Modifier = Modifier,
+    color: Color = NnTheme.colorScheme.primary,
     fontWeight: FontWeight? = null,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
@@ -30,34 +30,7 @@ fun NnPrimaryText(
     Text(
         text = text,
         modifier = modifier,
-        color = NnTheme.colorScheme.primary,
-        fontWeight = fontWeight,
-        fontFamily = Fonts.joa,
-        textDecoration = textDecoration,
-        textAlign = textAlign,
-        overflow = overflow,
-        maxLines = maxLines,
-        onTextLayout = onTextLayout,
-        style = style
-    )
-}
-
-@Composable
-fun NnSecondaryText(
-    text: String,
-    modifier: Modifier = Modifier,
-    fontWeight: FontWeight? = null,
-    textDecoration: TextDecoration? = null,
-    textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
-    maxLines: Int = Int.MAX_VALUE,
-    onTextLayout: (TextLayoutResult) -> Unit = {},
-    style: TextStyle = LocalTextStyle.current
-) {
-    Text(
-        text = text,
-        modifier = modifier,
-        color = NnTheme.colorScheme.secondary,
+        color = color,
         fontWeight = fontWeight,
         fontFamily = Fonts.joa,
         textDecoration = textDecoration,

@@ -22,6 +22,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -32,8 +34,8 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
-import com.hanbikan.nooknook.core.designsystem.component.NnPrimaryText
-import com.hanbikan.nooknook.core.designsystem.component.NnSecondaryText
+import com.hanbikan.nooknook.core.designsystem.component.DialogWithTextField
+import com.hanbikan.nooknook.core.designsystem.component.NnText
 import com.hanbikan.nooknook.core.designsystem.component.NnTopAppBar
 import com.hanbikan.nooknook.core.designsystem.component.WithTitle
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
@@ -44,6 +46,8 @@ import com.hanbikan.nooknook.core.domain.model.Task
 fun TodoScreen(
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
+    val isAddDialogShown = remember { mutableStateOf(false) }
+
     val userName = viewModel.userName.collectAsStateWithLifecycle().value
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
     val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
@@ -74,12 +78,22 @@ fun TodoScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.SpacingLarge),
-            onClick = { /*TODO*/ },
+            onClick = { isAddDialogShown.value = true },
             containerColor = NnTheme.colorScheme.primary,
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = stringResource(id = R.string.add_task),
+            )
+        }
+
+        if (isAddDialogShown.value) {
+            DialogWithTextField(
+                onDismissRequest = { isAddDialogShown.value = false },
+                onConfirmation = {
+                    viewModel.addTask(it)
+                    isAddDialogShown.value = false
+                }
             )
         }
     }
@@ -97,7 +111,7 @@ fun TodoScreenContents(
             .padding(Dimens.SideMargin),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingLarge)
     ) {
-        NnPrimaryText(
+        NnText(
             text = stringResource(id = R.string.welcome_text, userName),
             style = NnTheme.typography.headlineLarge,
             fontWeight = FontWeight.Bold,
@@ -132,11 +146,12 @@ fun ProgressCard(
             .padding(Dimens.SpacingMedium, Dimens.SpacingLarge),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
     ) {
-        NnSecondaryText(
+        NnText(
             text = stringResource(id = R.string.task_count, taskCount),
-            style = NnTheme.typography.bodySmall
+            style = NnTheme.typography.bodySmall,
+            color = NnTheme.colorScheme.primaryContainer,
         )
-        NnPrimaryText(
+        NnText(
             text = stringResource(id = R.string.done_task_percent, doneTaskPercent),
             style = NnTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
@@ -183,7 +198,7 @@ fun TaskCard(
             checked = task.isDone,
             onCheckedChange = { onClickCheckbox() },
         )
-        NnPrimaryText(
+        NnText(
             text = task.name,
             style = NnTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,

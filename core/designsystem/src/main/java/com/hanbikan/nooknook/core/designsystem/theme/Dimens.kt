@@ -13,5 +13,7 @@ object Dimens {
 
     val SpacingLarge: Dp = 24.dp
 
+    val SpacingExtraLarge: Dp = 32.dp
+
     val SideMargin: Dp = SpacingLarge
 }
