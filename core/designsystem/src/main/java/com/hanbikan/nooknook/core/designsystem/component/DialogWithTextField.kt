@@ -11,22 +11,38 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Card
 import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
+import com.hanbikan.nooknook.core.designsystem.R
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun DialogWithTextField(
+    title: String,
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
 ) {
     val input = remember { mutableStateOf("") }
+    val focusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
+    LaunchedEffect(Unit) {
+        focusRequester.requestFocus()
+        keyboardController?.show()
+    }
 
     Dialog(onDismissRequest = { onDismissRequest() }) {
         // Draw a rectangle shape with rounded corners inside the dialog
@@ -44,7 +60,7 @@ fun DialogWithTextField(
             ) {
                 NnText(
                     modifier = Modifier.fillMaxWidth(),
-                    text = "할 일",
+                    text = title,
                     style = NnTheme.typography.titleMedium
                 )
                 Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
@@ -54,6 +70,7 @@ fun DialogWithTextField(
                         input.value = it
                     },
                     singleLine = true,
+                    modifier = Modifier.focusRequester(focusRequester)
                 )
                 Row(
                     modifier = Modifier
@@ -62,12 +79,12 @@ fun DialogWithTextField(
                 ) {
                     NnTextButton(
                         onClick = onDismissRequest,
-                        text = "취소",
+                        text = stringResource(id = R.string.dismiss),
                         modifier = Modifier.weight(1f)
                     )
                     NnTextButton(
                         onClick = { onConfirmation(input.value) },
-                        text = "확인",
+                        text = stringResource(id = R.string.confirm),
                         modifier = Modifier.weight(1f)
                     )
                 }
@@ -79,5 +96,5 @@ fun DialogWithTextField(
 @Composable
 @Preview
 fun DialogWithTextFieldPreview() {
-    DialogWithTextField({}, {})
+    DialogWithTextField(title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
 }

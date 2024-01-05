@@ -1,4 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="top_app_bar_preview_title">Todo</string>
+    <string name="confirm">확인</string>
+    <string name="dismiss">취소</string>
 </resources>

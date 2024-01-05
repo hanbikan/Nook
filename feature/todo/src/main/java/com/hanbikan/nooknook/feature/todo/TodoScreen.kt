@@ -93,7 +93,8 @@ fun TodoScreen(
                 onConfirmation = {
                     viewModel.addTask(it)
                     isAddDialogShown.value = false
-                }
+                },
+                title = stringResource(id = R.string.add_task)
             )
         }
     }
