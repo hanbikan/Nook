@@ -30,20 +30,11 @@ import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun DialogWithTextField(
-    title: String,
+fun NnDialog(
+    description: String,
     onDismissRequest: () -> Unit,
-    onConfirmation: (String) -> Unit,
+    onConfirmation: () -> Unit,
 ) {
-    val input = remember { mutableStateOf("") }
-    val focusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
-
-    LaunchedEffect(Unit) {
-        focusRequester.requestFocus()
-        keyboardController?.show()
-    }
-
     Dialog(onDismissRequest = { onDismissRequest() }) {
         // Draw a rectangle shape with rounded corners inside the dialog
         Card(
@@ -59,18 +50,8 @@ fun DialogWithTextField(
                 horizontalAlignment = Alignment.CenterHorizontally,
             ) {
                 NnText(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = title,
+                    text = description,
                     style = NnTheme.typography.titleMedium
-                )
-                Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-                NnTextField(
-                    value = input.value,
-                    onValueChange = {
-                        input.value = it
-                    },
-                    singleLine = true,
-                    modifier = Modifier.focusRequester(focusRequester)
                 )
                 Row(
                     modifier = Modifier
@@ -83,7 +64,7 @@ fun DialogWithTextField(
                         modifier = Modifier.weight(1f)
                     )
                     NnTextButton(
-                        onClick = { onConfirmation(input.value) },
+                        onClick = onConfirmation,
                         text = stringResource(id = R.string.confirm),
                         modifier = Modifier.weight(1f)
                     )
@@ -95,6 +76,6 @@ fun DialogWithTextField(
 
 @Composable
 @Preview
-fun DialogWithTextFieldPreview() {
-    DialogWithTextField(title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
+fun NnDialogPreview() {
+    NnDialog(description = "할 일을 삭제합니다.", onDismissRequest = {}, onConfirmation = {})
 }
