@@ -3,6 +3,7 @@ package com.hanbikan.nooknook.feature.todo
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,9 +14,12 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Checkbox
+import androidx.compose.material3.FloatingActionButton
+import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -44,25 +48,40 @@ fun TodoScreen(
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
     val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NnTheme.colorScheme.background),
-    ) {
-        NnTopAppBar(
-            leftAppBarIcons = listOf(
-                AppBarIcon(imageVector = Icons.Default.Home, onClick = {})
-            ),
-            rightAppBarIcons = listOf(
-                AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
-            ),
-        )
-        TodoScreenContents(
-            userName = userName,
-            taskList = taskList,
-            doneTaskCount = doneTaskCount,
-            onClickCheckbox = viewModel::switchTask
-        )
+    Box {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(NnTheme.colorScheme.background),
+        ) {
+            NnTopAppBar(
+                leftAppBarIcons = listOf(
+                    AppBarIcon(imageVector = Icons.Default.Home, onClick = {})
+                ),
+                rightAppBarIcons = listOf(
+                    AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
+                ),
+            )
+            TodoScreenContents(
+                userName = userName,
+                taskList = taskList,
+                doneTaskCount = doneTaskCount,
+                onClickCheckbox = viewModel::switchTask
+            )
+        }
+
+        FloatingActionButton(
+            modifier = Modifier
+                .align(Alignment.BottomEnd)
+                .padding(Dimens.SpacingLarge),
+            onClick = { /*TODO*/ },
+            containerColor = NnTheme.colorScheme.primary,
+        ) {
+            Icon(
+                imageVector = Icons.Default.Add,
+                contentDescription = stringResource(id = R.string.add_task),
+            )
+        }
     }
 }
 

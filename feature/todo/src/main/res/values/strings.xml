@@ -5,4 +5,5 @@
     <string name="task_count">%d개의 할일</string>
     <string name="done_task_percent">%d%% 완료</string>
     <string name="todo">TODO</string>
+    <string name="add_task">Add task</string>
 </resources>
