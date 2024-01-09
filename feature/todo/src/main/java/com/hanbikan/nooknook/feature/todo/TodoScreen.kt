@@ -1,5 +1,6 @@
 package com.hanbikan.nooknook.feature.todo
 
+import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -27,6 +28,8 @@ import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -39,6 +42,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nooknook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nooknook.core.designsystem.component.NnDialog
 import com.hanbikan.nooknook.core.designsystem.component.NnDialogWithTextField
 import com.hanbikan.nooknook.core.designsystem.component.NnText
@@ -74,22 +78,20 @@ fun TodoScreen(
                     AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
                 ),
             )
-            when (uiState) {
-                TodoUiState.Success.NotEmpty -> {
-                    TodoScreenSuccess(
-                        userName = userName,
-                        taskList = taskList,
-                        doneTaskCount = doneTaskCount,
-                        onClickCheckbox = viewModel::switchTask,
-                        onLongClickTask = viewModel::onLongClickTask
-                    )
-                }
-                TodoUiState.Success.Empty -> {
-                    TodoScreenEmpty()
-                }
-                TodoUiState.Loading -> {
-                    // TODO
-                }
+            FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.NotEmpty) {
+                TodoScreenSuccess(
+                    userName = userName,
+                    taskList = taskList,
+                    doneTaskCount = doneTaskCount,
+                    onClickCheckbox = viewModel::switchTask,
+                    onLongClickTask = viewModel::onLongClickTask
+                )
+            }
+            FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
+                TodoScreenEmpty()
+            }
+            FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
+                // TODO
             }
         }
 
@@ -233,8 +235,7 @@ fun TaskCard(
 @Composable
 fun TodoScreenEmpty() {
     Column(
-        modifier = Modifier
-            .fillMaxSize(),
+        modifier = Modifier.fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.Center,
     ) {
