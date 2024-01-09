@@ -10,10 +10,12 @@ import com.hanbikan.nooknook.core.domain.usecase.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -26,19 +28,12 @@ class TodoViewModel @Inject constructor(
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
 ) : ViewModel() {
-    // Dialog
-    private val _isAddTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isAddTaskDialogShown = _isAddTaskDialogShown.asStateFlow()
+    // Ui state
+    private val _uiState: MutableStateFlow<TodoUiState> = MutableStateFlow(TodoUiState.Loading)
+    val uiState = _uiState.asStateFlow()
 
-    private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isDeleteTaskDialogShown = _isDeleteTaskDialogShown.asStateFlow()
-
-    // 제거할 작업을 잠시 여기에 저장한 뒤, delete task dialog에서 이 값을 참조하여 제거합니다.
-    private val _taskIdToDelete: MutableStateFlow<Int> = MutableStateFlow(-1)
-    val taskIdToDelete = _taskIdToDelete.asStateFlow()
-
-    // Data
-    private val _userName: MutableStateFlow<String> = MutableStateFlow("Isabelle")
+    // Data for UI
+    private val _userName: MutableStateFlow<String> = MutableStateFlow("Isabelle") // TODO
     val userName = _userName.asStateFlow()
 
     val taskList: StateFlow<List<Task>> = getAllTasksUseCase()
@@ -48,6 +43,28 @@ class TodoViewModel @Inject constructor(
     val doneTaskCount = taskList.mapLatest { taskList ->
         taskList.count { it.isDone }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+
+    // Dialog
+    private val _isAddTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isAddTaskDialogShown = _isAddTaskDialogShown.asStateFlow()
+
+    private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isDeleteTaskDialogShown = _isDeleteTaskDialogShown.asStateFlow()
+
+    // Long-click 시 제거할 작업을 잠시 여기에 저장한 뒤, 삭제 버튼을 누를 때 이 값을 참조하여 제거합니다.
+    private val _taskIdToDelete: MutableStateFlow<Int> = MutableStateFlow(-1)
+    val taskIdToDelete = _taskIdToDelete.asStateFlow()
+
+    init {
+        // Fake loading for UX
+        viewModelScope.launch(Dispatchers.IO) {
+            delay(500)
+            updateSuccessUiState()
+            taskList.collectLatest {
+                updateSuccessUiState()
+            }
+        }
+    }
 
     fun addTask(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
@@ -87,5 +104,18 @@ class TodoViewModel @Inject constructor(
     fun onLongClickTask(task: Task) {
         setTaskIdToDelete(task.id)
         switchDeleteTaskDialog()
+    }
+
+    private fun updateSuccessUiState() {
+        _uiState.value =
+            if (taskList.value.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
+    }
+}
+
+sealed interface TodoUiState {
+    object Loading : TodoUiState
+    sealed interface Success : TodoUiState {
+        object Empty : Success
+        object NotEmpty : Success
     }
 }

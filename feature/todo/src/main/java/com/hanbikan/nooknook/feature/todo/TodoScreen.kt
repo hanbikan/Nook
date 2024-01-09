@@ -1,6 +1,7 @@
 package com.hanbikan.nooknook.feature.todo
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Arrangement
@@ -12,6 +13,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -28,7 +30,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -51,6 +55,7 @@ fun TodoScreen(
     val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
     val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
 
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val userName = viewModel.userName.collectAsStateWithLifecycle().value
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
     val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
@@ -69,13 +74,23 @@ fun TodoScreen(
                     AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
                 ),
             )
-            TodoScreenContents(
-                userName = userName,
-                taskList = taskList,
-                doneTaskCount = doneTaskCount,
-                onClickCheckbox = viewModel::switchTask,
-                onLongClickTask = viewModel::onLongClickTask
-            )
+            when (uiState) {
+                TodoUiState.Success.NotEmpty -> {
+                    TodoScreenSuccess(
+                        userName = userName,
+                        taskList = taskList,
+                        doneTaskCount = doneTaskCount,
+                        onClickCheckbox = viewModel::switchTask,
+                        onLongClickTask = viewModel::onLongClickTask
+                    )
+                }
+                TodoUiState.Success.Empty -> {
+                    TodoScreenEmpty()
+                }
+                TodoUiState.Loading -> {
+                    // TODO
+                }
+            }
         }
 
         FloatingActionButton(
@@ -110,7 +125,7 @@ fun TodoScreen(
 }
 
 @Composable
-fun TodoScreenContents(
+fun TodoScreenSuccess(
     userName: String,
     taskList: List<Task>,
     doneTaskCount: Int,
@@ -122,12 +137,14 @@ fun TodoScreenContents(
             .padding(Dimens.SideMargin),
     ) {
         item {
+            // 웰컴 메시지
             NnText(
                 text = stringResource(id = R.string.welcome_text, userName),
                 style = NnTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
             )
 
+            // 진행도
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             TitleTextWithSpacer(title = stringResource(id = R.string.progress))
             ProgressCard(
@@ -135,10 +152,10 @@ fun TodoScreenContents(
                 doneTaskCount = doneTaskCount,
             )
 
+            // 투두리스트
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             TitleTextWithSpacer(title = stringResource(id = R.string.todo))
         }
-
         itemsIndexed(taskList) { index, item ->
             TaskCard(
                 task = item,
@@ -210,6 +227,24 @@ fun TaskCard(
             style = NnTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
+    }
+}
+
+@Composable
+fun TodoScreenEmpty() {
+    Column(
+        modifier = Modifier
+            .fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center
+    ) {
+        Image(
+            imageVector = ImageVector.vectorResource(id = R.drawable.no_data),
+            contentDescription = stringResource(id = R.string.empty_todo_list),
+            modifier = Modifier.size(Dimens.IconMedium)
+        )
+        Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+        NnText(text = stringResource(id = R.string.empty_todo_list))
     }
 }
 
