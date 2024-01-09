@@ -137,14 +137,14 @@ fun TodoScreenSuccess(
             .padding(Dimens.SideMargin),
     ) {
         item {
-            // 웰컴 메시지
+            // Welcome message
             NnText(
                 text = stringResource(id = R.string.welcome_text, userName),
                 style = NnTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
             )
 
-            // 진행도
+            // Progress card
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             TitleTextWithSpacer(title = stringResource(id = R.string.progress))
             ProgressCard(
@@ -152,7 +152,7 @@ fun TodoScreenSuccess(
                 doneTaskCount = doneTaskCount,
             )
 
-            // 투두리스트
+            // To-do list
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             TitleTextWithSpacer(title = stringResource(id = R.string.todo))
         }
@@ -236,7 +236,7 @@ fun TodoScreenEmpty() {
         modifier = Modifier
             .fillMaxSize(),
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center
+        verticalArrangement = Arrangement.Center,
     ) {
         Image(
             imageVector = ImageVector.vectorResource(id = R.drawable.no_data),
@@ -245,6 +245,7 @@ fun TodoScreenEmpty() {
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
         NnText(text = stringResource(id = R.string.empty_todo_list))
+        Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
     }
 }
 
