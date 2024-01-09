@@ -7,8 +7,10 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
@@ -37,7 +39,7 @@ import com.hanbikan.nooknook.core.designsystem.component.NnDialog
 import com.hanbikan.nooknook.core.designsystem.component.NnDialogWithTextField
 import com.hanbikan.nooknook.core.designsystem.component.NnText
 import com.hanbikan.nooknook.core.designsystem.component.NnTopAppBar
-import com.hanbikan.nooknook.core.designsystem.component.WithTitle
+import com.hanbikan.nooknook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 import com.hanbikan.nooknook.core.domain.model.Task
@@ -115,28 +117,35 @@ fun TodoScreenContents(
     onClickCheckbox: (Int) -> Unit,
     onLongClickTask: (Task) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier
             .padding(Dimens.SideMargin),
-        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingLarge)
     ) {
-        NnText(
-            text = stringResource(id = R.string.welcome_text, userName),
-            style = NnTheme.typography.headlineLarge,
-            fontWeight = FontWeight.Bold,
-        )
-        WithTitle(title = stringResource(id = R.string.progress)) {
+        item {
+            NnText(
+                text = stringResource(id = R.string.welcome_text, userName),
+                style = NnTheme.typography.headlineLarge,
+                fontWeight = FontWeight.Bold,
+            )
+
+            Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+            TitleTextWithSpacer(title = stringResource(id = R.string.progress))
             ProgressCard(
                 taskCount = taskList.size,
                 doneTaskCount = doneTaskCount,
             )
+
+            Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+            TitleTextWithSpacer(title = stringResource(id = R.string.todo))
         }
-        WithTitle(title = stringResource(id = R.string.todo)) {
-            TodoList(
-                taskList = taskList,
-                onClickCheckbox = onClickCheckbox,
-                onLongClickTask = onLongClickTask,
+
+        itemsIndexed(taskList) { index, item ->
+            TaskCard(
+                task = item,
+                onClickCheckbox = { onClickCheckbox(index) },
+                onLongClickTask = { onLongClickTask(item) }
             )
+            Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
         }
     }
 }
@@ -171,25 +180,6 @@ fun ProgressCard(
             progress = progress,
             color = NnTheme.colorScheme.tertiary,
         )
-    }
-}
-
-@Composable
-fun TodoList(
-    taskList: List<Task>,
-    onClickCheckbox: (Int) -> Unit,
-    onLongClickTask: (Task) -> Unit,
-) {
-    LazyColumn(
-        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
-    ) {
-        itemsIndexed(taskList) { index, item ->
-            TaskCard(
-                task = item,
-                onClickCheckbox = { onClickCheckbox(index) },
-                onLongClickTask = { onLongClickTask(item) }
-            )
-        }
     }
 }
 
