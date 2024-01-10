@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.feature.phone.navigation
+package com.hanbikan.nooknook.core.ui
 
 import android.content.BroadcastReceiver
 import android.content.Context
