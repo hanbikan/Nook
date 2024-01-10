@@ -1,6 +1,5 @@
 package com.hanbikan.nooknook.feature.todo
 
-import androidx.compose.animation.AnimatedVisibility
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -26,10 +25,7 @@ import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -41,6 +37,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hanbikan.nooknook.core.designsystem.component.AnimatedLinearProgressIndicator
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nooknook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nooknook.core.designsystem.component.NnDialog
@@ -197,7 +194,7 @@ fun ProgressCard(
             fontWeight = FontWeight.Bold,
         )
         // TODO: Dynamic color & animation
-        LinearProgressIndicator(
+        AnimatedLinearProgressIndicator(
             progress = progress,
             color = NnTheme.colorScheme.tertiary,
         )
