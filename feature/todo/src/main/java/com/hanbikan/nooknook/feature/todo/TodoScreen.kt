@@ -193,7 +193,6 @@ fun ProgressCard(
             style = NnTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
-        // TODO: Dynamic color & animation
         AnimatedLinearProgressIndicator(
             progress = progress,
             color = NnTheme.colorScheme.tertiary,
