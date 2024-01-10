@@ -78,20 +78,22 @@ fun TodoScreen(
                     AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
                 ),
             )
-            FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.NotEmpty) {
-                TodoScreenSuccess(
-                    userName = userName,
-                    taskList = taskList,
-                    doneTaskCount = doneTaskCount,
-                    onClickCheckbox = viewModel::switchTask,
-                    onLongClickTask = viewModel::onLongClickTask
-                )
-            }
-            FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
-                TodoScreenEmpty()
-            }
-            FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
-                // TODO
+            Box {
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.NotEmpty) {
+                    TodoScreenSuccess(
+                        userName = userName,
+                        taskList = taskList,
+                        doneTaskCount = doneTaskCount,
+                        onClickCheckbox = viewModel::switchTask,
+                        onLongClickTask = viewModel::onLongClickTask
+                    )
+                }
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
+                    TodoScreenEmpty()
+                }
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
+                    // TODO
+                }
             }
         }
 
