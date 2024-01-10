@@ -4,14 +4,18 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import com.hanbikan.nooknook.core.domain.usecase.ResetAllTasksUseCase
+import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
-class DailyResetReceiver @Inject constructor(
-    private val resetAllTasksUseCase: ResetAllTasksUseCase
-): BroadcastReceiver() {
+@AndroidEntryPoint
+class DailyResetReceiver : BroadcastReceiver() {
+
+    @Inject
+    lateinit var resetAllTasksUseCase: ResetAllTasksUseCase
+
     override fun onReceive(p0: Context?, p1: Intent?) {
         CoroutineScope(Dispatchers.IO).launch {
             resetAllTasksUseCase()
