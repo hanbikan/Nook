@@ -16,7 +16,7 @@ class DailyResetReceiver : BroadcastReceiver() {
     @Inject
     lateinit var resetAllTasksUseCase: ResetAllTasksUseCase
 
-    override fun onReceive(p0: Context?, p1: Intent?) {
+    override fun onReceive(context: Context?, intent: Intent?) {
         CoroutineScope(Dispatchers.IO).launch {
             resetAllTasksUseCase()
         }

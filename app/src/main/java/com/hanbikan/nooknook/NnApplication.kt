@@ -8,6 +8,6 @@ import dagger.hilt.android.HiltAndroidApp
 class NnApplication : Application() {
     override fun onCreate() {
         super.onCreate()
-        DailyResetScheduler.scheduleDailyAlarm(baseContext)
+        DailyResetScheduler.scheduleDailyAlarm(this)
     }
 }
