@@ -7,7 +7,7 @@ import android.content.Intent
 import java.util.Calendar
 
 /**
- *  * 매일 오전 5시에 [DailyResetReceiver]를 호출합니다.
+ * 매일 오전 5시에 [DailyResetReceiver]를 호출합니다.
  */
 class DailyResetScheduler {
 
@@ -27,15 +27,16 @@ class DailyResetScheduler {
                 set(Calendar.HOUR_OF_DAY, 5)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
+                set(Calendar.MILLISECOND, 0)
 
                 // 현재 시간이 이미 데일리 리셋 시간을 지났다면 다음 날로 설정
-                if (after(Calendar.getInstance())) {
+                if (Calendar.getInstance().after(this)) {
                     add(Calendar.DATE, 1)
                 }
             }
 
             alarmManager.setRepeating(
-                AlarmManager.RTC,
+                AlarmManager.RTC_WAKEUP,
                 calendar.timeInMillis,
                 AlarmManager.INTERVAL_DAY,
                 pendingIntent
