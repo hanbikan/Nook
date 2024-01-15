@@ -24,6 +24,7 @@ class DailyResetScheduler {
 
             // TODO: 타임슬립 유저를 위한 데일리 리셋 시간 변경
             val calendar = Calendar.getInstance().apply {
+                timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, 5)
                 set(Calendar.MINUTE, 0)
                 set(Calendar.SECOND, 0)
