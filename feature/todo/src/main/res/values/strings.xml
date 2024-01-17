@@ -1,3 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <string name="welcome_text">안녕하세요, %s님!</string>
+    <string name="progress">진행도</string>
+    <string name="task_count">%d개의 할일</string>
+    <string name="done_task_percent">%d%% 완료</string>
+    <string name="todo">TODO</string>
+    <string name="add_task">할 일 추가</string>
+    <string name="sure_to_delete_task">할 일을 삭제합니다.</string>
+    <string name="empty_todo_list">할 일을 추가해보세요.</string>
 </resources>
