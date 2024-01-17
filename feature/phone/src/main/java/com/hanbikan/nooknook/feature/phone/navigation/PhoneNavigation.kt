@@ -1,31 +1,33 @@
 package com.hanbikan.nooknook.feature.phone.navigation
 
 import androidx.navigation.NavGraphBuilder
-import androidx.navigation.compose.composable
+import androidx.navigation.NavHostController
 import androidx.navigation.navigation
-import com.hanbikan.nooknook.feature.todo.TodoScreen
-import com.hanbikan.nooknook.feature.tutorial.TutorialScreen
+import com.hanbikan.nooknook.feature.todo.navigation.navigateToTodo
+import com.hanbikan.nooknook.feature.todo.navigation.todoScreen
+import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToTutorial
+import com.hanbikan.nooknook.feature.tutorial.navigation.tutorialScreen
+import kotlinx.coroutines.flow.Flow
 
 const val phoneGraphRoute = "phone_graph"
 
-private const val tutorialScreenRoute = "tutorial_screen_route"
-private const val todoScreenRoute = "todo_screen_route"
 
-fun NavGraphBuilder.phoneGraph() {
+fun NavGraphBuilder.phoneGraph(
+    hasAnyUsers: Flow<Boolean>,
+    navController: NavHostController,
+    // TODO: lastVisitedApp
+) {
     navigation(
         route = phoneGraphRoute,
-        startDestination = todoScreenRoute,
+        startDestination = loadingScreenRoute,
     ) {
+        loadingScreen(
+            hasAnyUsers = hasAnyUsers,
+            navigateToTutorial = navController::navigateToTutorial,
+            navigateToTodo = navController::navigateToTodo,
+        )
         // TODO: PhoneScreen
-        composable(
-            route = tutorialScreenRoute,
-        ) {
-            TutorialScreen()
-        }
-        composable(
-            route = todoScreenRoute,
-        ) {
-            TodoScreen()
-        }
+        tutorialScreen()
+        todoScreen()
     }
 }

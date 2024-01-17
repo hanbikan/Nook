@@ -1,12 +1,24 @@
 package com.hanbikan.nooknook.core.database
 
+import androidx.room.AutoMigration
 import androidx.room.Database
 import androidx.room.RoomDatabase
 import com.hanbikan.nooknook.core.database.dao.TaskDao
 import com.hanbikan.nooknook.core.database.dao.UserDao
 import com.hanbikan.nooknook.core.database.entity.TaskEntity
+import com.hanbikan.nooknook.core.database.entity.UserEntity
 
-@Database(entities = [TaskEntity::class], version = 1)
+@Database(
+    version = 2,
+    entities = [
+        TaskEntity::class,
+        UserEntity::class
+    ],
+    autoMigrations = [
+        AutoMigration (from = 1, to = 2)
+    ],
+    exportSchema = true
+)
 abstract class NnDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun userDao(): UserDao

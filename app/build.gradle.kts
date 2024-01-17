@@ -62,6 +62,7 @@ dependencies {
 
     implementation(project(mapOf("path" to ":feature:phone")))
     implementation(project(mapOf("path" to ":core:designsystem")))
+    implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:data")))
     implementation(project(mapOf("path" to ":core:database")))
     implementation(project(mapOf("path" to ":core:ui")))
