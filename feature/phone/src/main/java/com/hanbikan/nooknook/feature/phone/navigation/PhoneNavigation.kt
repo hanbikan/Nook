@@ -7,7 +7,9 @@ import com.hanbikan.nooknook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nooknook.feature.todo.navigation.todoScreen
 import com.hanbikan.nooknook.feature.tutorial.navigation.addUserScreen
 import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToAddUser
+import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToTutorial
 import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToWelcome
+import com.hanbikan.nooknook.feature.tutorial.navigation.tutorialScreen
 import com.hanbikan.nooknook.feature.tutorial.navigation.welcomeScreen
 import kotlinx.coroutines.flow.Flow
 
@@ -34,9 +36,10 @@ fun NavGraphBuilder.phoneGraph(
         )
         addUserScreen(
             navigateUp = navController::navigateUp,
-            navigateToTutorial = { /* TODO */ }
+            navigateToTutorial = navController::navigateToTutorial
         )
 
+        tutorialScreen()
         todoScreen()
     }
 }
