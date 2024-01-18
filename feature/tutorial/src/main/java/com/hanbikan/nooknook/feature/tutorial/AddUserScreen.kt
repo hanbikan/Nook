@@ -15,6 +15,7 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nooknook.core.designsystem.component.NnPlaceholder
 import com.hanbikan.nooknook.core.designsystem.component.NnText
 import com.hanbikan.nooknook.core.designsystem.component.NnTextButton
 import com.hanbikan.nooknook.core.designsystem.component.NnTextField
@@ -65,6 +66,9 @@ fun AddUserScreenContents() {
                 modifier = Modifier.fillMaxWidth(),
                 value = "",
                 onValueChange = {},
+                placeholder = {
+                    NnPlaceholder(text = stringResource(id = R.string.name_placeholder))
+                }
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
             NnText(
@@ -75,6 +79,9 @@ fun AddUserScreenContents() {
                 modifier = Modifier.fillMaxWidth(),
                 value = "",
                 onValueChange = {},
+                placeholder = {
+                    NnPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
+                }
             )
         }
         NnTextButton(
