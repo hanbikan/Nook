@@ -5,4 +5,7 @@
     <string name="start">시작하기</string>
     <string name="add_user_title">계정을 추가합니다</string>
     <string name="add_user_body">입력하신 정보는 언제든지 변경할 수 있어요.</string>
+    <string name="add">추가하기</string>
+    <string name="name">이름</string>
+    <string name="island_name">섬 이름</string>
 </resources>

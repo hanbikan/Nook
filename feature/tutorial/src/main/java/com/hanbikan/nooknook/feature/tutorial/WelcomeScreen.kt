@@ -56,8 +56,7 @@ fun WelcomeScreen(
         }
 
         NnTextButton(
-            modifier = Modifier
-                .fillMaxWidth(),
+            modifier = Modifier.fillMaxWidth(),
             onClick = navigateToAddUser,
             text = stringResource(id = R.string.start),
         )
