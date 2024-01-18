@@ -6,6 +6,7 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.TextButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
@@ -29,4 +30,10 @@ fun NnTextButton(
             color = NnTheme.colorScheme.tertiaryContainer,
         )
     }
+}
+
+@Composable
+@Preview
+fun NnTextButtonPreview() {
+    NnTextButton(onClick = {}, text = "Text")
 }

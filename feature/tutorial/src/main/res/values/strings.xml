@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_message_title">Nookie에 오신 것을 환영해요!</string>
+    <string name="welcome_message_body">모동숲 생활을 꼼꼼하게 관리해드릴게요 :)</string>
+    <string name="start">시작하기</string>
+</resources>
