@@ -64,7 +64,10 @@ fun UserDialog(
                     UserItem(user = it)
                 }
                 item {
-                    AddUserItem(navigateToAddUser = navigateToAddUser)
+                    AddUserItem(
+                        navigateToAddUser = navigateToAddUser,
+                        onDismissRequest = onDismissRequest,
+                    )
                 }
             }
         }
@@ -97,11 +100,17 @@ fun UserItem(user: User) {
 }
 
 @Composable
-fun AddUserItem(navigateToAddUser: () -> Unit) {
+fun AddUserItem(
+    navigateToAddUser: () -> Unit,
+    onDismissRequest: () -> Unit,
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { navigateToAddUser() }
+            .clickable {
+                navigateToAddUser()
+                onDismissRequest()
+            }
             .padding(Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {

@@ -52,6 +52,7 @@ import com.hanbikan.nooknook.core.ui.UserDialog
 
 @Composable
 fun TodoScreen(
+    navigateToAddUser: () -> Unit,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
@@ -127,7 +128,7 @@ fun TodoScreen(
 
         if (isUserDialogShown) {
             UserDialog(
-                navigateToAddUser = { /*TODO*/ },
+                navigateToAddUser = navigateToAddUser,
                 onDismissRequest = viewModel::switchUserDialog
             )
         }
@@ -260,5 +261,5 @@ fun TodoScreenEmpty() {
 @Preview
 @Composable
 fun TodoScreenPreview() {
-    TodoScreen()
+    TodoScreen({})
 }

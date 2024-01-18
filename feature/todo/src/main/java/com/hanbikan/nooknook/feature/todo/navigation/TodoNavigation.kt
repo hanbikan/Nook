@@ -7,11 +7,15 @@ import com.hanbikan.nooknook.feature.todo.TodoScreen
 
 const val todoScreenRoute = "todo_screen_route"
 
-fun NavGraphBuilder.todoScreen() {
+fun NavGraphBuilder.todoScreen(
+    navigateToAddUser: () -> Unit,
+) {
     composable(
         route = todoScreenRoute,
     ) {
-        TodoScreen()
+        TodoScreen(
+            navigateToAddUser = navigateToAddUser
+        )
     }
 }
 

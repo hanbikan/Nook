@@ -9,6 +9,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import javax.inject.Inject
 
 @HiltViewModel
@@ -34,7 +35,9 @@ class AddUserViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             val user = User(0, name.value, islandName.value)
             addUserUseCase(user)
-            onComplete()
+            withContext(Dispatchers.Main) {
+                onComplete()
+            }
         }
     }
 }

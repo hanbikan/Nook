@@ -40,6 +40,8 @@ fun NavGraphBuilder.phoneGraph(
         )
 
         tutorialScreen()
-        todoScreen()
+        todoScreen(
+            navigateToAddUser = navController::navigateToAddUser
+        )
     }
 }
