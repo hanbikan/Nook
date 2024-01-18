@@ -9,7 +9,7 @@ const val loadingScreenRoute = "loading_screen_route"
 
 fun NavGraphBuilder.loadingScreen(
     hasAnyUsers: Flow<Boolean>,
-    navigateToTutorial: () -> Unit,
+    navigateToWelcome: () -> Unit,
     navigateToTodo: () -> Unit,
 ) {
     composable(
@@ -17,7 +17,7 @@ fun NavGraphBuilder.loadingScreen(
     ) {
         LoadingScreen(
             hasAnyUsers = hasAnyUsers,
-            navigateToTutorial = navigateToTutorial,
+            navigateToWelcome = navigateToWelcome,
             navigateToTodo = navigateToTodo,
         )
     }

@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoadingScreen(
     hasAnyUsers: Flow<Boolean>,
-    navigateToTutorial: () -> Unit,
+    navigateToWelcome: () -> Unit,
     navigateToTodo: () -> Unit,
 ) {
     val coroutineScope = rememberCoroutineScope()
@@ -24,7 +24,7 @@ fun LoadingScreen(
     LaunchedEffect(Unit) {
         coroutineScope.launch {
             if (!hasAnyUsers.first()) {
-                navigateToTutorial()
+                navigateToWelcome()
             } else {
                 navigateToTodo()
             }

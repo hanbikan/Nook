@@ -23,12 +23,14 @@ import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 
 @Composable
-fun TutorialScreen() {
+fun WelcomeScreen(
+    navigateToAddUser: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(NnTheme.colorScheme.background)
-            .padding(Dimens.SpacingLarge),
+            .padding(Dimens.SideMargin),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Column(
@@ -56,7 +58,7 @@ fun TutorialScreen() {
         NnTextButton(
             modifier = Modifier
                 .fillMaxWidth(),
-            onClick = { /*TODO*/ },
+            onClick = navigateToAddUser,
             text = stringResource(id = R.string.start),
         )
     }
@@ -64,6 +66,6 @@ fun TutorialScreen() {
 
 @Composable
 @Preview
-fun TutorialScreenPreview() {
-    TutorialScreen()
+fun WelcomeScreenPreview() {
+    WelcomeScreen({})
 }

@@ -5,8 +5,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.navigation
 import com.hanbikan.nooknook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nooknook.feature.todo.navigation.todoScreen
-import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToTutorial
-import com.hanbikan.nooknook.feature.tutorial.navigation.tutorialScreen
+import com.hanbikan.nooknook.feature.tutorial.navigation.addUserScreen
+import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToAddUser
+import com.hanbikan.nooknook.feature.tutorial.navigation.navigateToWelcome
+import com.hanbikan.nooknook.feature.tutorial.navigation.welcomeScreen
 import kotlinx.coroutines.flow.Flow
 
 const val phoneGraphRoute = "phone_graph"
@@ -23,11 +25,15 @@ fun NavGraphBuilder.phoneGraph(
     ) {
         loadingScreen(
             hasAnyUsers = hasAnyUsers,
-            navigateToTutorial = navController::navigateToTutorial,
+            navigateToWelcome = navController::navigateToWelcome,
             navigateToTodo = navController::navigateToTodo,
         )
         // TODO: PhoneScreen
-        tutorialScreen()
+        welcomeScreen(
+            navigateToAddUser = navController::navigateToAddUser,
+        )
+        addUserScreen()
+
         todoScreen()
     }
 }
