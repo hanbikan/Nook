@@ -8,10 +8,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.focus.FocusRequester
+import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -53,6 +61,7 @@ fun AddUserScreen(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddUserScreenContents(
     name: String,
@@ -61,6 +70,9 @@ fun AddUserScreenContents(
     setIslandName: (String) -> Unit,
     onClickAddButton: () -> Unit,
 ) {
+    val secondFocusRequester = remember { FocusRequester() }
+    val keyboardController = LocalSoftwareKeyboardController.current
+
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -90,7 +102,14 @@ fun AddUserScreenContents(
                 onValueChange = setName,
                 placeholder = {
                     NnPlaceholder(text = stringResource(id = R.string.name_placeholder))
-                }
+                },
+                keyboardOptions = KeyboardOptions.Default.copy(
+                    imeAction = ImeAction.Next
+                ),
+                keyboardActions = KeyboardActions {
+                    secondFocusRequester.requestFocus()
+                },
+                singleLine = true,
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
             NnText(
@@ -98,12 +117,15 @@ fun AddUserScreenContents(
                 style = NnTheme.typography.titleMedium
             )
             NnTextField(
-                modifier = Modifier.fillMaxWidth(),
+                modifier = Modifier
+                    .focusRequester(secondFocusRequester)
+                    .fillMaxWidth(),
                 value = islandName,
                 onValueChange = setIslandName,
                 placeholder = {
                     NnPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
-                }
+                },
+                singleLine = true,
             )
         }
         NnTextButton(
