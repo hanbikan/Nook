@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.core.ui
+package com.hanbikan.nooknook.core.ui.receiver
 
 import android.content.BroadcastReceiver
 import android.content.Context

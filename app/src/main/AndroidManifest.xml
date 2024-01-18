@@ -25,8 +25,8 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <receiver android:name=".core.ui.DailyResetReceiver"/>
-        <receiver android:name=".core.ui.BootCompletedReceiver"
+        <receiver android:name=".core.ui.receiver.DailyResetReceiver"/>
+        <receiver android:name=".core.ui.receiver.BootCompletedReceiver"
             android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.BOOT_COMPLETED" />

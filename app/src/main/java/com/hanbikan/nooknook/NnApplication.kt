@@ -1,7 +1,7 @@
 package com.hanbikan.nooknook
 
 import android.app.Application
-import com.hanbikan.nooknook.core.ui.DailyResetScheduler
+import com.hanbikan.nooknook.core.ui.receiver.DailyResetScheduler
 import dagger.hilt.android.HiltAndroidApp
 
 @HiltAndroidApp

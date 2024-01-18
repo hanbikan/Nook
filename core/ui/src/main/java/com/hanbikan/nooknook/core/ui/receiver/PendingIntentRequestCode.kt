@@ -1,4 +1,4 @@
-package com.hanbikan.nooknook.core.ui
+package com.hanbikan.nooknook.core.ui.receiver
 
 class PendingIntentRequestCode {
     companion object {
