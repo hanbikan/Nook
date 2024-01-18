@@ -32,6 +32,7 @@ import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 @Composable
 fun NnDialogWithTextField(
     title: String,
+    placeholder: String = "",
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
 ) {
@@ -63,7 +64,8 @@ fun NnDialogWithTextField(
                     input.value = it
                 },
                 singleLine = true,
-                modifier = Modifier.focusRequester(focusRequester)
+                placeholder = { NnPlaceholder(text = placeholder) },
+                modifier = Modifier.focusRequester(focusRequester),
             )
             Row(
                 modifier = Modifier

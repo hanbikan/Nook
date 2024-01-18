@@ -113,6 +113,7 @@ fun TodoScreen(
         if (isAddTaskDialogShown) {
             NnDialogWithTextField(
                 title = stringResource(id = R.string.add_task),
+                placeholder = stringResource(id = R.string.add_task_placeholder),
                 onDismissRequest = viewModel::switchAddTaskDialog,
                 onConfirmation = { viewModel.addTask(it) }
             )

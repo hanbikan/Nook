@@ -70,6 +70,8 @@ class TodoViewModel @Inject constructor(
     }
 
     fun addTask(name: String) {
+        if (name.isEmpty()) return
+
         viewModelScope.launch(Dispatchers.IO) {
             val task = Task(0, name, false)
             addTaskUseCase(task)
