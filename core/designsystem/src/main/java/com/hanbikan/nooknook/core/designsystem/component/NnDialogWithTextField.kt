@@ -44,50 +44,42 @@ fun NnDialogWithTextField(
         keyboardController?.show()
     }
 
-    Dialog(onDismissRequest = { onDismissRequest() }) {
-        // Draw a rectangle shape with rounded corners inside the dialog
-        Card(
+    NnDialogBase(onDismissRequest) {
+        Column(
             modifier = Modifier
-                .padding(Dimens.SpacingExtraLarge),
-            colors = CardDefaults.cardColors(containerColor = NnTheme.colorScheme.background),
-            shape = RoundedCornerShape(Dimens.SpacingMedium),
+                .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
+            verticalArrangement = Arrangement.Center,
+            horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            Column(
+            NnText(
+                modifier = Modifier.fillMaxWidth(),
+                text = title,
+                style = NnTheme.typography.titleMedium
+            )
+            Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+            NnTextField(
+                value = input.value,
+                onValueChange = {
+                    input.value = it
+                },
+                singleLine = true,
+                modifier = Modifier.focusRequester(focusRequester)
+            )
+            Row(
                 modifier = Modifier
-                    .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
-                verticalArrangement = Arrangement.Center,
-                horizontalAlignment = Alignment.CenterHorizontally,
+                    .fillMaxWidth(),
+                horizontalArrangement = Arrangement.Center,
             ) {
-                NnText(
-                    modifier = Modifier.fillMaxWidth(),
-                    text = title,
-                    style = NnTheme.typography.titleMedium
+                NnTextButton(
+                    onClick = onDismissRequest,
+                    text = stringResource(id = R.string.dismiss),
+                    modifier = Modifier.weight(1f)
                 )
-                Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-                NnTextField(
-                    value = input.value,
-                    onValueChange = {
-                        input.value = it
-                    },
-                    singleLine = true,
-                    modifier = Modifier.focusRequester(focusRequester)
+                NnTextButton(
+                    onClick = { onConfirmation(input.value) },
+                    text = stringResource(id = R.string.confirm),
+                    modifier = Modifier.weight(1f)
                 )
-                Row(
-                    modifier = Modifier
-                        .fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Center,
-                ) {
-                    NnTextButton(
-                        onClick = onDismissRequest,
-                        text = stringResource(id = R.string.dismiss),
-                        modifier = Modifier.weight(1f)
-                    )
-                    NnTextButton(
-                        onClick = { onConfirmation(input.value) },
-                        text = stringResource(id = R.string.confirm),
-                        modifier = Modifier.weight(1f)
-                    )
-                }
             }
         }
     }

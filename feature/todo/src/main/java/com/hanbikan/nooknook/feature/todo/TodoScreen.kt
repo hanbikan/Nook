@@ -48,6 +48,7 @@ import com.hanbikan.nooknook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
 import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 import com.hanbikan.nooknook.core.domain.model.Task
+import com.hanbikan.nooknook.core.ui.UserDialog
 
 @Composable
 fun TodoScreen(
@@ -55,6 +56,7 @@ fun TodoScreen(
 ) {
     val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
     val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
+    val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val userName = viewModel.userName.collectAsStateWithLifecycle().value
@@ -69,10 +71,10 @@ fun TodoScreen(
         ) {
             NnTopAppBar(
                 leftAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Home, onClick = {})
+                    AppBarIcon(imageVector = Icons.Default.Home, onClick = { /* TODO: navigate to phone */ })
                 ),
                 rightAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
+                    AppBarIcon(imageVector = Icons.Default.Person, onClick = viewModel::switchUserDialog),
                 ),
             )
             Box {
@@ -120,6 +122,13 @@ fun TodoScreen(
                 description = stringResource(id = R.string.sure_to_delete_task),
                 onDismissRequest = viewModel::switchDeleteTaskDialog,
                 onConfirmation = viewModel::deleteTask
+            )
+        }
+
+        if (isUserDialogShown) {
+            UserDialog(
+                navigateToAddUser = { /*TODO*/ },
+                onDismissRequest = viewModel::switchUserDialog
             )
         }
     }

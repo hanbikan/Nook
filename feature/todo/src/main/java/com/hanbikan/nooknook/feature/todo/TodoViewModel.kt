@@ -51,6 +51,9 @@ class TodoViewModel @Inject constructor(
     private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDeleteTaskDialogShown = _isDeleteTaskDialogShown.asStateFlow()
 
+    private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isUserDialogShown = _isUserDialogShown.asStateFlow()
+
     // Long-click 시 제거할 작업을 잠시 여기에 저장한 뒤, 삭제 버튼을 누를 때 이 값을 참조하여 제거합니다.
     private val _taskIdToDelete: MutableStateFlow<Int> = MutableStateFlow(-1)
     val taskIdToDelete = _taskIdToDelete.asStateFlow()
@@ -89,16 +92,8 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun switchAddTaskDialog() {
-        _isAddTaskDialogShown.value = !isAddTaskDialogShown.value
-    }
-
     fun setTaskIdToDelete(taskId: Int) {
         _taskIdToDelete.value = taskId
-    }
-
-    fun switchDeleteTaskDialog() {
-        _isDeleteTaskDialogShown.value = !isDeleteTaskDialogShown.value
     }
 
     fun onLongClickTask(task: Task) {
@@ -109,6 +104,18 @@ class TodoViewModel @Inject constructor(
     private fun updateSuccessUiState() {
         _uiState.value =
             if (taskList.value.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
+    }
+
+    fun switchAddTaskDialog() {
+        _isAddTaskDialogShown.value = !isAddTaskDialogShown.value
+    }
+
+    fun switchDeleteTaskDialog() {
+        _isDeleteTaskDialogShown.value = !isDeleteTaskDialogShown.value
+    }
+
+    fun switchUserDialog() {
+        _isUserDialogShown.value = !isUserDialogShown.value
     }
 }
 
