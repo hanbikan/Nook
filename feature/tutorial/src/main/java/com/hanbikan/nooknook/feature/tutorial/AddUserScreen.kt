@@ -61,7 +61,6 @@ fun AddUserScreen(
     }
 }
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun AddUserScreenContents(
     name: String,
@@ -71,7 +70,6 @@ fun AddUserScreenContents(
     onClickAddButton: () -> Unit,
 ) {
     val secondFocusRequester = remember { FocusRequester() }
-    val keyboardController = LocalSoftwareKeyboardController.current
 
     Column(
         modifier = Modifier
