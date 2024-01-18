@@ -2,4 +2,5 @@
 <resources>
     <string name="close">닫기</string>
     <string name="add_user">다른 계정 추가</string>
+    <string name="sure_to_delete_user">정말 계정을 삭제하시겠습니까?</string>
 </resources>

@@ -79,7 +79,7 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun deleteTask() {
+    fun onConfirmDeleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
             deleteTaskUseCase(taskIdToDelete.value)
             switchDeleteTaskDialog()
@@ -94,18 +94,9 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun setTaskIdToDelete(taskId: Int) {
-        _taskIdToDelete.value = taskId
-    }
-
     fun onLongClickTask(task: Task) {
-        setTaskIdToDelete(task.id)
+        _taskIdToDelete.value = task.id
         switchDeleteTaskDialog()
-    }
-
-    private fun updateSuccessUiState() {
-        _uiState.value =
-            if (taskList.value.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
     }
 
     fun switchAddTaskDialog() {
@@ -118,6 +109,11 @@ class TodoViewModel @Inject constructor(
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
+    }
+
+    private fun updateSuccessUiState() {
+        _uiState.value =
+            if (taskList.value.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
     }
 }
 

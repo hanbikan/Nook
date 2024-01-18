@@ -1,7 +1,9 @@
 package com.hanbikan.nooknook.core.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -26,6 +28,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hanbikan.nooknook.core.designsystem.component.NnDialog
 import com.hanbikan.nooknook.core.designsystem.component.NnDialogBase
 import com.hanbikan.nooknook.core.designsystem.component.NnText
 import com.hanbikan.nooknook.core.designsystem.theme.Dimens
@@ -39,6 +42,7 @@ fun UserDialog(
     viewModel: UserDialogViewModel = hiltViewModel(),
 ) {
     val users = viewModel.users.collectAsStateWithLifecycle().value
+    val isDeleteUserDialogShown = viewModel.isDeleteUserDialogShown.collectAsStateWithLifecycle().value
 
     NnDialogBase(onDismissRequest) {
         Column(
@@ -61,7 +65,10 @@ fun UserDialog(
                     .padding(Dimens.SpacingSmall)
             ) {
                 items(users) {
-                    UserItem(user = it)
+                    UserItem(
+                        user = it,
+                        onLongClickUser = viewModel::onLongClickUser
+                    )
                 }
                 item {
                     AddUserItem(
@@ -72,14 +79,29 @@ fun UserDialog(
             }
         }
     }
+
+    if (isDeleteUserDialogShown) {
+        NnDialog(
+            description = stringResource(id = R.string.sure_to_delete_user),
+            onDismissRequest = viewModel::switchIsDeleteUserDialogShown,
+            onConfirmation = viewModel::onConfirmDeleteUser
+        )
+    }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun UserItem(user: User) {
+fun UserItem(
+    user: User,
+    onLongClickUser: (User) -> Unit
+) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .clickable { /* TODO: switch active user & close dialog */ }
+            .combinedClickable(
+                onClick = { /* TODO: switch active user & close dialog */ },
+                onLongClick = { onLongClickUser(user) }
+            )
             .padding(Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
     ) {

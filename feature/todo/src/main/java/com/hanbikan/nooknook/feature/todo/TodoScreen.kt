@@ -123,7 +123,7 @@ fun TodoScreen(
             NnDialog(
                 description = stringResource(id = R.string.sure_to_delete_task),
                 onDismissRequest = viewModel::switchDeleteTaskDialog,
-                onConfirmation = viewModel::deleteTask
+                onConfirmation = viewModel::onConfirmDeleteTask
             )
         }
 
