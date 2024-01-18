@@ -33,7 +33,8 @@ fun NavGraphBuilder.phoneGraph(
             navigateToAddUser = navController::navigateToAddUser,
         )
         addUserScreen(
-            navigateUp = navController::navigateUp
+            navigateUp = navController::navigateUp,
+            navigateToTutorial = { /* TODO */ }
         )
 
         todoScreen()

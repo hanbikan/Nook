@@ -13,7 +13,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nooknook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nooknook.core.designsystem.component.NnPlaceholder
 import com.hanbikan.nooknook.core.designsystem.component.NnText
@@ -26,19 +27,40 @@ import com.hanbikan.nooknook.core.designsystem.theme.NnTheme
 @Composable
 fun AddUserScreen(
     navigateUp: () -> Unit,
+    navigateToTutorial: () -> Unit,
+    viewModel: AddUserViewModel = hiltViewModel(),
 ) {
+    val name = viewModel.name.collectAsStateWithLifecycle().value
+    val islandName = viewModel.islandName.collectAsStateWithLifecycle().value
+
     Column(
         modifier = Modifier
             .fillMaxSize()
             .background(NnTheme.colorScheme.background),
     ) {
         NnTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
-        AddUserScreenContents()
+        AddUserScreenContents(
+            name = name,
+            islandName = islandName,
+            setName = viewModel::setName,
+            setIslandName = viewModel::setIslandName,
+            onClickAddButton = {
+                viewModel.addUser {
+                    navigateToTutorial()
+                }
+            }
+        )
     }
 }
 
 @Composable
-fun AddUserScreenContents() {
+fun AddUserScreenContents(
+    name: String,
+    islandName: String,
+    setName: (String) -> Unit,
+    setIslandName: (String) -> Unit,
+    onClickAddButton: () -> Unit,
+) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -64,8 +86,8 @@ fun AddUserScreenContents() {
             )
             NnTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = name,
+                onValueChange = setName,
                 placeholder = {
                     NnPlaceholder(text = stringResource(id = R.string.name_placeholder))
                 }
@@ -77,8 +99,8 @@ fun AddUserScreenContents() {
             )
             NnTextField(
                 modifier = Modifier.fillMaxWidth(),
-                value = "",
-                onValueChange = {},
+                value = islandName,
+                onValueChange = setIslandName,
                 placeholder = {
                     NnPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
                 }
@@ -86,7 +108,7 @@ fun AddUserScreenContents() {
         }
         NnTextButton(
             modifier = Modifier.fillMaxWidth(),
-            onClick = { /* TODO */ },
+            onClick = onClickAddButton,
             text = stringResource(id = R.string.add),
         )
     }
@@ -95,5 +117,5 @@ fun AddUserScreenContents() {
 @Composable
 @Preview
 fun AddUserScreenPreview() {
-    AddUserScreen({})
+    AddUserScreen({}, {})
 }
