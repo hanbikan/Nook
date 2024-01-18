@@ -21,11 +21,15 @@ fun NavGraphBuilder.welcomeScreen(
     }
 }
 
-fun NavGraphBuilder.addUserScreen() {
+fun NavGraphBuilder.addUserScreen(
+    navigateUp: () -> Unit,
+) {
     composable(
         route = addUserScreenRoute,
     ) {
-        AddUserScreen()
+        AddUserScreen(
+            navigateUp = navigateUp,
+        )
     }
 }
 
