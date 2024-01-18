@@ -6,6 +6,7 @@ import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -39,6 +40,14 @@ fun NnTextField(
             color = NnTheme.colorScheme.primary,
             fontFamily = Fonts.joa
         ),
+    )
+}
+
+@Composable
+fun NnPlaceholder(text: String) {
+    NnText(
+        text = text,
+        color = NnTheme.colorScheme.primaryContainer,
     )
 }
 
