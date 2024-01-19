@@ -16,6 +16,7 @@ hilt = "2.44"
 hilt-navigation-compose = "1.1.0"
 org-jetbrains-kotlin-jvm = "1.8.10"
 room = "2.6.1"
+datastore-preferences = "1.0.0"
 
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-fragment-ktx" }
@@ -45,6 +46,8 @@ hilt-navigation-compose = { group = "androidx.hilt", name = "hilt-navigation-com
 room-runtime = { group = "androidx.room", name = "room-runtime", version.ref = "room" }
 room-compiler = { group = "androidx.room", name = "room-compiler", version.ref = "room" }
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
+
+datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
