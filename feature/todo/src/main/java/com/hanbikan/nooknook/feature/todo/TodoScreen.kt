@@ -91,9 +91,7 @@ fun TodoScreen(
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
                     TodoScreenEmpty()
                 }
-                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
-                    // TODO
-                }
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {}
             }
         }
 
