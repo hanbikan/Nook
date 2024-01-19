@@ -3,9 +3,12 @@ package com.hanbikan.nooknook.feature.todo
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nooknook.core.domain.model.Task
+import com.hanbikan.nooknook.core.domain.model.User
 import com.hanbikan.nooknook.core.domain.usecase.AddTaskUseCase
 import com.hanbikan.nooknook.core.domain.usecase.DeleteTaskUseCase
+import com.hanbikan.nooknook.core.domain.usecase.GetActiveUserIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetAllTasksUseCase
+import com.hanbikan.nooknook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -16,6 +19,7 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -27,14 +31,18 @@ class TodoViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
+    getActiveUserIdUseCase: GetActiveUserIdUseCase,
+    getUserByIdUseCase: GetUserByIdUseCase,
 ) : ViewModel() {
     // Ui state
     private val _uiState: MutableStateFlow<TodoUiState> = MutableStateFlow(TodoUiState.Loading)
     val uiState = _uiState.asStateFlow()
 
     // Data for UI
-    private val _userName: MutableStateFlow<String> = MutableStateFlow("Isabelle") // TODO
-    val userName = _userName.asStateFlow()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val activeUser: StateFlow<User?> = getActiveUserIdUseCase()
+        .flatMapLatest { getUserByIdUseCase(it!!) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val taskList: StateFlow<List<Task>> = getAllTasksUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())

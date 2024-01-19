@@ -60,7 +60,7 @@ fun TodoScreen(
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val userName = viewModel.userName.collectAsStateWithLifecycle().value
+    val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
     val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
 
@@ -81,7 +81,7 @@ fun TodoScreen(
             Box {
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.NotEmpty) {
                     TodoScreenSuccess(
-                        userName = userName,
+                        userName = activeUser?.name ?: "",
                         taskList = taskList,
                         doneTaskCount = doneTaskCount,
                         onClickCheckbox = viewModel::switchTask,
