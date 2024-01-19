@@ -4,9 +4,9 @@ import com.hanbikan.nooknook.core.database.entity.TaskEntity
 import com.hanbikan.nooknook.core.domain.model.Task
 
 fun TaskEntity.toDomain(): Task {
-    return Task(id, name, isDone)
+    return Task(id, userId, name, isDone)
 }
 
 fun Task.toData(): TaskEntity {
-    return TaskEntity(id, name, isDone)
+    return TaskEntity(id, userId, name, isDone)
 }

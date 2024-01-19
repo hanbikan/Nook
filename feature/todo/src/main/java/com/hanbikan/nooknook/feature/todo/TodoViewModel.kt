@@ -7,7 +7,7 @@ import com.hanbikan.nooknook.core.domain.model.User
 import com.hanbikan.nooknook.core.domain.usecase.AddTaskUseCase
 import com.hanbikan.nooknook.core.domain.usecase.DeleteTaskUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetActiveUserIdUseCase
-import com.hanbikan.nooknook.core.domain.usecase.GetAllTasksUseCase
+import com.hanbikan.nooknook.core.domain.usecase.GetAllTasksByUserIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.UpdateTaskUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -27,7 +27,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel @Inject constructor(
-    getAllTasksUseCase: GetAllTasksUseCase,
+    getAllTasksByUserIdUseCase: GetAllTasksByUserIdUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
@@ -39,12 +39,17 @@ class TodoViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     // Data for UI
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val activeUser: StateFlow<User?> = getActiveUserIdUseCase()
-        .flatMapLatest { getUserByIdUseCase(it!!) }
+    private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val taskList: StateFlow<List<Task>> = getAllTasksUseCase()
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val activeUser: StateFlow<User?> = activeUserId
+        .flatMapLatest { getUserByIdUseCase(it) }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val taskList: StateFlow<List<Task>> = activeUserId
+        .flatMapLatest { getAllTasksByUserIdUseCase(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -81,9 +86,11 @@ class TodoViewModel @Inject constructor(
         if (name.isEmpty()) return
 
         viewModelScope.launch(Dispatchers.IO) {
-            val task = Task(0, name, false)
-            addTaskUseCase(task)
-            switchAddTaskDialog()
+            activeUserId.value?.let {
+                val task = Task(0, it, name, false)
+                addTaskUseCase(task)
+                switchAddTaskDialog()
+            }
         }
     }
 

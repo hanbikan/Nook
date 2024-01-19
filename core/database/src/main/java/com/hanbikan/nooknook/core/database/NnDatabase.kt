@@ -9,13 +9,14 @@ import com.hanbikan.nooknook.core.database.entity.TaskEntity
 import com.hanbikan.nooknook.core.database.entity.UserEntity
 
 @Database(
-    version = 2,
+    version = 3,
     entities = [
         TaskEntity::class,
         UserEntity::class
     ],
     autoMigrations = [
-        AutoMigration (from = 1, to = 2)
+        AutoMigration (from = 1, to = 2),
+        AutoMigration (from = 2, to = 3)
     ],
     exportSchema = true
 )

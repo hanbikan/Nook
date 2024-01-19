@@ -12,8 +12,8 @@ import javax.inject.Inject
 class TaskRepositoryImpl @Inject constructor(
     private val taskDao: TaskDao
 ) : TaskRepository {
-    override fun getAllTasks(): Flow<List<Task>> {
-        return taskDao.getAllTasks().map { tasks ->
+    override fun getAllTasksByUserId(userId: Int): Flow<List<Task>> {
+        return taskDao.getAllTasksByUserId(userId).map { tasks ->
             tasks.map { it.toDomain() }
         }
     }
