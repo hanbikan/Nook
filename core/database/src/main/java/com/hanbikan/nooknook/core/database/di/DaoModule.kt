@@ -14,11 +14,11 @@ object DaoModule {
 
     @Provides
     fun providesTaskDao(
-        database: NnDatabase,
+        database: NnDatabase
     ): TaskDao = database.taskDao()
 
     @Provides
     fun providesUserDao(
-        database: NnDatabase,
+        database: NnDatabase
     ): UserDao = database.userDao()
 }

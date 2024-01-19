@@ -11,15 +11,15 @@ import dagger.hilt.components.SingletonComponent
 
 @Module
 @InstallIn(SingletonComponent::class)
-interface RepositoryModule {
+interface DatabaseRepositoryModule {
 
     @Binds
     fun bindsTaskRepository(
-        taskRepositoryImpl: TaskRepositoryImpl,
+        taskRepositoryImpl: TaskRepositoryImpl
     ): TaskRepository
 
     @Binds
     fun bindsUserRepository(
-        userRepositoryImpl: UserRepositoryImpl,
+        userRepositoryImpl: UserRepositoryImpl
     ): UserRepository
 }
