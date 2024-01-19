@@ -37,19 +37,14 @@ class UserDialogViewModel @Inject constructor(
     private val _isDeleteUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDeleteUserDialogShown = _isDeleteUserDialogShown.asStateFlow()
 
-    fun onClickUser(user: User) {
-        if (activeUserId.value == user.id) return
-
+    fun setActiveUserId(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            setActiveUserIdUseCase(user.id)
+            setActiveUserIdUseCase(id)
         }
     }
 
-    fun onLongClickUser(user: User) {
-        if (activeUserId.value == user.id) return
-
-        _userIdToDelete.value = user.id
-        switchIsDeleteUserDialogShown()
+    fun setUserIdToDelete(id: Int) {
+        _userIdToDelete.value = id
     }
 
     fun onConfirmDeleteUser() {

@@ -29,7 +29,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hanbikan.nooknook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nooknook.core.designsystem.component.NnDialog
 import com.hanbikan.nooknook.core.designsystem.component.NnDialogBase
 import com.hanbikan.nooknook.core.designsystem.component.NnText
@@ -71,8 +70,14 @@ fun UserDialog(
                     UserItem(
                         user = it,
                         isActive = activeUserId == it.id,
-                        onClickUser = viewModel::onClickUser,
-                        onLongClickUser = viewModel::onLongClickUser,
+                        onClickUser = { user ->
+                            viewModel.setActiveUserId(user.id)
+                            onDismissRequest()
+                        },
+                        onLongClickUser = { user ->
+                            viewModel.setUserIdToDelete(user.id)
+                            viewModel.switchIsDeleteUserDialogShown()
+                        },
                     )
                 }
                 item {
@@ -129,7 +134,7 @@ fun UserItem(
                 maxLines = 1,
             )
         }
-        FadeAnimatedVisibility(visible = isActive) {
+        if (isActive) {
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
