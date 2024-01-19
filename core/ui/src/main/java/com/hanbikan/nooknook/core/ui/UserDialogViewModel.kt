@@ -24,7 +24,7 @@ class UserDialogViewModel @Inject constructor(
     val users: StateFlow<List<User>> = getAllUsersUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
-    private val _userIdToDelete: MutableStateFlow<Int> = MutableStateFlow(-1)
+    private val _userIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
     val userIdToDelete = _userIdToDelete.asStateFlow()
 
     private val _isDeleteUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -37,8 +37,10 @@ class UserDialogViewModel @Inject constructor(
 
     fun onConfirmDeleteUser() {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteUserUseCase(userIdToDelete.value)
-            switchIsDeleteUserDialogShown()
+            userIdToDelete.value?.let {
+                deleteUserUseCase(it)
+                switchIsDeleteUserDialogShown()
+            }
         }
     }
 

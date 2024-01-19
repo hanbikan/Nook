@@ -55,7 +55,7 @@ class TodoViewModel @Inject constructor(
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
     // Long-click 시 제거할 작업을 잠시 여기에 저장한 뒤, 삭제 버튼을 누를 때 이 값을 참조하여 제거합니다.
-    private val _taskIdToDelete: MutableStateFlow<Int> = MutableStateFlow(-1)
+    private val _taskIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
     val taskIdToDelete = _taskIdToDelete.asStateFlow()
 
     init {
@@ -81,8 +81,10 @@ class TodoViewModel @Inject constructor(
 
     fun onConfirmDeleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            deleteTaskUseCase(taskIdToDelete.value)
-            switchDeleteTaskDialog()
+            taskIdToDelete.value?.let {
+                deleteTaskUseCase(it)
+                switchDeleteTaskDialog()
+            }
         }
     }
 
