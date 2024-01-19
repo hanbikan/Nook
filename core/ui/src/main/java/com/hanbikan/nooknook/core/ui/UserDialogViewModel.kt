@@ -4,9 +4,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nooknook.core.domain.model.User
 import com.hanbikan.nooknook.core.domain.usecase.DeleteUserUseCase
+import com.hanbikan.nooknook.core.domain.usecase.GetActiveUserIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetAllUsersUseCase
+import com.hanbikan.nooknook.core.domain.usecase.SetActiveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -19,10 +22,15 @@ import javax.inject.Inject
 class UserDialogViewModel @Inject constructor(
     getAllUsersUseCase: GetAllUsersUseCase,
     private val deleteUserUseCase: DeleteUserUseCase,
+    getActiveUserIdUseCase: GetActiveUserIdUseCase,
+    private val setActiveUserIdUseCase: SetActiveUserIdUseCase,
 ) : ViewModel() {
 
     val users: StateFlow<List<User>> = getAllUsersUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val _userIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
     val userIdToDelete = _userIdToDelete.asStateFlow()
@@ -30,7 +38,17 @@ class UserDialogViewModel @Inject constructor(
     private val _isDeleteUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDeleteUserDialogShown = _isDeleteUserDialogShown.asStateFlow()
 
+    fun onClickUser(user: User) {
+        if (activeUserId.value == user.id) return
+
+        viewModelScope.launch(Dispatchers.IO) {
+            setActiveUserIdUseCase(user.id)
+        }
+    }
+
     fun onLongClickUser(user: User) {
+        if (activeUserId.value == user.id) return
+
         _userIdToDelete.value = user.id
         switchIsDeleteUserDialogShown()
     }

@@ -16,6 +16,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Check
 import androidx.compose.material.icons.filled.Close
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
@@ -28,6 +29,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hanbikan.nooknook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nooknook.core.designsystem.component.NnDialog
 import com.hanbikan.nooknook.core.designsystem.component.NnDialogBase
 import com.hanbikan.nooknook.core.designsystem.component.NnText
@@ -42,6 +44,7 @@ fun UserDialog(
     viewModel: UserDialogViewModel = hiltViewModel(),
 ) {
     val users = viewModel.users.collectAsStateWithLifecycle().value
+    val activeUserId = viewModel.activeUserId.collectAsStateWithLifecycle().value
     val isDeleteUserDialogShown = viewModel.isDeleteUserDialogShown.collectAsStateWithLifecycle().value
 
     NnDialogBase(onDismissRequest) {
@@ -67,7 +70,9 @@ fun UserDialog(
                 items(users) {
                     UserItem(
                         user = it,
-                        onLongClickUser = viewModel::onLongClickUser
+                        isActive = activeUserId == it.id,
+                        onClickUser = viewModel::onClickUser,
+                        onLongClickUser = viewModel::onLongClickUser,
                     )
                 }
                 item {
@@ -93,13 +98,15 @@ fun UserDialog(
 @Composable
 fun UserItem(
     user: User,
-    onLongClickUser: (User) -> Unit
+    isActive: Boolean,
+    onClickUser: (User) -> Unit,
+    onLongClickUser: (User) -> Unit,
 ) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
             .combinedClickable(
-                onClick = { /* TODO: switch active user & close dialog */ },
+                onClick = { onClickUser(user) },
                 onLongClick = { onLongClickUser(user) }
             )
             .padding(Dimens.SpacingSmall),
@@ -111,11 +118,22 @@ fun UserItem(
             tint = NnTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
-        Column {
-            NnText(text = user.name)
+        Column(modifier = Modifier.weight(1f)) {
+            NnText(
+                text = user.name,
+                maxLines = 1,
+            )
             NnText(
                 text = user.islandName,
-                color = NnTheme.colorScheme.primaryContainer
+                color = NnTheme.colorScheme.primaryContainer,
+                maxLines = 1,
+            )
+        }
+        FadeAnimatedVisibility(visible = isActive) {
+            Icon(
+                imageVector = Icons.Default.Check,
+                contentDescription = null,
+                tint = NnTheme.colorScheme.secondary,
             )
         }
     }

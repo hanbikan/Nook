@@ -22,7 +22,7 @@ fun NnText(
     fontWeight: FontWeight? = null,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,
-    overflow: TextOverflow = TextOverflow.Clip,
+    overflow: TextOverflow = TextOverflow.Ellipsis,
     maxLines: Int = Int.MAX_VALUE,
     onTextLayout: (TextLayoutResult) -> Unit = {},
     style: TextStyle = LocalTextStyle.current
