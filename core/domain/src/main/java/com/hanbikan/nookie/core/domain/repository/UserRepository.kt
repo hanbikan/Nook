@@ -8,7 +8,7 @@ interface UserRepository {
 
     fun getUserById(id: Int): Flow<User?>
 
-    suspend fun insertUser(user: User)
+    suspend fun insertUser(user: User): Int
 
     suspend fun deleteUserById(id: Int)
 }

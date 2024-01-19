@@ -11,11 +11,11 @@ class AddUserUseCase @Inject constructor(
     private val appStateRepository: AppStateRepository
 ) {
     suspend operator fun invoke(user: User) {
-        userRepository.insertUser(user)
+        val addedUserId = userRepository.insertUser(user)
 
         // 첫 계정을 생성한 것이라면 active user로 등록
         if (appStateRepository.getActiveUserId().first() == null) {
-            appStateRepository.setActiveUserId(user.id)
+            appStateRepository.setActiveUserId(addedUserId)
         }
     }
 }
