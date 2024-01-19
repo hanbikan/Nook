@@ -13,7 +13,7 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NookNook"
+rootProject.name = "Nookie"
 include(":app")
 include(":feature:phone")
 include(":feature:tutorial")

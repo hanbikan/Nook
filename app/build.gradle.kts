@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook"
+    namespace = "com.hanbikan.nookie"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.hanbikan.nooknook"
+        applicationId = "com.hanbikan.nookie"
         minSdk = 24
         targetSdk = 34
         versionCode = 1

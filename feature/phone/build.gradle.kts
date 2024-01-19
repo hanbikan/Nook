@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.feature.phone"
+    namespace = "com.hanbikan.nookie.feature.phone"
     compileSdk = 34
 
     defaultConfig {
