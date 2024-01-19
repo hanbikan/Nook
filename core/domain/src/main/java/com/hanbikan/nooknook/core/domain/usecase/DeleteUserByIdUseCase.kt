@@ -3,7 +3,7 @@ package com.hanbikan.nooknook.core.domain.usecase
 import com.hanbikan.nooknook.core.domain.repository.UserRepository
 import javax.inject.Inject
 
-class DeleteUserUseCase @Inject constructor(
+class DeleteUserByIdUseCase @Inject constructor(
     private val userRepository: UserRepository
 ) {
     suspend operator fun invoke(id: Int) {

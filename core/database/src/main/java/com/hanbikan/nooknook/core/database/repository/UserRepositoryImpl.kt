@@ -18,6 +18,12 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
+    override fun getUserById(id: Int): Flow<User?> {
+        return userDao.getUserById(id).map { user ->
+            user?.toDomain()
+        }
+    }
+
     override suspend fun insertUser(user: User) {
         userDao.insertUser(user.toData())
     }

@@ -3,13 +3,12 @@ package com.hanbikan.nooknook.core.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nooknook.core.domain.model.User
-import com.hanbikan.nooknook.core.domain.usecase.DeleteUserUseCase
+import com.hanbikan.nooknook.core.domain.usecase.DeleteUserByIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetActiveUserIdUseCase
 import com.hanbikan.nooknook.core.domain.usecase.GetAllUsersUseCase
 import com.hanbikan.nooknook.core.domain.usecase.SetActiveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -21,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class UserDialogViewModel @Inject constructor(
     getAllUsersUseCase: GetAllUsersUseCase,
-    private val deleteUserUseCase: DeleteUserUseCase,
+    private val deleteUserByIdUseCase: DeleteUserByIdUseCase,
     getActiveUserIdUseCase: GetActiveUserIdUseCase,
     private val setActiveUserIdUseCase: SetActiveUserIdUseCase,
 ) : ViewModel() {
@@ -56,7 +55,7 @@ class UserDialogViewModel @Inject constructor(
     fun onConfirmDeleteUser() {
         viewModelScope.launch(Dispatchers.IO) {
             userIdToDelete.value?.let {
-                deleteUserUseCase(it)
+                deleteUserByIdUseCase(it)
                 switchIsDeleteUserDialogShown()
             }
         }
