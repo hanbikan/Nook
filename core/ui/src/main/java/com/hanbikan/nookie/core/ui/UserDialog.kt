@@ -110,9 +110,15 @@ fun UserItem(
     Row(
         modifier = Modifier
             .fillMaxWidth()
-            .combinedClickable(
-                onClick = { onClickUser(user) },
-                onLongClick = { onLongClickUser(user) }
+            .then(
+                if (!isActive) {
+                    Modifier.combinedClickable(
+                        onClick = { onClickUser(user) },
+                        onLongClick = { onLongClickUser(user) }
+                    )
+                } else {
+                    Modifier
+                }
             )
             .padding(Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
