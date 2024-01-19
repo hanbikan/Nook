@@ -18,7 +18,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.hanbikan.nookie.core.designsystem.R
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 data class AppBarIcon(
     val imageVector: ImageVector,
@@ -37,7 +37,7 @@ data class AppBarIcon(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NnTopAppBar(
+fun NkTopAppBar(
     @StringRes titleRes: Int? = null,
     leftAppBarIcons: List<AppBarIcon> = listOf(),
     rightAppBarIcons: List<AppBarIcon> = listOf(),
@@ -50,7 +50,7 @@ fun NnTopAppBar(
                         Icon(
                             imageVector = it.imageVector,
                             contentDescription = it.contentDescription,
-                            tint = NnTheme.colorScheme.primary,
+                            tint = NkTheme.colorScheme.primary,
                         )
                     }
                 }
@@ -58,9 +58,9 @@ fun NnTopAppBar(
         },
         title = {
             titleRes?.let {
-                NnText(
+                NkText(
                     text = stringResource(id = titleRes),
-                    style = NnTheme.typography.titleMedium,
+                    style = NkTheme.typography.titleMedium,
                     fontWeight = FontWeight.Bold,
                 )
             }
@@ -72,22 +72,22 @@ fun NnTopAppBar(
                         Icon(
                             imageVector = it.imageVector,
                             contentDescription = it.contentDescription,
-                            tint = NnTheme.colorScheme.primary,
+                            tint = NkTheme.colorScheme.primary,
                         )
                     }
                 }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-            containerColor = NnTheme.colorScheme.background,
+            containerColor = NkTheme.colorScheme.background,
         )
     )
 }
 
 @Composable
 @Preview
-fun NnTopAppBarPreview() {
-    NnTopAppBar(
+fun NkTopAppBarPreview() {
+    NkTopAppBar(
         titleRes = R.string.top_app_bar_preview_title,
         leftAppBarIcons = listOf(AppBarIcon(imageVector = Icons.Default.Home, onClick = {})),
         rightAppBarIcons = listOf(

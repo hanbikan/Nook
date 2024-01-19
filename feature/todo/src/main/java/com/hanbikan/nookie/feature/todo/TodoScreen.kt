@@ -40,13 +40,13 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nookie.core.designsystem.component.AnimatedLinearProgressIndicator
 import com.hanbikan.nookie.core.designsystem.component.AppBarIcon
 import com.hanbikan.nookie.core.designsystem.component.FadeAnimatedVisibility
-import com.hanbikan.nookie.core.designsystem.component.NnDialog
-import com.hanbikan.nookie.core.designsystem.component.NnDialogWithTextField
-import com.hanbikan.nookie.core.designsystem.component.NnText
-import com.hanbikan.nookie.core.designsystem.component.NnTopAppBar
+import com.hanbikan.nookie.core.designsystem.component.NkDialog
+import com.hanbikan.nookie.core.designsystem.component.NkDialogWithTextField
+import com.hanbikan.nookie.core.designsystem.component.NkText
+import com.hanbikan.nookie.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nookie.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 import com.hanbikan.nookie.core.domain.model.Task
 import com.hanbikan.nookie.core.ui.UserDialog
 
@@ -68,9 +68,9 @@ fun TodoScreen(
         Column(
             modifier = Modifier
                 .fillMaxSize()
-                .background(NnTheme.colorScheme.background),
+                .background(NkTheme.colorScheme.background),
         ) {
-            NnTopAppBar(
+            NkTopAppBar(
                 leftAppBarIcons = listOf(
                     AppBarIcon(imageVector = Icons.Default.Home, onClick = { /* TODO: navigate to phone */ })
                 ),
@@ -100,7 +100,7 @@ fun TodoScreen(
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.SpacingLarge),
             onClick = viewModel::switchAddTaskDialog,
-            containerColor = NnTheme.colorScheme.primary,
+            containerColor = NkTheme.colorScheme.primary,
         ) {
             Icon(
                 imageVector = Icons.Default.Add,
@@ -109,7 +109,7 @@ fun TodoScreen(
         }
 
         if (isAddTaskDialogShown) {
-            NnDialogWithTextField(
+            NkDialogWithTextField(
                 title = stringResource(id = R.string.add_task),
                 placeholder = stringResource(id = R.string.add_task_placeholder),
                 onDismissRequest = viewModel::switchAddTaskDialog,
@@ -118,7 +118,7 @@ fun TodoScreen(
         }
 
         if (isDeleteTaskDialogShown) {
-            NnDialog(
+            NkDialog(
                 description = stringResource(id = R.string.sure_to_delete_task),
                 onDismissRequest = viewModel::switchDeleteTaskDialog,
                 onConfirmation = viewModel::onConfirmDeleteTask
@@ -148,9 +148,9 @@ fun TodoScreenSuccess(
     ) {
         item {
             // Welcome message
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.welcome_text, userName),
-                style = NnTheme.typography.headlineLarge,
+                style = NkTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
             )
 
@@ -192,19 +192,19 @@ fun ProgressCard(
             .padding(Dimens.SpacingMedium, Dimens.SpacingLarge),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
     ) {
-        NnText(
+        NkText(
             text = stringResource(id = R.string.task_count, taskCount),
-            style = NnTheme.typography.bodySmall,
-            color = NnTheme.colorScheme.primaryContainer,
+            style = NkTheme.typography.bodySmall,
+            color = NkTheme.colorScheme.primaryContainer,
         )
-        NnText(
+        NkText(
             text = stringResource(id = R.string.done_task_percent, doneTaskPercent),
-            style = NnTheme.typography.bodyLarge,
+            style = NkTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
         AnimatedLinearProgressIndicator(
             progress = progress,
-            color = NnTheme.colorScheme.tertiary,
+            color = NkTheme.colorScheme.tertiary,
         )
     }
 }
@@ -231,9 +231,9 @@ fun TaskCard(
             checked = task.isDone,
             onCheckedChange = { onClickCheckbox() },
         )
-        NnText(
+        NkText(
             text = task.name,
-            style = NnTheme.typography.bodyLarge,
+            style = NkTheme.typography.bodyLarge,
             fontWeight = FontWeight.Bold,
         )
     }
@@ -252,7 +252,7 @@ fun TodoScreenEmpty() {
             modifier = Modifier.size(Dimens.IconMedium)
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
-        NnText(text = stringResource(id = R.string.empty_todo_list))
+        NkText(text = stringResource(id = R.string.empty_todo_list))
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
     }
 }

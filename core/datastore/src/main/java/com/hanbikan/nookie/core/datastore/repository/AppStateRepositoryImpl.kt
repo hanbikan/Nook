@@ -1,18 +1,18 @@
 package com.hanbikan.nookie.core.datastore.repository
 
-import com.hanbikan.nookie.core.datastore.NnDataStore
+import com.hanbikan.nookie.core.datastore.NkDataStore
 import com.hanbikan.nookie.core.domain.repository.AppStateRepository
 import kotlinx.coroutines.flow.Flow
 import javax.inject.Inject
 
 class AppStateRepositoryImpl @Inject constructor(
-    private val nnDataStore: NnDataStore
+    private val nkDataStore: NkDataStore
 ) : AppStateRepository {
     override fun getActiveUserId(): Flow<Int?> {
-        return nnDataStore.activeUserIdFlow
+        return nkDataStore.activeUserIdFlow
     }
 
     override suspend fun setActiveUserId(id: Int) {
-        nnDataStore.setActiveUserId(id)
+        nkDataStore.setActiveUserId(id)
     }
 }

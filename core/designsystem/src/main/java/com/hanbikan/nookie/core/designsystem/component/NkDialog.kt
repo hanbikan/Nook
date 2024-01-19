@@ -18,36 +18,36 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.window.Dialog
 import com.hanbikan.nookie.core.designsystem.R
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
-fun NnDialog(
+fun NkDialog(
     description: String,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
 ) {
-    NnDialogBase(onDismissRequest) {
+    NkDialogBase(onDismissRequest) {
         Column(
             modifier = Modifier
                 .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            NnText(
+            NkText(
                 text = description,
-                style = NnTheme.typography.titleMedium
+                style = NkTheme.typography.titleMedium
             )
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
-                NnTextButton(
+                NkTextButton(
                     onClick = onDismissRequest,
                     text = stringResource(id = R.string.dismiss),
                     modifier = Modifier.weight(1f)
                 )
-                NnTextButton(
+                NkTextButton(
                     onClick = onConfirmation,
                     text = stringResource(id = R.string.confirm),
                     modifier = Modifier.weight(1f)
@@ -58,7 +58,7 @@ fun NnDialog(
 }
 
 @Composable
-fun NnDialogBase(
+fun NkDialogBase(
     onDismissRequest: () -> Unit,
     content: @Composable() (ColumnScope.() -> Unit)
 ) {
@@ -66,7 +66,7 @@ fun NnDialogBase(
         Card(
             modifier = Modifier
                 .padding(Dimens.SpacingExtraLarge),
-            colors = CardDefaults.cardColors(containerColor = NnTheme.colorScheme.background),
+            colors = CardDefaults.cardColors(containerColor = NkTheme.colorScheme.background),
             shape = RoundedCornerShape(Dimens.SpacingMedium),
             content = content,
         )
@@ -75,6 +75,6 @@ fun NnDialogBase(
 
 @Composable
 @Preview
-fun NnDialogPreview() {
-    NnDialog(description = "할 일을 삭제합니다.", onDismissRequest = {}, onConfirmation = {})
+fun NkDialogPreview() {
+    NkDialog(description = "할 일을 삭제합니다.", onDismissRequest = {}, onConfirmation = {})
 }

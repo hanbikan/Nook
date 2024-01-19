@@ -29,11 +29,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hanbikan.nookie.core.designsystem.component.NnDialog
-import com.hanbikan.nookie.core.designsystem.component.NnDialogBase
-import com.hanbikan.nookie.core.designsystem.component.NnText
+import com.hanbikan.nookie.core.designsystem.component.NkDialog
+import com.hanbikan.nookie.core.designsystem.component.NkDialogBase
+import com.hanbikan.nookie.core.designsystem.component.NkText
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 import com.hanbikan.nookie.core.domain.model.User
 
 @Composable
@@ -46,7 +46,7 @@ fun UserDialog(
     val activeUserId = viewModel.activeUserId.collectAsStateWithLifecycle().value
     val isDeleteUserDialogShown = viewModel.isDeleteUserDialogShown.collectAsStateWithLifecycle().value
 
-    NnDialogBase(onDismissRequest) {
+    NkDialogBase(onDismissRequest) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -54,7 +54,7 @@ fun UserDialog(
                 Icon(
                     imageVector = Icons.Default.Close,
                     contentDescription = stringResource(id = R.string.close),
-                    tint = NnTheme.colorScheme.primaryContainer,
+                    tint = NkTheme.colorScheme.primaryContainer,
                 )
             }
             LazyColumn(
@@ -91,7 +91,7 @@ fun UserDialog(
     }
 
     if (isDeleteUserDialogShown) {
-        NnDialog(
+        NkDialog(
             description = stringResource(id = R.string.sure_to_delete_user),
             onDismissRequest = viewModel::switchIsDeleteUserDialogShown,
             onConfirmation = viewModel::onConfirmDeleteUser
@@ -126,17 +126,17 @@ fun UserItem(
         Icon(
             imageVector = Icons.Default.AccountCircle,
             contentDescription = user.name,
-            tint = NnTheme.colorScheme.primary
+            tint = NkTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
         Column(modifier = Modifier.weight(1f)) {
-            NnText(
+            NkText(
                 text = user.name,
                 maxLines = 1,
             )
-            NnText(
+            NkText(
                 text = user.islandName,
-                color = NnTheme.colorScheme.primaryContainer,
+                color = NkTheme.colorScheme.primaryContainer,
                 maxLines = 1,
             )
         }
@@ -144,7 +144,7 @@ fun UserItem(
             Icon(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
-                tint = NnTheme.colorScheme.secondary,
+                tint = NkTheme.colorScheme.secondary,
             )
         }
     }
@@ -168,10 +168,10 @@ fun AddUserItem(
         Icon(
             imageVector = Icons.Default.Add,
             contentDescription = stringResource(id = R.string.add_user),
-            tint = NnTheme.colorScheme.primary
+            tint = NkTheme.colorScheme.primary
         )
         Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
-        NnText(text = stringResource(id = R.string.add_user))
+        NkText(text = stringResource(id = R.string.add_user))
     }
 }
 

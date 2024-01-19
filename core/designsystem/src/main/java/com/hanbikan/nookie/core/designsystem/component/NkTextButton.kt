@@ -9,10 +9,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
-fun NnTextButton(
+fun NkTextButton(
     onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
@@ -22,18 +22,18 @@ fun NnTextButton(
         modifier = modifier.padding(8.dp),
         shape = RoundedCornerShape(Dimens.SpacingMedium),
         colors = ButtonDefaults.buttonColors(
-            containerColor = NnTheme.colorScheme.tertiary,
+            containerColor = NkTheme.colorScheme.tertiary,
         )
     ) {
-        NnText(
+        NkText(
             text = text,
-            color = NnTheme.colorScheme.tertiaryContainer,
+            color = NkTheme.colorScheme.tertiaryContainer,
         )
     }
 }
 
 @Composable
 @Preview
-fun NnTextButtonPreview() {
-    NnTextButton(onClick = {}, text = "Text")
+fun NkTextButtonPreview() {
+    NkTextButton(onClick = {}, text = "Text")
 }

@@ -2,7 +2,7 @@ package com.hanbikan.nookie.core.database.di
 
 import android.content.Context
 import androidx.room.Room
-import com.hanbikan.nookie.core.database.NnDatabase
+import com.hanbikan.nookie.core.database.NkDatabase
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -16,11 +16,11 @@ object DatabaseModule {
 
     @Provides
     @Singleton
-    fun providesNnDatabase(
+    fun providesNkDatabase(
         @ApplicationContext context: Context
-    ) : NnDatabase = Room.databaseBuilder(
+    ) : NkDatabase = Room.databaseBuilder(
         context,
-        NnDatabase::class.java,
-        "nn-database"
+        NkDatabase::class.java,
+        "nk-database"
     ).build()
 }

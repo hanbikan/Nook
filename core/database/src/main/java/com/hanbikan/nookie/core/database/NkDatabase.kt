@@ -20,7 +20,7 @@ import com.hanbikan.nookie.core.database.entity.UserEntity
     ],
     exportSchema = true
 )
-abstract class NnDatabase : RoomDatabase() {
+abstract class NkDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun userDao(): UserDao
 }

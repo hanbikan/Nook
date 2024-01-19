@@ -6,8 +6,8 @@ import com.hanbikan.nookie.feature.phone.navigation.phoneGraph
 import com.hanbikan.nookie.feature.phone.navigation.phoneGraphRoute
 
 @Composable
-fun NnNavHost(
-    appState: NnAppState,
+fun NkNavHost(
+    appState: NkAppState,
 ) {
     NavHost(
         navController = appState.navController,

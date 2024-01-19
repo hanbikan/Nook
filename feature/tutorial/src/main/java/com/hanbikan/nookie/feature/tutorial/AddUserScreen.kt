@@ -22,13 +22,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nookie.core.designsystem.component.AppBarIcon
-import com.hanbikan.nookie.core.designsystem.component.NnPlaceholder
-import com.hanbikan.nookie.core.designsystem.component.NnText
-import com.hanbikan.nookie.core.designsystem.component.NnTextButton
-import com.hanbikan.nookie.core.designsystem.component.NnTextField
-import com.hanbikan.nookie.core.designsystem.component.NnTopAppBar
+import com.hanbikan.nookie.core.designsystem.component.NkPlaceholder
+import com.hanbikan.nookie.core.designsystem.component.NkText
+import com.hanbikan.nookie.core.designsystem.component.NkTextButton
+import com.hanbikan.nookie.core.designsystem.component.NkTextField
+import com.hanbikan.nookie.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
 fun AddUserScreen(
@@ -42,9 +42,9 @@ fun AddUserScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(NnTheme.colorScheme.background),
+            .background(NkTheme.colorScheme.background),
     ) {
-        NnTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
+        NkTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
         AddUserScreenContents(
             name = name,
             islandName = islandName,
@@ -78,26 +78,26 @@ fun AddUserScreenContents(
         Column(
             verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
         ) {
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.add_user_title),
-                style = NnTheme.typography.headlineLarge,
+                style = NkTheme.typography.headlineLarge,
                 fontWeight = FontWeight.Bold,
             )
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.add_user_body),
-                color = NnTheme.colorScheme.primaryContainer
+                color = NkTheme.colorScheme.primaryContainer
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.name),
-                style = NnTheme.typography.titleMedium
+                style = NkTheme.typography.titleMedium
             )
-            NnTextField(
+            NkTextField(
                 modifier = Modifier.fillMaxWidth(),
                 value = name,
                 onValueChange = setName,
                 placeholder = {
-                    NnPlaceholder(text = stringResource(id = R.string.name_placeholder))
+                    NkPlaceholder(text = stringResource(id = R.string.name_placeholder))
                 },
                 keyboardOptions = KeyboardOptions.Default.copy(
                     imeAction = ImeAction.Next
@@ -108,23 +108,23 @@ fun AddUserScreenContents(
                 singleLine = true,
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.island_name),
-                style = NnTheme.typography.titleMedium
+                style = NkTheme.typography.titleMedium
             )
-            NnTextField(
+            NkTextField(
                 modifier = Modifier
                     .focusRequester(secondFocusRequester)
                     .fillMaxWidth(),
                 value = islandName,
                 onValueChange = setIslandName,
                 placeholder = {
-                    NnPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
+                    NkPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
                 },
                 singleLine = true,
             )
         }
-        NnTextButton(
+        NkTextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = onClickAddButton,
             text = stringResource(id = R.string.add),

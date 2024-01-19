@@ -17,10 +17,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
-import com.hanbikan.nookie.core.designsystem.component.NnText
-import com.hanbikan.nookie.core.designsystem.component.NnTextButton
+import com.hanbikan.nookie.core.designsystem.component.NkText
+import com.hanbikan.nookie.core.designsystem.component.NkTextButton
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
 fun WelcomeScreen(
@@ -29,7 +29,7 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(NnTheme.colorScheme.background)
+            .background(NkTheme.colorScheme.background)
             .padding(Dimens.SideMargin),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
@@ -43,19 +43,19 @@ fun WelcomeScreen(
                 contentDescription = stringResource(id = R.string.welcome_message_title),
                 modifier = Modifier.size(Dimens.IconExtraLarge)
             )
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.welcome_message_title),
-                style = NnTheme.typography.titleLarge,
+                style = NkTheme.typography.titleLarge,
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
-            NnText(
+            NkText(
                 text = stringResource(id = R.string.welcome_message_body),
-                style = NnTheme.typography.titleMedium,
-                color = NnTheme.colorScheme.primaryContainer,
+                style = NkTheme.typography.titleMedium,
+                color = NkTheme.colorScheme.primaryContainer,
             )
         }
 
-        NnTextButton(
+        NkTextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = navigateToAddUser,
             text = stringResource(id = R.string.start),

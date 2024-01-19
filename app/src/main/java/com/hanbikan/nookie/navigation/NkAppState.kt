@@ -9,22 +9,22 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.mapLatest
 
 @Composable
-fun rememberNnAppState(
+fun rememberNkAppState(
     getAllUsersUseCase: GetAllUsersUseCase,
     navController: NavHostController = rememberNavController(),
-): NnAppState {
+): NkAppState {
     return remember(
         getAllUsersUseCase,
         navController,
     ) {
-        NnAppState(
+        NkAppState(
             navController,
             getAllUsersUseCase,
         )
     }
 }
 
-class NnAppState(
+class NkAppState(
     val navController: NavHostController,
     getAllUsersUseCase: GetAllUsersUseCase,
 ) {

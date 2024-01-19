@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 val Context.dataStore: DataStore<Preferences> by preferencesDataStore("preferences")
 
-class NnDataStore @Inject constructor(
+class NkDataStore @Inject constructor(
     private val context: Context
 ) {
     val activeUserIdFlow: Flow<Int?> = context.dataStore.data.map { it[ACTIVE_USER_ID] }

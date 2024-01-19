@@ -12,11 +12,11 @@ import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nookie.core.designsystem.theme.Fonts
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NnTextField(
+fun NkTextField(
     value: String,
     onValueChange: (String) -> Unit,
     modifier: Modifier = Modifier,
@@ -36,28 +36,28 @@ fun NnTextField(
         singleLine = singleLine,
         maxLines = maxLines,
         colors = TextFieldDefaults.textFieldColors(
-            containerColor = NnTheme.colorScheme.secondaryContainer,
-            cursorColor = NnTheme.colorScheme.secondary,
-            focusedIndicatorColor = NnTheme.colorScheme.secondary,
-            unfocusedIndicatorColor = NnTheme.colorScheme.secondary,
+            containerColor = NkTheme.colorScheme.secondaryContainer,
+            cursorColor = NkTheme.colorScheme.secondary,
+            focusedIndicatorColor = NkTheme.colorScheme.secondary,
+            unfocusedIndicatorColor = NkTheme.colorScheme.secondary,
         ),
         textStyle = TextStyle(
-            color = NnTheme.colorScheme.primary,
+            color = NkTheme.colorScheme.primary,
             fontFamily = Fonts.joa
         ),
     )
 }
 
 @Composable
-fun NnPlaceholder(text: String) {
-    NnText(
+fun NkPlaceholder(text: String) {
+    NkText(
         text = text,
-        color = NnTheme.colorScheme.primaryContainer,
+        color = NkTheme.colorScheme.primaryContainer,
     )
 }
 
 @Composable
 @Preview
-fun NnTextFieldPreview() {
-    NnTextField("test", {})
+fun NkTextFieldPreview() {
+    NkTextField("test", {})
 }

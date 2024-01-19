@@ -2,16 +2,16 @@ package com.hanbikan.nookie.ui
 
 import androidx.compose.runtime.Composable
 import com.hanbikan.nookie.core.domain.usecase.GetAllUsersUseCase
-import com.hanbikan.nookie.navigation.NnAppState
-import com.hanbikan.nookie.navigation.NnNavHost
-import com.hanbikan.nookie.navigation.rememberNnAppState
+import com.hanbikan.nookie.navigation.NkAppState
+import com.hanbikan.nookie.navigation.NkNavHost
+import com.hanbikan.nookie.navigation.rememberNkAppState
 
 @Composable
-fun NnApp(
+fun NkApp(
     getAllUsersUseCase: GetAllUsersUseCase,
-    appState: NnAppState = rememberNnAppState(
+    appState: NkAppState = rememberNkAppState(
         getAllUsersUseCase = getAllUsersUseCase,
     ),
 ) {
-    NnNavHost(appState = appState)
+    NkNavHost(appState = appState)
 }

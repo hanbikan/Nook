@@ -22,11 +22,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nookie.core.designsystem.R
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @OptIn(ExperimentalComposeUiApi::class)
 @Composable
-fun NnDialogWithTextField(
+fun NkDialogWithTextField(
     title: String,
     placeholder: String = "",
     onDismissRequest: () -> Unit,
@@ -41,26 +41,26 @@ fun NnDialogWithTextField(
         keyboardController?.show()
     }
 
-    NnDialogBase(onDismissRequest) {
+    NkDialogBase(onDismissRequest) {
         Column(
             modifier = Modifier
                 .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            NnText(
+            NkText(
                 modifier = Modifier.fillMaxWidth(),
                 text = title,
-                style = NnTheme.typography.titleMedium
+                style = NkTheme.typography.titleMedium
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-            NnTextField(
+            NkTextField(
                 value = input.value,
                 onValueChange = {
                     input.value = it
                 },
                 singleLine = true,
-                placeholder = { NnPlaceholder(text = placeholder) },
+                placeholder = { NkPlaceholder(text = placeholder) },
                 modifier = Modifier.focusRequester(focusRequester),
             )
             Row(
@@ -68,12 +68,12 @@ fun NnDialogWithTextField(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
-                NnTextButton(
+                NkTextButton(
                     onClick = onDismissRequest,
                     text = stringResource(id = R.string.dismiss),
                     modifier = Modifier.weight(1f)
                 )
-                NnTextButton(
+                NkTextButton(
                     onClick = { onConfirmation(input.value) },
                     text = stringResource(id = R.string.confirm),
                     modifier = Modifier.weight(1f)
@@ -85,6 +85,6 @@ fun NnDialogWithTextField(
 
 @Composable
 @Preview
-fun NnDialogWithTextFieldPreview() {
-    NnDialogWithTextField(title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
+fun NkDialogWithTextFieldPreview() {
+    NkDialogWithTextField(title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
 }

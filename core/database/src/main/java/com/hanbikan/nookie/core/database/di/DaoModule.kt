@@ -1,6 +1,6 @@
 package com.hanbikan.nookie.core.database.di
 
-import com.hanbikan.nookie.core.database.NnDatabase
+import com.hanbikan.nookie.core.database.NkDatabase
 import com.hanbikan.nookie.core.database.dao.TaskDao
 import com.hanbikan.nookie.core.database.dao.UserDao
 import dagger.Module
@@ -14,11 +14,11 @@ object DaoModule {
 
     @Provides
     fun providesTaskDao(
-        database: NnDatabase
+        database: NkDatabase
     ): TaskDao = database.taskDao()
 
     @Provides
     fun providesUserDao(
-        database: NnDatabase
+        database: NkDatabase
     ): UserDao = database.userDao()
 }

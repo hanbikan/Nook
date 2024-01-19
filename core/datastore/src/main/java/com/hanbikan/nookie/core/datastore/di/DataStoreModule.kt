@@ -1,7 +1,7 @@
 package com.hanbikan.nookie.core.datastore.di
 
 import android.content.Context
-import com.hanbikan.nookie.core.datastore.NnDataStore
+import com.hanbikan.nookie.core.datastore.NkDataStore
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -15,7 +15,7 @@ object DataStoreModule {
 
     @Provides
     @Singleton
-    fun providesNnDataStore(
+    fun providesNkDataStore(
         @ApplicationContext context: Context
-    ) : NnDataStore = NnDataStore(context)
+    ) : NkDataStore = NkDataStore(context)
 }

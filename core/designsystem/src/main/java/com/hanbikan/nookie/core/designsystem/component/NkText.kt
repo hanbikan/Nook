@@ -12,13 +12,13 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import com.hanbikan.nookie.core.designsystem.theme.Fonts
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
-fun NnText(
+fun NkText(
     text: String,
     modifier: Modifier = Modifier,
-    color: Color = NnTheme.colorScheme.primary,
+    color: Color = NkTheme.colorScheme.primary,
     fontWeight: FontWeight? = null,
     textDecoration: TextDecoration? = null,
     textAlign: TextAlign? = null,

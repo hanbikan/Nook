@@ -6,16 +6,16 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.hanbikan.nookie.core.designsystem.theme.Dimens
-import com.hanbikan.nookie.core.designsystem.theme.NnTheme
+import com.hanbikan.nookie.core.designsystem.theme.NkTheme
 
 @Composable
 fun TitleTextWithSpacer(
     title: String,
 ) {
     Column {
-        NnText(
+        NkText(
             text = title,
-            color = NnTheme.colorScheme.primaryContainer,
+            color = NkTheme.colorScheme.primaryContainer,
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
     }
