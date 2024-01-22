@@ -45,6 +45,7 @@ dependencies {
 
     implementation(project(mapOf("path" to ":core:designsystem")))
     implementation(project(mapOf("path" to ":core:domain")))
+    implementation(project(mapOf("path" to ":core:ui")))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
