@@ -1,8 +1,11 @@
 package com.hanbikan.nookie.feature.phone.navigation
 
+import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
+import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.hanbikan.nookie.feature.phone.PhoneScreen
 import com.hanbikan.nookie.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nookie.feature.todo.navigation.todoScreen
 import com.hanbikan.nookie.feature.tutorial.navigation.addUserScreen
@@ -14,6 +17,8 @@ import com.hanbikan.nookie.feature.tutorial.navigation.welcomeScreen
 import kotlinx.coroutines.flow.Flow
 
 const val phoneGraphRoute = "phone_graph"
+
+const val phoneScreenRoute = "phone_screen_route"
 
 
 fun NavGraphBuilder.phoneGraph(
@@ -30,7 +35,11 @@ fun NavGraphBuilder.phoneGraph(
             navigateToWelcome = navController::navigateToWelcome,
             navigateToTodo = navController::navigateToTodo,
         )
-        // TODO: PhoneScreen
+        phoneScreen(
+            navigateToTutorial = navController::navigateToTutorial,
+            navigateToTodo = navController::navigateToTodo,
+        )
+
         welcomeScreen(
             navigateToAddUser = navController::navigateToAddUser,
         )
@@ -38,10 +47,30 @@ fun NavGraphBuilder.phoneGraph(
             navigateUp = navController::navigateUp,
             navigateToTutorial = navController::navigateToTutorial
         )
-
-        tutorialScreen()
+        tutorialScreen(
+            navigateToPhone = navController::navigateToPhone,
+        )
         todoScreen(
-            navigateToAddUser = navController::navigateToAddUser
+            navigateToAddUser = navController::navigateToAddUser,
+            navigateToPhone = navController::navigateToPhone,
         )
     }
+}
+
+fun NavGraphBuilder.phoneScreen(
+    navigateToTutorial: () -> Unit,
+    navigateToTodo: () -> Unit,
+) {
+    composable(
+        route = phoneScreenRoute,
+    ) {
+        PhoneScreen(
+            navigateToTutorial = navigateToTutorial,
+            navigateToTodo = navigateToTodo,
+        )
+    }
+}
+
+fun NavController.navigateToPhone() {
+    navigate(phoneScreenRoute)
 }

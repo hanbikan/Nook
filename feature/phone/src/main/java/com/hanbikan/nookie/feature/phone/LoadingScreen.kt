@@ -36,8 +36,6 @@ fun LoadingScreen(
         modifier = Modifier
             .fillMaxSize()
             .background(NkTheme.colorScheme.background),
-        verticalArrangement = Arrangement.Center,
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
 
     }

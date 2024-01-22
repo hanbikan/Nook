@@ -53,6 +53,7 @@ import com.hanbikan.nookie.core.ui.UserDialog
 @Composable
 fun TodoScreen(
     navigateToAddUser: () -> Unit,
+    navigateToPhone: () -> Unit,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
@@ -72,7 +73,7 @@ fun TodoScreen(
         ) {
             NkTopAppBar(
                 leftAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Home, onClick = { /* TODO: navigate to phone */ })
+                    AppBarIcon(imageVector = Icons.Default.Home, onClick = navigateToPhone)
                 ),
                 rightAppBarIcons = listOf(
                     AppBarIcon(imageVector = Icons.Default.Person, onClick = viewModel::switchUserDialog),
@@ -260,5 +261,5 @@ fun TodoScreenEmpty() {
 @Preview
 @Composable
 fun TodoScreenPreview() {
-    TodoScreen({})
+    TodoScreen({}, {})
 }
