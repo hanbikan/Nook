@@ -5,6 +5,8 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
+import com.hanbikan.nookie.feature.phone.createTodoNkApp
+import com.hanbikan.nookie.feature.phone.createTutorialNkApp
 import com.hanbikan.nookie.feature.phone.PhoneScreen
 import com.hanbikan.nookie.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nookie.feature.todo.navigation.todoScreen
@@ -35,10 +37,6 @@ fun NavGraphBuilder.phoneGraph(
             navigateToWelcome = navController::navigateToWelcome,
             navigateToTodo = navController::navigateToTodo,
         )
-        phoneScreen(
-            navigateToTutorial = navController::navigateToTutorial,
-            navigateToTodo = navController::navigateToTodo,
-        )
 
         welcomeScreen(
             navigateToAddUser = navController::navigateToAddUser,
@@ -47,6 +45,13 @@ fun NavGraphBuilder.phoneGraph(
             navigateUp = navController::navigateUp,
             navigateToTutorial = navController::navigateToTutorial
         )
+
+        phoneScreen(
+            navigateToTutorial = navController::navigateToTutorial,
+            navigateToTodo = navController::navigateToTodo,
+            navigateToAddUser = navController::navigateToAddUser,
+        )
+
         tutorialScreen(
             navigateToPhone = navController::navigateToPhone,
         )
@@ -60,13 +65,17 @@ fun NavGraphBuilder.phoneGraph(
 fun NavGraphBuilder.phoneScreen(
     navigateToTutorial: () -> Unit,
     navigateToTodo: () -> Unit,
+    navigateToAddUser: () -> Unit,
 ) {
     composable(
         route = phoneScreenRoute,
     ) {
         PhoneScreen(
-            navigateToTutorial = navigateToTutorial,
-            navigateToTodo = navigateToTodo,
+            nkApps = listOf(
+                createTutorialNkApp(navigateToTutorial),
+                createTodoNkApp(navigateToTodo),
+            ),
+            navigateToAddUser = navigateToAddUser,
         )
     }
 }
