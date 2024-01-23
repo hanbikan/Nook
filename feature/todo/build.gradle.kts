@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nookie.feature.todo"
+    namespace = "com.hanbikan.nook.feature.todo"
     compileSdk = 34
 
     defaultConfig {

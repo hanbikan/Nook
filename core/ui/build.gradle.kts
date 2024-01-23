@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nookie.core.ui"
+    namespace = "com.hanbikan.nook.core.ui"
     compileSdk = 34
 
     defaultConfig {

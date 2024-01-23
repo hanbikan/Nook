@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nookie.core.database"
+    namespace = "com.hanbikan.nook.core.database"
     compileSdk = 34
 
     defaultConfig {
