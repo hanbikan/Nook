@@ -31,11 +31,13 @@ import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import com.hanbikan.nook.core.ui.NkApp
+import com.hanbikan.nook.core.ui.NkAppWithNavigation
 import com.hanbikan.nook.core.ui.UserDialog
 
 @Composable
 fun PhoneScreen(
-    nkApps: List<NkApp>,
+    nkApps: List<NkAppWithNavigation>,
     navigateToAddUser: () -> Unit,
     viewModel: PhoneViewModel = hiltViewModel(),
 ) {
@@ -98,8 +100,8 @@ fun PhoneScreen(
 fun PhoneScreenPreview() {
     PhoneScreen(
         listOf(
-            createTutorialNkApp {},
-            createTodoNkApp {},
+            NkApp.TUTORIAL.toNkAppWithNavigation {},
+            NkApp.TODO.toNkAppWithNavigation {},
         ),
         {}
     )

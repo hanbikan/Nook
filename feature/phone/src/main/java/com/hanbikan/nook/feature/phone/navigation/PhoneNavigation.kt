@@ -5,8 +5,7 @@ import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
-import com.hanbikan.nook.feature.phone.createTodoNkApp
-import com.hanbikan.nook.feature.phone.createTutorialNkApp
+import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.feature.phone.PhoneScreen
 import com.hanbikan.nook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
@@ -72,8 +71,8 @@ fun NavGraphBuilder.phoneScreen(
     ) {
         PhoneScreen(
             nkApps = listOf(
-                createTutorialNkApp(navigateToTutorial),
-                createTodoNkApp(navigateToTodo),
+                NkApp.TUTORIAL.toNkAppWithNavigation(navigateToTutorial),
+                NkApp.TODO.toNkAppWithNavigation(navigateToTodo),
             ),
             navigateToAddUser = navigateToAddUser,
         )
