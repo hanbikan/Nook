@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -28,6 +29,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -48,6 +50,7 @@ import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
+import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.core.ui.UserDialog
 
 @Composable
@@ -92,7 +95,9 @@ fun TodoScreen(
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
                     TodoScreenEmpty()
                 }
-                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {}
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
+                    TodoScreenLoading()
+                }
             }
         }
 
@@ -255,6 +260,24 @@ fun TodoScreenEmpty() {
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
         NkText(text = stringResource(id = R.string.empty_todo_list))
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+    }
+}
+
+@Composable
+fun TodoScreenLoading() {
+    Column(
+        modifier = Modifier.fillMaxSize(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+        verticalArrangement = Arrangement.Center,
+    ) {
+        Image(
+            painter = NkApp.TODO.painter,
+            contentDescription = NkApp.TODO.name,
+            modifier = Modifier
+                .size(Dimens.IconMedium)
+                .aspectRatio(1f)
+                .clip(RoundedCornerShape(Dimens.SpacingExtraLarge))
+        )
     }
 }
 

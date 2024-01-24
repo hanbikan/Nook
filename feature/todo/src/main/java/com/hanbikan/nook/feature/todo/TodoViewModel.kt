@@ -74,7 +74,7 @@ class TodoViewModel @Inject constructor(
     init {
         // Fake loading for UX
         viewModelScope.launch(Dispatchers.IO) {
-            delay(250)
+            delay(500)
             updateSuccessUiState()
             taskList.collectLatest {
                 updateSuccessUiState()
