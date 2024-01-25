@@ -1,6 +1,5 @@
 package com.hanbikan.nook.feature.tutorial
 
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -39,11 +38,7 @@ fun AddUserScreen(
     val name = viewModel.name.collectAsStateWithLifecycle().value
     val islandName = viewModel.islandName.collectAsStateWithLifecycle().value
 
-    Column(
-        modifier = Modifier
-            .fillMaxSize()
-            .background(NkTheme.colorScheme.background),
-    ) {
+    Column(modifier = Modifier.fillMaxSize()) {
         NkTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
         AddUserScreenContents(
             name = name,

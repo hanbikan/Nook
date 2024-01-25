@@ -1,7 +1,7 @@
 package com.hanbikan.nook.ui
 
 import androidx.compose.runtime.Composable
-import com.hanbikan.nook.core.domain.usecase.GetAllUsersUseCase
+import com.hanbikan.nook.core.designsystem.component.NkBackground
 import com.hanbikan.nook.navigation.NkAppState
 import com.hanbikan.nook.navigation.NkNavHost
 import com.hanbikan.nook.navigation.rememberNkAppState
@@ -13,5 +13,7 @@ fun NkApp(
         startDestination = startDestination,
     ),
 ) {
-    NkNavHost(appState = appState)
+    NkBackground {
+        NkNavHost(appState = appState)
+    }
 }

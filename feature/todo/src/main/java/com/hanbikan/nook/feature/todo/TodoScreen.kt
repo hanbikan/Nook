@@ -9,7 +9,6 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,15 +20,12 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.Checkbox
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -50,7 +46,6 @@ import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
-import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.core.ui.UserDialog
 
 @Composable
@@ -69,11 +64,7 @@ fun TodoScreen(
     val doneTaskCount = viewModel.doneTaskCount.collectAsStateWithLifecycle().value
 
     Box {
-        Column(
-            modifier = Modifier
-                .fillMaxSize()
-                .background(NkTheme.colorScheme.background),
-        ) {
+        Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
                 leftAppBarIcons = listOf(
                     AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)

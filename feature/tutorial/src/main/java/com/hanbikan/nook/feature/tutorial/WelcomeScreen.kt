@@ -1,7 +1,6 @@
 package com.hanbikan.nook.feature.tutorial
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -30,7 +29,6 @@ fun WelcomeScreen(
     Column(
         modifier = Modifier
             .fillMaxSize()
-            .background(NkTheme.colorScheme.background)
             .padding(Dimens.SideMargin),
     ) {
         EnterFadeInAnimatedVisibility {
