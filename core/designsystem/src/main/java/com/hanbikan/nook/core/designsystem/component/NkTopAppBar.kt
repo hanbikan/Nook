@@ -32,6 +32,20 @@ data class AppBarIcon(
             contentDescription = stringResource(id = R.string.back),
             onClick = onClick
         )
+
+        @Composable
+        fun appListAppBarIcon(onClick: () -> Unit) = AppBarIcon(
+            imageVector = Icons.Default.Home,
+            contentDescription = stringResource(id = R.string.app_list),
+            onClick = onClick
+        )
+
+        @Composable
+        fun userDialogAppBarIcon(onClick: () -> Unit) = AppBarIcon(
+            imageVector = Icons.Default.Person,
+            contentDescription = stringResource(id = R.string.user_dialog),
+            onClick = onClick
+        )
     }
 }
 
@@ -93,6 +107,6 @@ fun NkTopAppBarPreview() {
         rightAppBarIcons = listOf(
             AppBarIcon(imageVector = Icons.Default.Search, onClick = {}),
             AppBarIcon(imageVector = Icons.Default.Person, onClick = {}),
-        ),
+        )
     )
 }

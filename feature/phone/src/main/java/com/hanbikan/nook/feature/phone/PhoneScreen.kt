@@ -52,7 +52,7 @@ fun PhoneScreen(
         ) {
             NkTopAppBar(
                 rightAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Person, onClick = viewModel::switchUserDialog),
+                    AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog),
                 ),
             )
             NkText(

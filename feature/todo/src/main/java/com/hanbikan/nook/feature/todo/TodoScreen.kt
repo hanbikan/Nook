@@ -76,10 +76,10 @@ fun TodoScreen(
         ) {
             NkTopAppBar(
                 leftAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Home, onClick = navigateToPhone)
+                    AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
                 ),
                 rightAppBarIcons = listOf(
-                    AppBarIcon(imageVector = Icons.Default.Person, onClick = viewModel::switchUserDialog),
+                    AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
             )
             Box {
