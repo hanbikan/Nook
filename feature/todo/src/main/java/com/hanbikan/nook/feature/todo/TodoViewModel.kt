@@ -19,9 +19,10 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -36,6 +37,7 @@ class TodoViewModel @Inject constructor(
     getActiveUserIdUseCase: GetActiveUserIdUseCase,
     getUserByIdUseCase: GetUserByIdUseCase,
 ) : ViewModel() {
+
     // Ui state
     private val _uiState: MutableStateFlow<TodoUiState> = MutableStateFlow(TodoUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -51,7 +53,16 @@ class TodoViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val taskList: StateFlow<List<Task>> = activeUserId
-        .flatMapLatest { getAllTasksByUserIdUseCase(it) }
+        .flatMapLatest {
+            if (it == null) {
+                flowOf(listOf())
+            } else {
+                getAllTasksByUserIdUseCase(it).onEach { taskList ->
+                    _uiState.value =
+                        if (taskList.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
+                }
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -76,13 +87,6 @@ class TodoViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(todoScreenRoute)
-        }
-
-        // Fake loading for UX
-        viewModelScope.launch(Dispatchers.IO) {
-            taskList.collectLatest {
-                updateSuccessUiState()
-            }
         }
     }
 
@@ -130,11 +134,6 @@ class TodoViewModel @Inject constructor(
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
-    }
-
-    private fun updateSuccessUiState() {
-        _uiState.value =
-            if (taskList.value.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
     }
 }
 
