@@ -7,6 +7,10 @@ import android.view.ViewTreeObserver
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.feature.tutorial.navigation.welcomeScreenRoute
@@ -25,7 +29,16 @@ class MainActivity : ComponentActivity() {
         setContent {
             NkTheme {
                 val lastVisitedRoute = viewModel.lastVisitedRoute.collectAsStateWithLifecycle().value
-                NkApp(startDestination = lastVisitedRoute ?: welcomeScreenRoute)
+                val isReady = viewModel.isReady.collectAsStateWithLifecycle().value
+                if (isReady) {
+                    NkApp(startDestination = lastVisitedRoute ?: welcomeScreenRoute)
+                } else {
+                    Column(
+                        modifier = Modifier
+                            .fillMaxSize()
+                            .background(NkTheme.colorScheme.background)
+                    ) {}
+                }
             }
         }
 
