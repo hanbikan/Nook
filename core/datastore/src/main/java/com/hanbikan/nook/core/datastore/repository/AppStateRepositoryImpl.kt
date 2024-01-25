@@ -12,7 +12,15 @@ class AppStateRepositoryImpl @Inject constructor(
         return nkDataStore.activeUserIdFlow
     }
 
+    override fun getLastVisitedRoute(): Flow<String?> {
+        return nkDataStore.lastVisitedRoute
+    }
+
     override suspend fun setActiveUserId(id: Int) {
         nkDataStore.setActiveUserId(id)
+    }
+
+    override suspend fun setLastVisitedRoute(route: String) {
+        nkDataStore.setLastVisitedRoute(route)
     }
 }
