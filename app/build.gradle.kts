@@ -61,6 +61,7 @@ android {
 dependencies {
 
     implementation(project(mapOf("path" to ":feature:phone")))
+    implementation(project(mapOf("path" to ":feature:tutorial")))
     implementation(project(mapOf("path" to ":core:designsystem")))
     implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:database")))

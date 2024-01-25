@@ -14,8 +14,8 @@ fun NkNavHost(
         startDestination = phoneGraphRoute,
     ) {
         phoneGraph(
-            hasAnyUsers = appState.hasAnyUsers,
             navController = appState.navController,
+            startDestination = appState.startDestination,
         )
     }
 }

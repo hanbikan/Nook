@@ -10,26 +10,20 @@ import kotlinx.coroutines.flow.mapLatest
 
 @Composable
 fun rememberNkAppState(
-    getAllUsersUseCase: GetAllUsersUseCase,
+    startDestination: String,
     navController: NavHostController = rememberNavController(),
 ): NkAppState {
     return remember(
-        getAllUsersUseCase,
         navController,
     ) {
         NkAppState(
             navController,
-            getAllUsersUseCase,
+            startDestination
         )
     }
 }
 
 class NkAppState(
     val navController: NavHostController,
-    getAllUsersUseCase: GetAllUsersUseCase,
-) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val hasAnyUsers = getAllUsersUseCase().mapLatest { users ->
-        users.isNotEmpty()
-    }
-}
+    val startDestination: String,
+)

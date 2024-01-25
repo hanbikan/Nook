@@ -23,20 +23,13 @@ const val phoneScreenRoute = "phone_screen_route"
 
 
 fun NavGraphBuilder.phoneGraph(
-    hasAnyUsers: Flow<Boolean>,
     navController: NavHostController,
-    // TODO: lastVisitedApp
+    startDestination: String,
 ) {
     navigation(
         route = phoneGraphRoute,
-        startDestination = loadingScreenRoute,
+        startDestination = startDestination,
     ) {
-        loadingScreen(
-            hasAnyUsers = hasAnyUsers,
-            navigateToWelcome = navController::navigateToWelcome,
-            navigateToTodo = navController::navigateToTodo,
-        )
-
         welcomeScreen(
             navigateToAddUser = navController::navigateToAddUser,
         )

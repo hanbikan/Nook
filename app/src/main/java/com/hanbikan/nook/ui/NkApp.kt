@@ -8,9 +8,9 @@ import com.hanbikan.nook.navigation.rememberNkAppState
 
 @Composable
 fun NkApp(
-    getAllUsersUseCase: GetAllUsersUseCase,
+    startDestination: String,
     appState: NkAppState = rememberNkAppState(
-        getAllUsersUseCase = getAllUsersUseCase,
+        startDestination = startDestination,
     ),
 ) {
     NkNavHost(appState = appState)
