@@ -19,7 +19,6 @@
         <activity
             android:name="com.hanbikan.nook.MainActivity"
             android:exported="true"
-            android:theme="@style/Theme.Nook"
             android:windowSoftInputMode="adjustResize"
             android:screenOrientation="portrait">
             <intent-filter>
