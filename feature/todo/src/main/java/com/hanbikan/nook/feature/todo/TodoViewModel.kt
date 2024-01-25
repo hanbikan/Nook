@@ -15,7 +15,6 @@ import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -81,8 +80,6 @@ class TodoViewModel @Inject constructor(
 
         // Fake loading for UX
         viewModelScope.launch(Dispatchers.IO) {
-            delay(500)
-            updateSuccessUiState()
             taskList.collectLatest {
                 updateSuccessUiState()
             }

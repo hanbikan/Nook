@@ -95,9 +95,7 @@ fun TodoScreen(
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
                     TodoScreenEmpty()
                 }
-                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {
-                    TodoScreenLoading()
-                }
+                FadeAnimatedVisibility(visible = uiState is TodoUiState.Loading) {}
             }
         }
 
@@ -260,24 +258,6 @@ fun TodoScreenEmpty() {
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
         NkText(text = stringResource(id = R.string.empty_todo_list))
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
-    }
-}
-
-@Composable
-fun TodoScreenLoading() {
-    Column(
-        modifier = Modifier.fillMaxSize(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-    ) {
-        Image(
-            painter = NkApp.TODO.painter,
-            contentDescription = NkApp.TODO.name,
-            modifier = Modifier
-                .size(Dimens.IconMedium)
-                .aspectRatio(1f)
-                .clip(RoundedCornerShape(Dimens.SpacingExtraLarge))
-        )
     }
 }
 
