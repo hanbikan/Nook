@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -17,6 +18,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.core.animation.doOnEnd
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.usecase.GetLastVisitedRouteUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.welcomeScreenRoute
@@ -27,8 +29,7 @@ import javax.inject.Inject
 @AndroidEntryPoint
 class MainActivity : ComponentActivity() {
 
-    @Inject
-    lateinit var getLastVisitedRouteUseCase: GetLastVisitedRouteUseCase
+    private val viewModel: MainViewModel by viewModels()
 
     @SuppressLint("Recycle")
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -52,15 +53,8 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NkTheme {
-                var isReady by remember { mutableStateOf(false) }
-                var lastVisitedRoute: String? by remember { mutableStateOf(null) }
-
-                LaunchedEffect(Unit) {
-                    getLastVisitedRouteUseCase().collect {
-                        isReady = true
-                        lastVisitedRoute = it
-                    }
-                }
+                val isReady = viewModel.isReady.collectAsStateWithLifecycle().value
+                val lastVisitedRoute = viewModel.lastVisitedRoute.collectAsStateWithLifecycle().value
 
                 if (!isReady) {
                     Column(

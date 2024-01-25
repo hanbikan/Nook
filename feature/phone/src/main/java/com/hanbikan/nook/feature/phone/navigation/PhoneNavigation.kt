@@ -12,10 +12,8 @@ import com.hanbikan.nook.feature.todo.navigation.todoScreen
 import com.hanbikan.nook.feature.tutorial.navigation.addUserScreen
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToTutorial
-import com.hanbikan.nook.feature.tutorial.navigation.navigateToWelcome
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreen
 import com.hanbikan.nook.feature.tutorial.navigation.welcomeScreen
-import kotlinx.coroutines.flow.Flow
 
 const val phoneGraphRoute = "phone_graph"
 
