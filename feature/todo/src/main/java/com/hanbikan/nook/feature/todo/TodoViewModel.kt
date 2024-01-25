@@ -9,7 +9,9 @@ import com.hanbikan.nook.core.domain.usecase.DeleteTaskUseCase
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllTasksByUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
+import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTaskUseCase
+import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -27,6 +29,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel @Inject constructor(
+    setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
     getAllTasksByUserIdUseCase: GetAllTasksByUserIdUseCase,
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
@@ -72,6 +75,10 @@ class TodoViewModel @Inject constructor(
     val taskIdToDelete = _taskIdToDelete.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            setLastVisitedRouteUseCase(todoScreenRoute)
+        }
+
         // Fake loading for UX
         viewModelScope.launch(Dispatchers.IO) {
             delay(500)
