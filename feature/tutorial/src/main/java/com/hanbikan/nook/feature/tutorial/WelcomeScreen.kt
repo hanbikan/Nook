@@ -17,6 +17,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.tooling.preview.Preview
+import com.hanbikan.nook.core.designsystem.component.EnterFadeInAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTextButton
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -31,35 +32,40 @@ fun WelcomeScreen(
             .fillMaxSize()
             .background(NkTheme.colorScheme.background)
             .padding(Dimens.SideMargin),
-        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        Column(
-            modifier = Modifier.weight(1f),
-            horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center,
-        ) {
-            Image(
-                imageVector = ImageVector.vectorResource(id = R.drawable.welcome_cats),
-                contentDescription = stringResource(id = R.string.welcome_message_title),
-                modifier = Modifier.size(Dimens.IconExtraLarge)
-            )
-            NkText(
-                text = stringResource(id = R.string.welcome_message_title),
-                style = NkTheme.typography.titleLarge,
-            )
-            Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
-            NkText(
-                text = stringResource(id = R.string.welcome_message_body),
-                style = NkTheme.typography.titleMedium,
-                color = NkTheme.colorScheme.primaryContainer,
-            )
-        }
+        EnterFadeInAnimatedVisibility {
+            Column(
+                horizontalAlignment = Alignment.CenterHorizontally,
+            ) {
+                Column(
+                    modifier = Modifier.weight(1f),
+                    horizontalAlignment = Alignment.CenterHorizontally,
+                    verticalArrangement = Arrangement.Center,
+                ) {
+                    Image(
+                        imageVector = ImageVector.vectorResource(id = R.drawable.welcome_cats),
+                        contentDescription = stringResource(id = R.string.welcome_message_title),
+                        modifier = Modifier.size(Dimens.IconExtraLarge)
+                    )
+                    NkText(
+                        text = stringResource(id = R.string.welcome_message_title),
+                        style = NkTheme.typography.titleLarge,
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
+                    NkText(
+                        text = stringResource(id = R.string.welcome_message_body),
+                        style = NkTheme.typography.titleMedium,
+                        color = NkTheme.colorScheme.primaryContainer,
+                    )
+                }
 
-        NkTextButton(
-            modifier = Modifier.fillMaxWidth(),
-            onClick = navigateToAddUser,
-            text = stringResource(id = R.string.start),
-        )
+                NkTextButton(
+                    modifier = Modifier.fillMaxWidth(),
+                    onClick = navigateToAddUser,
+                    text = stringResource(id = R.string.start),
+                )
+            }
+        }
     }
 }
 
