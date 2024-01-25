@@ -43,6 +43,7 @@ fun NavGraphBuilder.phoneGraph(
         )
 
         tutorialScreen(
+            navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
         )
         todoScreen(
