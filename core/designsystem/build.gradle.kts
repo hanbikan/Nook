@@ -5,7 +5,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.core.designsystem"
+    namespace = "com.hanbikan.nook.core.designsystem"
     compileSdk = 34
 
     defaultConfig {

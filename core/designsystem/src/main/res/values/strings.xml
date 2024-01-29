@@ -3,4 +3,7 @@
     <string name="top_app_bar_preview_title">Todo</string>
     <string name="confirm">확인</string>
     <string name="dismiss">취소</string>
+    <string name="back">뒤로가기</string>
+    <string name="app_list">앱 목록</string>
+    <string name="user_dialog">계정 관리</string>
 </resources>

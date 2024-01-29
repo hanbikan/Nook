@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_message_title">도동숲에 오신 것을 환영해요!</string>
+    <string name="welcome_message_body">모동숲 생활을 꼼꼼하게 관리해드릴게요 :)</string>
+    <string name="start">시작하기</string>
+    <string name="add_user_title">계정을 추가합니다</string>
+    <string name="add_user_body">입력하신 정보는 언제든지 변경할 수 있어요.</string>
+    <string name="add">추가하기</string>
+    <string name="name">이름</string>
+    <string name="name_placeholder">혜린, 지민, …</string>
+    <string name="island_name">섬 이름</string>
+    <string name="island_name_placeholder">둥둥섬, 송도, …</string>
+</resources>

@@ -7,11 +7,11 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook"
+    namespace = "com.hanbikan.nook"
     compileSdk = 34
 
     defaultConfig {
-        applicationId = "com.hanbikan.nooknook"
+        applicationId = "com.hanbikan.nook"
         minSdk = 24
         targetSdk = 34
         versionCode = 1
@@ -61,13 +61,16 @@ android {
 dependencies {
 
     implementation(project(mapOf("path" to ":feature:phone")))
+    implementation(project(mapOf("path" to ":feature:tutorial")))
     implementation(project(mapOf("path" to ":core:designsystem")))
-    implementation(project(mapOf("path" to ":core:data")))
+    implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:database")))
+    implementation(project(mapOf("path" to ":core:datastore")))
     implementation(project(mapOf("path" to ":core:ui")))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

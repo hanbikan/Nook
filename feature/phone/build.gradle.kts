@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nooknook.feature.phone"
+    namespace = "com.hanbikan.nook.feature.phone"
     compileSdk = 34
 
     defaultConfig {
@@ -47,9 +47,11 @@ dependencies {
     implementation(project(mapOf("path" to ":feature:todo")))
     implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:designsystem")))
+    implementation(project(mapOf("path" to ":core:ui")))
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
+    implementation(libs.lifecycle.runtime.compose)
     implementation(libs.activity.compose)
     implementation(platform(libs.compose.bom))
     implementation(libs.ui)

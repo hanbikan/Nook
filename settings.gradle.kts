@@ -13,13 +13,13 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "NookNook"
+rootProject.name = "Nook"
 include(":app")
 include(":feature:phone")
 include(":feature:tutorial")
 include(":feature:todo")
 include(":core:designsystem")
-include(":core:data")
 include(":core:domain")
 include(":core:database")
 include(":core:ui")
+include(":core:datastore")
