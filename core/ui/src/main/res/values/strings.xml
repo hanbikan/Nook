@@ -5,4 +5,7 @@
     <string name="close">닫기</string>
     <string name="add_user">다른 계정 추가</string>
     <string name="sure_to_delete_user">정말 계정을 삭제하시겠습니까?</string>
+    <string name="task_count">%d개의 할일</string>
+    <string name="done_task_percent">%d%% 완료</string>
+    <string name="welcome_text">안녕하세요, %s님!</string>
 </resources>

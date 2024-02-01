@@ -65,11 +65,6 @@ class TodoViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val doneTaskCount = taskList.mapLatest { taskList ->
-        taskList.count { it.isDone }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
-
     // Dialog
     private val _isAddTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isAddTaskDialogShown = _isAddTaskDialogShown.asStateFlow()

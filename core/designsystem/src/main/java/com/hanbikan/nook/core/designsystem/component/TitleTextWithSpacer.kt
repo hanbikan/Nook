@@ -13,6 +13,7 @@ fun TitleTextWithSpacer(
     title: String,
 ) {
     Column {
+        Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
         NkText(
             text = title,
             color = NkTheme.colorScheme.primaryContainer,
