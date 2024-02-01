@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.database.di
 
 import com.hanbikan.nook.core.database.NkDatabase
 import com.hanbikan.nook.core.database.dao.TaskDao
+import com.hanbikan.nook.core.database.dao.TutorialTaskDao
 import com.hanbikan.nook.core.database.dao.UserDao
 import dagger.Module
 import dagger.Provides
@@ -16,6 +17,11 @@ object DaoModule {
     fun providesTaskDao(
         database: NkDatabase
     ): TaskDao = database.taskDao()
+
+    @Provides
+    fun providesTutorialTaskDao(
+        database: NkDatabase
+    ): TutorialTaskDao = database.tutorialTaskDao()
 
     @Provides
     fun providesUserDao(
