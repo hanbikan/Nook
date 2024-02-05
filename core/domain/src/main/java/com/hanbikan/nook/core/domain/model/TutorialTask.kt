@@ -5,5 +5,7 @@ data class TutorialTask(
     val userId: Int,
     override val name: String,
     override val isDone: Boolean,
+    val detailDescription: String? = null,
+    val detailImageId: Int? = null,
     val day: Int,
 ) : Completable

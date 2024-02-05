@@ -10,5 +10,7 @@ data class TutorialTaskEntity(
     @ColumnInfo(name = "user_id", defaultValue = "-1") val userId: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
+    @ColumnInfo(name = "detail_description") val detailDescription: String?,
+    @ColumnInfo(name = "detail_image_id") val detailImageId: Int? = null,
     @ColumnInfo(name = "day") val day: Int
 )

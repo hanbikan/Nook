@@ -9,7 +9,10 @@ import kotlinx.coroutines.flow.Flow
 
 @Dao
 interface TutorialTaskDao {
-    @Query("SELECT * FROM tutorial_task WHERE tutorial_task.user_id == :userId and tutorial_task.user_id == :day")
+    @Query("SELECT * FROM tutorial_task WHERE tutorial_task.user_id == :userId")
+    fun getTasksByUserId(userId: Int): Flow<List<TutorialTaskEntity>>
+
+    @Query("SELECT * FROM tutorial_task WHERE tutorial_task.user_id == :userId and tutorial_task.day == :day")
     fun getTasksByUserIdAndDay(userId: Int, day: Int): Flow<List<TutorialTaskEntity>>
 
     @Insert

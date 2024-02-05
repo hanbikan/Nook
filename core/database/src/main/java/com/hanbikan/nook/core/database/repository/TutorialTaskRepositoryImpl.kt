@@ -12,6 +12,12 @@ import javax.inject.Inject
 class TutorialTaskRepositoryImpl @Inject constructor(
     private val tutorialTaskDao: TutorialTaskDao
 ) : TutorialTaskRepository {
+    override fun getTutorialTasksByUserId(userId: Int): Flow<List<TutorialTask>> {
+        return tutorialTaskDao.getTasksByUserId(userId).map { tutorialTasks ->
+            tutorialTasks.map { it.toDomain() }
+        }
+    }
+
     override fun getTutorialTasksByUserIdAndDay(userId: Int, day: Int): Flow<List<TutorialTask>> {
         return tutorialTaskDao.getTasksByUserIdAndDay(userId, day).map { tutorialTasks ->
             tutorialTasks.map { it.toDomain() }
