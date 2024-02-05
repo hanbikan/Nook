@@ -8,4 +8,6 @@ data class TutorialTask(
     val detailDescription: String? = null,
     val detailImageId: Int? = null,
     val day: Int,
-) : Completable
+) : Completable {
+    companion object // For companion extension functions outside
+}
