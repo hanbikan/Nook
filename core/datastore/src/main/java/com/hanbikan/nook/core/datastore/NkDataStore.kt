@@ -17,7 +17,9 @@ class NkDataStore @Inject constructor(
     private val context: Context,
 ) {
     val activeUserIdFlow: Flow<Int?> = context.dataStore.data.map { it[ACTIVE_USER_ID] }
-    val lastVisitedRoute: Flow<String?> = context.dataStore.data.map { it[LAST_VISITED_ROUTE] }
+    val lastVisitedRouteFlow: Flow<String?> = context.dataStore.data.map { it[LAST_VISITED_ROUTE] }
+
+    val tutorialDayFlow: Flow<Int> = context.dataStore.data.map { it[TUTORIAL_DAY] ?: 0 }
 
     suspend fun setActiveUserId(id: Int) {
         context.dataStore.edit {
@@ -31,8 +33,15 @@ class NkDataStore @Inject constructor(
         }
     }
 
+    suspend fun setTutorialDay(tutorialDay: Int) {
+        context.dataStore.edit {
+            it[TUTORIAL_DAY] = tutorialDay
+        }
+    }
+
     companion object {
         val ACTIVE_USER_ID = intPreferencesKey("active_user_id")
         val LAST_VISITED_ROUTE = stringPreferencesKey("last_visited_route")
+        val TUTORIAL_DAY = intPreferencesKey("tutorial_day")
     }
 }

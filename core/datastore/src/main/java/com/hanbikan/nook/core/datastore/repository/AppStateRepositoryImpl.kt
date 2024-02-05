@@ -13,7 +13,11 @@ class AppStateRepositoryImpl @Inject constructor(
     }
 
     override fun getLastVisitedRoute(): Flow<String?> {
-        return nkDataStore.lastVisitedRoute
+        return nkDataStore.lastVisitedRouteFlow
+    }
+
+    override fun getTutorialDay(): Flow<Int> {
+        return nkDataStore.tutorialDayFlow
     }
 
     override suspend fun setActiveUserId(id: Int) {
@@ -22,5 +26,9 @@ class AppStateRepositoryImpl @Inject constructor(
 
     override suspend fun setLastVisitedRoute(route: String) {
         nkDataStore.setLastVisitedRoute(route)
+    }
+
+    override suspend fun setTutorialDay(tutorialDay: Int) {
+        nkDataStore.setTutorialDay(tutorialDay)
     }
 }

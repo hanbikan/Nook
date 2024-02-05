@@ -32,7 +32,7 @@ fun TutorialScreen(
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
-    val day = viewModel.day.collectAsStateWithLifecycle().value
+    val tutorialDay = viewModel.tutorialDay.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value
 
@@ -57,7 +57,7 @@ fun TutorialScreen(
                         WelcomeText(userName = activeUser?.name ?: "")
 
                         // Progress card
-                        TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, day))
+                        TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, tutorialDay ?: 0))
                         ProgressCard(completableList = tutorialTaskList)
 
                         // Today's tutorial task list

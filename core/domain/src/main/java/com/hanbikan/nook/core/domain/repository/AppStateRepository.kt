@@ -7,7 +7,11 @@ interface AppStateRepository {
 
     fun getLastVisitedRoute(): Flow<String?>
 
+    fun getTutorialDay(): Flow<Int>
+
     suspend fun setActiveUserId(id: Int)
 
     suspend fun setLastVisitedRoute(route: String)
+
+    suspend fun setTutorialDay(tutorialDay: Int)
 }

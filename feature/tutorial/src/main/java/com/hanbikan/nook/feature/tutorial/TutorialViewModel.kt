@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetTutorialDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
@@ -17,6 +18,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -31,10 +33,12 @@ class TutorialViewModel @Inject constructor(
     setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
     getActiveUserIdUseCase: GetActiveUserIdUseCase,
     getUserByIdUseCase: GetUserByIdUseCase,
+    getTutorialDayUseCase: GetTutorialDayUseCase,
 ) : ViewModel() {
 
     // Data for UI
-    val day = MutableStateFlow(1) // TODO
+    val tutorialDay: StateFlow<Int?> = getTutorialDayUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -46,13 +50,14 @@ class TutorialViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val tutorialTaskList: StateFlow<List<TutorialTask>> = activeUserId
-        .flatMapLatest {
-            if (it == null) {
+        .combine(tutorialDay) { activeUserId, tutorialDay ->
+            if (activeUserId == null || tutorialDay == null) {
                 flowOf(listOf())
             } else {
-                getTutorialTasksByUserIdAndDayUseCase(it, day.value)
+                getTutorialTasksByUserIdAndDayUseCase(activeUserId, tutorialDay)
             }
         }
+        .flatMapLatest { it }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     // Ui state
