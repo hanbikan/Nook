@@ -14,11 +14,8 @@ class AddUserUseCase @Inject constructor(
     suspend operator fun invoke(user: User) {
         val addedUserId = userRepository.insertUser(user)
 
+        // 후속 작업
+        appStateRepository.setActiveUserId(addedUserId)
         initializeTutorialTasksUseCase(addedUserId)
-
-        // 첫 계정을 생성한 것이라면 active user로 등록
-        if (appStateRepository.getActiveUserId().first() == null) {
-            appStateRepository.setActiveUserId(addedUserId)
-        }
     }
 }
