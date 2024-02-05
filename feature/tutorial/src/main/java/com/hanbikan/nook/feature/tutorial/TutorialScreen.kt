@@ -32,6 +32,7 @@ fun TutorialScreen(
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
     val tutorialDay = viewModel.tutorialDay.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value

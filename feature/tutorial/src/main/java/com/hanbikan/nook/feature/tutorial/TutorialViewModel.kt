@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
@@ -34,6 +35,7 @@ class TutorialViewModel @Inject constructor(
     getActiveUserIdUseCase: GetActiveUserIdUseCase,
     getUserByIdUseCase: GetUserByIdUseCase,
     getTutorialDayUseCase: GetTutorialDayUseCase,
+    getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
 ) : ViewModel() {
 
     // Data for UI
@@ -41,6 +43,11 @@ class TutorialViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val tutorialDayRange: StateFlow<IntRange?> = activeUserId
+        .flatMapLatest { getTutorialDayRangeUseCase(it) }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -62,13 +69,14 @@ class TutorialViewModel @Inject constructor(
 
     // Ui state
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uiState: StateFlow<TutorialUiState> = tutorialTaskList.mapLatest {
-        if (it.isEmpty()) {
-            TutorialUiState.Loading
-        } else {
-            TutorialUiState.Success
+    val uiState: StateFlow<TutorialUiState> = tutorialTaskList
+        .mapLatest {
+            if (it.isEmpty()) {
+                TutorialUiState.Loading
+            } else {
+                TutorialUiState.Success
+            }
         }
-    }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TutorialUiState.Loading)
 
     // Dialog
