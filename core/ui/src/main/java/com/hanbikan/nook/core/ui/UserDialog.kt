@@ -43,7 +43,7 @@ fun UserDialog(
     viewModel: UserDialogViewModel = hiltViewModel(),
 ) {
     val users = viewModel.users.collectAsStateWithLifecycle().value
-    val activeUserId = viewModel.activeUserId.collectAsStateWithLifecycle().value
+    val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val isDeleteUserDialogShown = viewModel.isDeleteUserDialogShown.collectAsStateWithLifecycle().value
 
     NkDialogBase(onDismissRequest) {
@@ -69,7 +69,7 @@ fun UserDialog(
                 items(users) {
                     UserItem(
                         user = it,
-                        isActive = activeUserId == it.id,
+                        isActive = activeUser?.id == it.id,
                         onClickUser = { user ->
                             viewModel.setActiveUserId(user.id)
                             onDismissRequest()

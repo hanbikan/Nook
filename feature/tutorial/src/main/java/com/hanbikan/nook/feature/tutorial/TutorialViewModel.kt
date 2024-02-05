@@ -5,10 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCase
-import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTaskUseCase
@@ -33,36 +32,35 @@ class TutorialViewModel @Inject constructor(
     private val getTutorialTasksByUserIdAndDayUseCase: GetTutorialTasksByUserIdAndDayUseCase,
     private val updateTutorialTaskUseCase: UpdateTutorialTaskUseCase,
     setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
-    getActiveUserIdUseCase: GetActiveUserIdUseCase,
-    getUserByIdUseCase: GetUserByIdUseCase,
+    getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
 
     // Data for UI
-    private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
+    val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val tutorialDayRange: StateFlow<IntRange?> = activeUserId
-        .flatMapLatest { getTutorialDayRangeUseCase(it) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val activeUser: StateFlow<User?> = activeUserId
-        .flatMapLatest { getUserByIdUseCase(it) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val tutorialTaskList: StateFlow<List<TutorialTask>> = activeUserId
-        .combine(activeUser) { activeUserId, activeUser ->
-            if (activeUserId == null || activeUser == null) {
-                flowOf(listOf())
+    val tutorialDayRange: StateFlow<IntRange?> = activeUser
+        .flatMapLatest {
+            if (it == null) {
+                flowOf(null)
             } else {
-                getTutorialTasksByUserIdAndDayUseCase(activeUserId, activeUser.tutorialDay)
+                getTutorialDayRangeUseCase(it.id)
             }
         }
-        .flatMapLatest { it }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val tutorialTaskList: StateFlow<List<TutorialTask>> = activeUser
+        .flatMapLatest {
+            if (it == null) {
+                flowOf(listOf())
+            } else {
+                getTutorialTasksByUserIdAndDayUseCase(it.id, it.tutorialDay)
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     // Ui state

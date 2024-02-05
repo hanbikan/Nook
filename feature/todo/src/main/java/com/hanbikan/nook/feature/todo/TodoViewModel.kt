@@ -6,9 +6,8 @@ import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.AddTaskUseCase
 import com.hanbikan.nook.core.domain.usecase.DeleteTaskUseCase
-import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllTasksByUserIdUseCase
-import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTaskUseCase
 import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -34,8 +32,7 @@ class TodoViewModel @Inject constructor(
     private val addTaskUseCase: AddTaskUseCase,
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
-    getActiveUserIdUseCase: GetActiveUserIdUseCase,
-    getUserByIdUseCase: GetUserByIdUseCase,
+    getActiveUserUseCase: GetActiveUserUseCase,
 ) : ViewModel() {
 
     // Ui state
@@ -43,21 +40,16 @@ class TodoViewModel @Inject constructor(
     val uiState = _uiState.asStateFlow()
 
     // Data for UI
-    private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
+    val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val activeUser: StateFlow<User?> = activeUserId
-        .flatMapLatest { getUserByIdUseCase(it) }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
-    val taskList: StateFlow<List<Task>> = activeUserId
+    val taskList: StateFlow<List<Task>> = activeUser
         .flatMapLatest {
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getAllTasksByUserIdUseCase(it).onEach { taskList ->
+                getAllTasksByUserIdUseCase(it.id).onEach { taskList ->
                     _uiState.value =
                         if (taskList.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
                 }
@@ -89,8 +81,8 @@ class TodoViewModel @Inject constructor(
         if (name.isEmpty()) return
 
         viewModelScope.launch(Dispatchers.IO) {
-            activeUserId.value?.let {
-                val task = Task(userId = it, name = name, isDone = false)
+            activeUser.value?.let {
+                val task = Task(userId = it.id, name = name, isDone = false)
                 addTaskUseCase(task)
                 switchAddTaskDialog()
             }

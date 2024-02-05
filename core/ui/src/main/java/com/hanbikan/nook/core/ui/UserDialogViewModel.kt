@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.DeleteUserByIdUseCase
-import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllUsersUseCase
 import com.hanbikan.nook.core.domain.usecase.SetActiveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,14 +21,14 @@ import javax.inject.Inject
 class UserDialogViewModel @Inject constructor(
     getAllUsersUseCase: GetAllUsersUseCase,
     private val deleteUserByIdUseCase: DeleteUserByIdUseCase,
-    getActiveUserIdUseCase: GetActiveUserIdUseCase,
+    getActiveUserUseCase: GetActiveUserUseCase,
     private val setActiveUserIdUseCase: SetActiveUserIdUseCase,
 ) : ViewModel() {
 
     val users: StateFlow<List<User>> = getAllUsersUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
-    val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
+    val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     private val _userIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
