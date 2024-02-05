@@ -39,7 +39,6 @@ fun TutorialScreen(
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
-    val tutorialDay = viewModel.tutorialDay.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value
 
@@ -67,7 +66,7 @@ fun TutorialScreen(
                             WelcomeText(userName = activeUser?.name ?: "")
 
                             // Progress card
-                            TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, tutorialDay ?: 0))
+                            TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, activeUser?.tutorialDay ?: 0))
                             ProgressCard(completableList = tutorialTaskList)
 
                             // Today's tutorial task list
@@ -85,7 +84,7 @@ fun TutorialScreen(
                         IconButton(
                             onClick = viewModel::decreaseTutorialDay,
                             modifier = Modifier.weight(1f),
-                            enabled = tutorialDay != null && tutorialDayRange != null && (tutorialDay - 1) in tutorialDayRange
+                            enabled = activeUser != null && tutorialDayRange != null && (activeUser.tutorialDay - 1) in tutorialDayRange
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowLeft,
@@ -95,7 +94,7 @@ fun TutorialScreen(
                         IconButton(
                             onClick = viewModel::increaseTutorialDay,
                             modifier = Modifier.weight(1f),
-                            enabled = tutorialDay != null && tutorialDayRange != null && (tutorialDay + 1) in tutorialDayRange
+                            enabled = activeUser != null && tutorialDayRange != null && (activeUser.tutorialDay + 1) in tutorialDayRange
                         ) {
                             Icon(
                                 imageVector = Icons.Default.KeyboardArrowRight,

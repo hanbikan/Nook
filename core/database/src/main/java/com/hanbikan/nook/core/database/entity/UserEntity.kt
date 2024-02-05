@@ -8,5 +8,6 @@ import androidx.room.PrimaryKey
 data class UserEntity(
     @PrimaryKey(autoGenerate = true) val id: Int = 0,
     @ColumnInfo(name = "name") val name: String,
-    @ColumnInfo(name = "island_name") val islandName: String
+    @ColumnInfo(name = "island_name") val islandName: String,
+    @ColumnInfo(name = "tutorial_day", defaultValue = "0") val tutorialDay: Int,
 )

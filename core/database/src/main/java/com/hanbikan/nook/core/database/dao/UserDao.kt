@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.database.dao
 
 import androidx.room.Dao
 import androidx.room.Insert
+import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import com.hanbikan.nook.core.database.entity.UserEntity
 import kotlinx.coroutines.flow.Flow
@@ -14,7 +15,7 @@ interface UserDao {
     @Query("SELECT * FROM user WHERE user.id == :id")
     fun getUserById(id: Int): Flow<UserEntity?>
 
-    @Insert
+    @Insert(onConflict = OnConflictStrategy.REPLACE)
     suspend fun insertUser(userEntity: UserEntity): Long
 
     @Query("DELETE FROM user WHERE user.id == :id")

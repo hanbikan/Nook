@@ -7,11 +7,10 @@ import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
-import com.hanbikan.nook.core.domain.usecase.GetTutorialDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCase
 import com.hanbikan.nook.core.domain.usecase.GetUserByIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
-import com.hanbikan.nook.core.domain.usecase.SetTutorialDayUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTaskUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -36,15 +35,11 @@ class TutorialViewModel @Inject constructor(
     setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
     getActiveUserIdUseCase: GetActiveUserIdUseCase,
     getUserByIdUseCase: GetUserByIdUseCase,
-    getTutorialDayUseCase: GetTutorialDayUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
-    private val setTutorialDayUseCase: SetTutorialDayUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
 
     // Data for UI
-    val tutorialDay: StateFlow<Int?> = getTutorialDayUseCase()
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
-
     private val activeUserId: StateFlow<Int?> = getActiveUserIdUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
@@ -60,11 +55,11 @@ class TutorialViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val tutorialTaskList: StateFlow<List<TutorialTask>> = activeUserId
-        .combine(tutorialDay) { activeUserId, tutorialDay ->
-            if (activeUserId == null || tutorialDay == null) {
+        .combine(activeUser) { activeUserId, activeUser ->
+            if (activeUserId == null || activeUser == null) {
                 flowOf(listOf())
             } else {
-                getTutorialTasksByUserIdAndDayUseCase(activeUserId, tutorialDay)
+                getTutorialTasksByUserIdAndDayUseCase(activeUserId, activeUser.tutorialDay)
             }
         }
         .flatMapLatest { it }
@@ -106,10 +101,10 @@ class TutorialViewModel @Inject constructor(
 
     fun increaseTutorialDay() {
         viewModelScope.launch(Dispatchers.IO) {
-            executeIfBothNonNull(tutorialDay.value, tutorialDayRange.value) { tutorialDay, tutorialDayRange ->
-                val nextTutorialDay = tutorialDay + 1
+            executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
+                val nextTutorialDay = activeUser.tutorialDay + 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    setTutorialDayUseCase(nextTutorialDay)
+                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }
@@ -117,10 +112,10 @@ class TutorialViewModel @Inject constructor(
 
     fun decreaseTutorialDay() {
         viewModelScope.launch(Dispatchers.IO) {
-            executeIfBothNonNull(tutorialDay.value, tutorialDayRange.value) { tutorialDay, tutorialDayRange ->
-                val nextTutorialDay = tutorialDay - 1
+            executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
+                val nextTutorialDay = activeUser.tutorialDay - 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    setTutorialDayUseCase(nextTutorialDay)
+                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }
