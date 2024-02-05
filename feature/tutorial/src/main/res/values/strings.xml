@@ -12,4 +12,6 @@
     <string name="island_name_placeholder">둥둥섬, 송도, …</string>
     <string name="progress_by_day">%d일차 진행도</string>
     <string name="today_task">오늘 해야할 일</string>
+    <string name="previous">이전</string>
+    <string name="next">다음</string>
 </resources>
