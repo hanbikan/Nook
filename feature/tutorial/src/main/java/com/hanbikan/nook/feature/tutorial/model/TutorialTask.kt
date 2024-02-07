@@ -1,6 +1,7 @@
-package com.hanbikan.nook.feature.tutorial
+package com.hanbikan.nook.feature.tutorial.model
 
 import com.hanbikan.nook.core.domain.model.TutorialTask
+import com.hanbikan.nook.feature.tutorial.R
 
 fun TutorialTask.Companion.createInitialTutorialTasks(userId: Int): List<TutorialTask> = listOf(
     TutorialTask(day = 0, name = "NPC들의 지시를 받아 튜토리얼 진행하기", detailDescription = "내 집과 주민의 집 위치는 나중에 변경 가능해요.", userId = userId, isDone = false),
