@@ -121,7 +121,10 @@ fun TutorialScreenContents(
                     WelcomeText(userName = activeUser.name)
 
                     // Progress card
-                    TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, activeUser.tutorialDay))
+                    TitleTextWithSpacer(
+                        title = stringResource(id = R.string.progress_by_day, activeUser.tutorialDay),
+                        onClickInfo = {}
+                    )
                     ProgressCard(completableList = tutorialTaskList)
 
                     // Today's tutorial task list
