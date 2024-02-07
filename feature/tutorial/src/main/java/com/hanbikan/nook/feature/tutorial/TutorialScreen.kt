@@ -21,6 +21,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
+import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -35,13 +36,16 @@ import com.hanbikan.nook.core.ui.WelcomeText
 fun TutorialScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
+    navigateToTodo: () -> Unit,
     viewModel: TutorialViewModel = hiltViewModel(),
 ) {
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val isNextDayDialogShown = viewModel.isNextDayDialogShown.collectAsStateWithLifecycle().value
+    val isTutorialEndDialogShown = viewModel.isTutorialEndDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
-    val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
+    val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value ?: User.DEFAULT
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value
 
     Box {
@@ -59,7 +63,7 @@ fun TutorialScreen(
             )
             TutorialScreenContents(
                 uiState = uiState,
-                activeUser = activeUser ?: User.DEFAULT,
+                activeUser = activeUser,
                 tutorialTaskList = tutorialTaskList,
                 switchTutorialTask = viewModel::switchTutorialTask,
                 decreaseTutorialDay = viewModel::decreaseTutorialDay,
@@ -72,6 +76,25 @@ fun TutorialScreen(
             UserDialog(
                 navigateToAddUser = navigateToAddUser,
                 onDismissRequest = viewModel::switchUserDialog
+            )
+        }
+
+        if (isNextDayDialogShown) {
+            NkDialog(
+                description = stringResource(id = R.string.move_to_next_day_description, activeUser.tutorialDay + 1),
+                onDismissRequest = viewModel::switchNextDayDialog,
+                onConfirmation = {
+                    viewModel.increaseTutorialDay()
+                    viewModel.switchNextDayDialog()
+                }
+            )
+        }
+
+        if (isTutorialEndDialogShown) {
+            NkDialog(
+                description = stringResource(id = R.string.move_to_todo_description),
+                onDismissRequest = viewModel::switchTutorialEndDialog,
+                onConfirmation = navigateToTodo
             )
         }
     }
@@ -141,5 +164,5 @@ fun TutorialScreenContents(
 @Composable
 @Preview
 fun TutorialScreenPreview() {
-    TutorialScreen({}, {})
+    TutorialScreen({}, {}, {})
 }

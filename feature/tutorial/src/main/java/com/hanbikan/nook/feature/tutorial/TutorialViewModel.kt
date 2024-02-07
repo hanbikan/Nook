@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.tutorial
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
@@ -15,12 +16,13 @@ import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -80,6 +82,12 @@ class TutorialViewModel @Inject constructor(
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
+    private val _isNextDayDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isNextDayDialogShown = _isNextDayDialogShown.asStateFlow()
+
+    private val _isTutorialEndDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isTutorialEndDialogShown = _isTutorialEndDialogShown.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(tutorialScreenRoute)
@@ -88,7 +96,13 @@ class TutorialViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             tutorialTaskList.collectLatest { tutorialTaskList ->
                 if (tutorialTaskList.all { it.isDone }) {
-
+                    executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
+                        if (activeUser.tutorialDay in tutorialDayRange.first until tutorialDayRange.last) {
+                            _isNextDayDialogShown.value = true
+                        } else if (activeUser.tutorialDay == tutorialDayRange.last) {
+                            _isTutorialEndDialogShown.value = true
+                        }
+                    }
                 }
             }
         }
@@ -96,6 +110,14 @@ class TutorialViewModel @Inject constructor(
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
+    }
+
+    fun switchNextDayDialog() {
+        _isNextDayDialogShown.value = !isNextDayDialogShown.value
+    }
+
+    fun switchTutorialEndDialog() {
+        _isTutorialEndDialogShown.value = !isTutorialEndDialogShown.value
     }
 
     fun switchTutorialTask(index: Int) {

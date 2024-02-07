@@ -40,6 +40,7 @@ fun NavGraphBuilder.addUserScreen(
 fun NavGraphBuilder.tutorialScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
+    navigateToTodo: () -> Unit,
 ) {
     composable(
         route = tutorialScreenRoute,
@@ -47,6 +48,7 @@ fun NavGraphBuilder.tutorialScreen(
         TutorialScreen(
             navigateToAddUser = navigateToAddUser,
             navigateToPhone = navigateToPhone,
+            navigateToTodo = navigateToTodo,
         )
     }
 }
