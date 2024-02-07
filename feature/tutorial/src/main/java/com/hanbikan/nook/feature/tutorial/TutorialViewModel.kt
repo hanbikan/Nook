@@ -19,6 +19,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
@@ -82,6 +83,14 @@ class TutorialViewModel @Inject constructor(
     init {
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(tutorialScreenRoute)
+        }
+
+        viewModelScope.launch(Dispatchers.IO) {
+            tutorialTaskList.collectLatest { tutorialTaskList ->
+                if (tutorialTaskList.all { it.isDone }) {
+
+                }
+            }
         }
     }
 

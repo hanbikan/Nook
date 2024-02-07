@@ -24,6 +24,8 @@ import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
+import com.hanbikan.nook.core.domain.model.TutorialTask
+import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.ui.UserDialog
@@ -55,55 +57,15 @@ fun TutorialScreen(
                     AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
             )
-            FadeAnimatedVisibility(visible = uiState is TutorialUiState.Success) {
-                Column {
-                    LazyColumn(
-                        modifier = Modifier
-                            .padding(Dimens.SideMargin)
-                            .weight(1f),
-                    ) {
-                        item {
-                            WelcomeText(userName = activeUser?.name ?: "")
-
-                            // Progress card
-                            TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, activeUser?.tutorialDay ?: 0))
-                            ProgressCard(completableList = tutorialTaskList)
-
-                            // Today's tutorial task list
-                            TitleTextWithSpacer(title = stringResource(id = R.string.today_task))
-                        }
-                        itemsIndexed(tutorialTaskList) { index, item ->
-                            TaskCard(
-                                completable = item,
-                                onClickCheckbox = { viewModel.switchTutorialTask(index) },
-                                onLongClickTask = {}
-                            )
-                        }
-                    }
-                    Row {
-                        IconButton(
-                            onClick = viewModel::decreaseTutorialDay,
-                            modifier = Modifier.weight(1f),
-                            enabled = activeUser != null && tutorialDayRange != null && (activeUser.tutorialDay - 1) in tutorialDayRange
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowLeft,
-                                contentDescription = stringResource(id = R.string.previous),
-                            )
-                        }
-                        IconButton(
-                            onClick = viewModel::increaseTutorialDay,
-                            modifier = Modifier.weight(1f),
-                            enabled = activeUser != null && tutorialDayRange != null && (activeUser.tutorialDay + 1) in tutorialDayRange
-                        ) {
-                            Icon(
-                                imageVector = Icons.Default.KeyboardArrowRight,
-                                contentDescription = stringResource(id = R.string.next),
-                            )
-                        }
-                    }
-                }
-            }
+            TutorialScreenContents(
+                uiState = uiState,
+                activeUser = activeUser ?: User.DEFAULT,
+                tutorialTaskList = tutorialTaskList,
+                switchTutorialTask = viewModel::switchTutorialTask,
+                decreaseTutorialDay = viewModel::decreaseTutorialDay,
+                increaseTutorialDay = viewModel::increaseTutorialDay,
+                tutorialDayRange = tutorialDayRange,
+            )
         }
 
         if (isUserDialogShown) {
@@ -111,6 +73,67 @@ fun TutorialScreen(
                 navigateToAddUser = navigateToAddUser,
                 onDismissRequest = viewModel::switchUserDialog
             )
+        }
+    }
+}
+
+@Composable
+fun TutorialScreenContents(
+    uiState: TutorialUiState,
+    activeUser: User,
+    tutorialTaskList: List<TutorialTask>,
+    switchTutorialTask: (Int) -> Unit,
+    decreaseTutorialDay: () -> Unit,
+    increaseTutorialDay: () -> Unit,
+    tutorialDayRange: IntRange?,
+) {
+    FadeAnimatedVisibility(visible = uiState is TutorialUiState.Success) {
+        Column {
+            LazyColumn(
+                modifier = Modifier
+                    .padding(Dimens.SideMargin)
+                    .weight(1f),
+            ) {
+                item {
+                    WelcomeText(userName = activeUser.name)
+
+                    // Progress card
+                    TitleTextWithSpacer(title = stringResource(id = R.string.progress_by_day, activeUser.tutorialDay))
+                    ProgressCard(completableList = tutorialTaskList)
+
+                    // Today's tutorial task list
+                    TitleTextWithSpacer(title = stringResource(id = R.string.today_task))
+                }
+                itemsIndexed(tutorialTaskList) { index, item ->
+                    TaskCard(
+                        completable = item,
+                        onClickCheckbox = { switchTutorialTask(index) },
+                        onLongClickTask = {}
+                    )
+                }
+            }
+            Row {
+                IconButton(
+                    onClick = decreaseTutorialDay,
+                    modifier = Modifier.weight(1f),
+                    enabled = tutorialDayRange != null && (activeUser.tutorialDay - 1) in tutorialDayRange
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowLeft,
+                        contentDescription = stringResource(id = R.string.previous),
+                    )
+                }
+                IconButton(
+                    onClick = increaseTutorialDay,
+                    modifier = Modifier.weight(1f),
+                    enabled = tutorialDayRange != null && (activeUser.tutorialDay + 1) in tutorialDayRange
+                ) {
+                    Icon(
+                        imageVector = Icons.Default.KeyboardArrowRight,
+                        contentDescription = stringResource(id = R.string.next),
+                    )
+                }
+            }
         }
     }
 }
