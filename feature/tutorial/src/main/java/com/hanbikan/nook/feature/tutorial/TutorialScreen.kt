@@ -42,6 +42,7 @@ fun TutorialScreen(
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val isNextDayDialogShown = viewModel.isNextDayDialogShown.collectAsStateWithLifecycle().value
     val isTutorialEndDialogShown = viewModel.isTutorialEndDialogShown.collectAsStateWithLifecycle().value
+    val isProgressCardInfoDialogShown = viewModel.isProgressCardInfoDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
@@ -69,6 +70,7 @@ fun TutorialScreen(
                 decreaseTutorialDay = viewModel::decreaseTutorialDay,
                 increaseTutorialDay = viewModel::increaseTutorialDay,
                 tutorialDayRange = tutorialDayRange,
+                switchProgressCardInfoDialog = viewModel::switchProgressCardInfoDialog,
             )
         }
 
@@ -76,6 +78,15 @@ fun TutorialScreen(
             UserDialog(
                 navigateToAddUser = navigateToAddUser,
                 onDismissRequest = viewModel::switchUserDialog
+            )
+        }
+
+        if (isProgressCardInfoDialogShown) {
+            NkDialog(
+                description = stringResource(id = R.string.progress_card_description),
+                onDismissRequest = viewModel::switchProgressCardInfoDialog,
+                onConfirmation = viewModel::switchProgressCardInfoDialog,
+                hasOnlyConfirmationButton = true
             )
         }
 
@@ -109,6 +120,7 @@ fun TutorialScreenContents(
     decreaseTutorialDay: () -> Unit,
     increaseTutorialDay: () -> Unit,
     tutorialDayRange: IntRange?,
+    switchProgressCardInfoDialog: () -> Unit,
 ) {
     FadeAnimatedVisibility(visible = uiState is TutorialUiState.Success) {
         Column {
@@ -123,7 +135,7 @@ fun TutorialScreenContents(
                     // Progress card
                     TitleTextWithSpacer(
                         title = stringResource(id = R.string.progress_by_day, activeUser.tutorialDay),
-                        onClickInfo = {}
+                        onClickInfo = switchProgressCardInfoDialog
                     )
                     ProgressCard(completableList = tutorialTaskList)
 

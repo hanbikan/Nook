@@ -88,6 +88,9 @@ class TutorialViewModel @Inject constructor(
     private val _isTutorialEndDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isTutorialEndDialogShown = _isTutorialEndDialogShown.asStateFlow()
 
+    private val _isProgressCardInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isProgressCardInfoDialogShown = _isProgressCardInfoDialogShown.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(tutorialScreenRoute)
@@ -118,6 +121,10 @@ class TutorialViewModel @Inject constructor(
 
     fun switchTutorialEndDialog() {
         _isTutorialEndDialogShown.value = !isTutorialEndDialogShown.value
+    }
+
+    fun switchProgressCardInfoDialog() {
+        _isProgressCardInfoDialogShown.value = !isProgressCardInfoDialogShown.value
     }
 
     fun switchTutorialTask(index: Int) {
