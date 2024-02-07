@@ -25,6 +25,7 @@ fun NkDialog(
     description: String,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
+    hasOnlyConfirmationButton: Boolean = false,
 ) {
     NkDialogBase(onDismissRequest) {
         Column(
@@ -42,11 +43,13 @@ fun NkDialog(
                     .fillMaxWidth(),
                 horizontalArrangement = Arrangement.Center,
             ) {
-                NkTextButton(
-                    onClick = onDismissRequest,
-                    text = stringResource(id = R.string.dismiss),
-                    modifier = Modifier.weight(1f)
-                )
+                if (!hasOnlyConfirmationButton) {
+                    NkTextButton(
+                        onClick = onDismissRequest,
+                        text = stringResource(id = R.string.dismiss),
+                        modifier = Modifier.weight(1f)
+                    )
+                }
                 NkTextButton(
                     onClick = onConfirmation,
                     text = stringResource(id = R.string.confirm),
