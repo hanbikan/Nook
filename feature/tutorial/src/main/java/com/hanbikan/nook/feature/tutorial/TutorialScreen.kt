@@ -22,6 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
+import com.hanbikan.nook.core.designsystem.component.NkSequentialDialog
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -96,8 +97,8 @@ fun TutorialScreen(
         }
 
         if (isDetailDialogShown) {
-            NkDialog(
-                description = detailToShow.description,
+            NkSequentialDialog(
+                descriptions = listOf(detailToShow.description),
                 onDismissRequest = viewModel::hideDetailDialog,
                 onConfirmation = viewModel::hideDetailDialog,
                 hasOnlyConfirmationButton = true
