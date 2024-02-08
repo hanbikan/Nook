@@ -1,38 +1,12 @@
 package com.hanbikan.nook.core.designsystem.component
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.res.stringResource
 import com.hanbikan.nook.core.designsystem.R
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.launch
-
-@Composable
-fun NkSequentialDialog(
-    description: String,
-    onDismissRequest: () -> Unit,
-    onConfirmation: () -> Unit,
-    hasOnlyConfirmationButton: Boolean = false,
-) {
-    var descriptions by remember { mutableStateOf(listOf<String>()) }
-
-    LaunchedEffect(Unit) {
-        // description을 "\n\n"를 기준으로 나눕니다.
-        launch(Dispatchers.Default) {
-            descriptions = description.split(Regex("\n\n")).map { it.trim() }.filter { it.isNotEmpty() }
-        }
-    }
-    NkSequentialDialog(
-        descriptions = descriptions,
-        onDismissRequest = onDismissRequest,
-        onConfirmation = onConfirmation,
-        hasOnlyConfirmationButton = hasOnlyConfirmationButton,
-    )
-}
 
 @Composable
 fun NkSequentialDialog(
