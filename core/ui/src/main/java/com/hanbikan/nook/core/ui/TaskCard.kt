@@ -16,17 +16,21 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
+import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Completable
+import com.hanbikan.nook.core.domain.model.TutorialTask
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCard(
     completable: Completable,
     onClickCheckbox: () -> Unit,
-    onLongClickTask: () -> Unit,
+    onLongClickTask: (() -> Unit)? = null,
+    onClickInfo: (() -> Unit)? = null,
 ) {
     Column {
         Row(
@@ -48,8 +52,25 @@ fun TaskCard(
                 text = completable.name,
                 style = NkTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
+                modifier = Modifier.weight(1f)
             )
+            if (onClickInfo != null) {
+                NkInfoButton(
+                    onClick = onClickInfo,
+                    size = Dimens.IconSmall,
+                    modifier = Modifier.padding(Dimens.SpacingSmall)
+                )
+            }
         }
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
     }
+}
+
+@Composable
+@Preview
+fun TaskCardPreview() {
+    TaskCard(
+        completable = TutorialTask(0, 0, 0, "상점 재료 모으기: 목재 30개, 부드러운 목재 30개, 단단한 목재 30개, 철광석 30개", false, null),
+        onClickCheckbox = {}
+    )
 }

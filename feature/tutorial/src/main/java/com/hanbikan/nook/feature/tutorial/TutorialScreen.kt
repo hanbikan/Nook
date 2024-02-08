@@ -146,7 +146,11 @@ fun TutorialScreenContents(
                     TaskCard(
                         completable = item,
                         onClickCheckbox = { switchTutorialTask(index) },
-                        onLongClickTask = {}
+                        onClickInfo = if (item.detail?.description == null) {
+                            null
+                        } else {
+                            { /* TODO: show detail dialog */}
+                        }
                     )
                 }
             }

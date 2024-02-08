@@ -12,6 +12,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.Dp
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
@@ -19,18 +20,19 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 fun NkInfoButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    size: Dp = Dimens.IconExtraSmall,
     tint: Color = NkTheme.colorScheme.primaryContainer,
 ) {
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
     Icon(
         modifier = modifier
-            .size(Dimens.IconExtraSmall)
+            .size(size)
             .clickable(
                 onClick = onClick,
                 interactionSource = interactionSource,
                 indication = rememberRipple(
                     bounded = false,
-                    radius = Dimens.IconExtraSmall
+                    radius = size
                 ),
             ),
         imageVector = Icons.Default.Info,
