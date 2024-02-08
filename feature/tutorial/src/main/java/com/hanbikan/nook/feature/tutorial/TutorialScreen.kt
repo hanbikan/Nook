@@ -98,7 +98,7 @@ fun TutorialScreen(
 
         if (isDetailDialogShown) {
             NkSequentialDialog(
-                descriptions = listOf(detailToShow.description),
+                description = detailToShow.description,
                 onDismissRequest = viewModel::hideDetailDialog,
                 onConfirmation = viewModel::hideDetailDialog,
                 hasOnlyConfirmationButton = true
