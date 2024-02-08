@@ -25,6 +25,7 @@ import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
+import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.ui.ProgressCard
@@ -40,14 +41,17 @@ fun TutorialScreen(
     viewModel: TutorialViewModel = hiltViewModel(),
 ) {
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val isProgressCardInfoDialogShown =
+        viewModel.isProgressCardInfoDialogShown.collectAsStateWithLifecycle().value
+    val isDetailDialogShown = viewModel.isDetailDialogShown.collectAsStateWithLifecycle().value
     val isNextDayDialogShown = viewModel.isNextDayDialogShown.collectAsStateWithLifecycle().value
     val isTutorialEndDialogShown = viewModel.isTutorialEndDialogShown.collectAsStateWithLifecycle().value
-    val isProgressCardInfoDialogShown = viewModel.isProgressCardInfoDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value ?: User.DEFAULT
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value
+    val detailToShow = viewModel.detailToShow.collectAsStateWithLifecycle().value
 
     Box {
         Column(
@@ -71,6 +75,7 @@ fun TutorialScreen(
                 increaseTutorialDay = viewModel::increaseTutorialDay,
                 tutorialDayRange = tutorialDayRange,
                 switchProgressCardInfoDialog = viewModel::switchProgressCardInfoDialog,
+                onClickInfo = viewModel::showDetailDialog,
             )
         }
 
@@ -90,9 +95,21 @@ fun TutorialScreen(
             )
         }
 
+        if (isDetailDialogShown) {
+            NkDialog(
+                description = detailToShow.description,
+                onDismissRequest = viewModel::hideDetailDialog,
+                onConfirmation = viewModel::hideDetailDialog,
+                hasOnlyConfirmationButton = true
+            )
+        }
+
         if (isNextDayDialogShown) {
             NkDialog(
-                description = stringResource(id = R.string.move_to_next_day_description, activeUser.tutorialDay + 1),
+                description = stringResource(
+                    id = R.string.move_to_next_day_description,
+                    activeUser.tutorialDay + 1
+                ),
                 onDismissRequest = viewModel::switchNextDayDialog,
                 onConfirmation = {
                     viewModel.increaseTutorialDay()
@@ -121,6 +138,7 @@ fun TutorialScreenContents(
     increaseTutorialDay: () -> Unit,
     tutorialDayRange: IntRange?,
     switchProgressCardInfoDialog: () -> Unit,
+    onClickInfo: (Detail) -> Unit,
 ) {
     FadeAnimatedVisibility(visible = uiState is TutorialUiState.Success) {
         Column {
@@ -134,7 +152,10 @@ fun TutorialScreenContents(
 
                     // Progress card
                     TitleTextWithSpacer(
-                        title = stringResource(id = R.string.progress_by_day, activeUser.tutorialDay),
+                        title = stringResource(
+                            id = R.string.progress_by_day,
+                            activeUser.tutorialDay
+                        ),
                         onClickInfo = switchProgressCardInfoDialog
                     )
                     ProgressCard(completableList = tutorialTaskList)
@@ -146,11 +167,7 @@ fun TutorialScreenContents(
                     TaskCard(
                         completable = item,
                         onClickCheckbox = { switchTutorialTask(index) },
-                        onClickInfo = if (item.detail?.description == null) {
-                            null
-                        } else {
-                            { /* TODO: show detail dialog */}
-                        }
+                        onClickInfo = item.detail?.let { { onClickInfo(it) } }
                     )
                 }
             }

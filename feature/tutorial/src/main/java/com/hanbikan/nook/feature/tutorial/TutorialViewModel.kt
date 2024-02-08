@@ -4,6 +4,7 @@ import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
+import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
@@ -82,14 +83,21 @@ class TutorialViewModel @Inject constructor(
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
+    private val _isProgressCardInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isProgressCardInfoDialogShown = _isProgressCardInfoDialogShown.asStateFlow()
+
     private val _isNextDayDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isNextDayDialogShown = _isNextDayDialogShown.asStateFlow()
 
     private val _isTutorialEndDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isTutorialEndDialogShown = _isTutorialEndDialogShown.asStateFlow()
 
-    private val _isProgressCardInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isProgressCardInfoDialogShown = _isProgressCardInfoDialogShown.asStateFlow()
+    // Detail dialog
+    private val _isDetailDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isDetailDialogShown = _isDetailDialogShown.asStateFlow()
+
+    private val _detailToShow: MutableStateFlow<Detail> = MutableStateFlow(Detail.DEFAULT)
+    val detailToShow = _detailToShow.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -115,6 +123,10 @@ class TutorialViewModel @Inject constructor(
         _isUserDialogShown.value = !isUserDialogShown.value
     }
 
+    fun switchProgressCardInfoDialog() {
+        _isProgressCardInfoDialogShown.value = !isProgressCardInfoDialogShown.value
+    }
+
     fun switchNextDayDialog() {
         _isNextDayDialogShown.value = !isNextDayDialogShown.value
     }
@@ -123,16 +135,22 @@ class TutorialViewModel @Inject constructor(
         _isTutorialEndDialogShown.value = !isTutorialEndDialogShown.value
     }
 
-    fun switchProgressCardInfoDialog() {
-        _isProgressCardInfoDialogShown.value = !isProgressCardInfoDialogShown.value
-    }
-
     fun switchTutorialTask(index: Int) {
         val target = tutorialTaskList.value.getOrNull(index) ?: return
         val newTutorialTask = target.copy(isDone = !target.isDone)
         viewModelScope.launch(Dispatchers.IO) {
             updateTutorialTaskUseCase(newTutorialTask)
         }
+    }
+
+    fun showDetailDialog(detail: Detail) {
+        _detailToShow.value = detail
+        _isDetailDialogShown.value = true
+    }
+
+    fun hideDetailDialog() {
+        _isDetailDialogShown.value = false
+        _detailToShow.value = Detail.DEFAULT
     }
 
     fun increaseTutorialDay() {
