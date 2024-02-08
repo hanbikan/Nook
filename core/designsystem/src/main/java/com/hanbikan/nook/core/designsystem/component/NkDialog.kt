@@ -27,6 +27,11 @@ fun NkDialog(
     onConfirmation: () -> Unit,
     hasOnlyConfirmationButton: Boolean = false,
 ) {
+    val textStyle = if (description.length < 15) {
+        NkTheme.typography.titleMedium
+    } else {
+        NkTheme.typography.titleSmall
+    }
     NkDialogBase(onDismissRequest) {
         Column(
             modifier = Modifier
@@ -36,7 +41,7 @@ fun NkDialog(
         ) {
             NkText(
                 text = description,
-                style = NkTheme.typography.titleMedium
+                style = textStyle,
             )
             Row(
                 modifier = Modifier
@@ -79,5 +84,5 @@ fun NkDialogBase(
 @Composable
 @Preview
 fun NkDialogPreview() {
-    NkDialog(description = "할 일을 삭제합니다.", onDismissRequest = {}, onConfirmation = {})
+    NkDialog(description = "할 일을 삭제합니다. 이 작업은 되돌릴 수 없습니다.", onDismissRequest = {}, onConfirmation = {})
 }
