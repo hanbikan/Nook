@@ -25,13 +25,16 @@ fun NkDialog(
     description: String,
     onDismissRequest: () -> Unit,
     onConfirmation: () -> Unit,
-    hasOnlyConfirmationButton: Boolean = false,
+    confirmText: String = NkDialogDefaults.confirmText,
+    hasOnlyConfirmationButton: Boolean = NkDialogDefaults.hasOnlyConfirmationButton,
 ) {
-    val textStyle = if (description.length < 15) {
+    // 텍스트가 너무 많으면 글씨 크기를 줄입니다.
+    val textStyle = if (description.length < NkDialogDefaults.descriptionLengthThreshold) {
         NkTheme.typography.titleMedium
     } else {
         NkTheme.typography.titleSmall
     }
+
     NkDialogBase(onDismissRequest) {
         Column(
             modifier = Modifier
@@ -51,13 +54,13 @@ fun NkDialog(
                 if (!hasOnlyConfirmationButton) {
                     NkTextButton(
                         onClick = onDismissRequest,
-                        text = stringResource(id = R.string.dismiss),
+                        text = NkDialogDefaults.dismissText,
                         modifier = Modifier.weight(1f)
                     )
                 }
                 NkTextButton(
                     onClick = onConfirmation,
-                    text = stringResource(id = R.string.confirm),
+                    text = confirmText,
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -68,7 +71,7 @@ fun NkDialog(
 @Composable
 fun NkDialogBase(
     onDismissRequest: () -> Unit,
-    content: @Composable() (ColumnScope.() -> Unit)
+    content: @Composable (ColumnScope.() -> Unit)
 ) {
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
@@ -79,6 +82,16 @@ fun NkDialogBase(
             content = content,
         )
     }
+}
+
+object NkDialogDefaults {
+    val confirmText: String @Composable get() = stringResource(id = R.string.confirm)
+
+    val dismissText: String @Composable get() = stringResource(id = R.string.dismiss)
+
+    const val hasOnlyConfirmationButton: Boolean = false
+
+    const val descriptionLengthThreshold: Int = 15
 }
 
 @Composable
