@@ -35,7 +35,10 @@ fun TutorialTask.Companion.createInitialTutorialTasks(
     TutorialTask(
         day = 1,
         name = context.getString(R.string.tutorial_task_name4),
-        details = listOf(Detail(description = context.getString(R.string.tutorial_task_detail_description4))),
+        details = listOf(
+            Detail(description = context.getString(R.string.tutorial_task_detail_description4_1)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description4_2)),
+        ),
         userId = userId,
         isDone = false
     ),
@@ -44,7 +47,10 @@ fun TutorialTask.Companion.createInitialTutorialTasks(
     TutorialTask(
         day = 2,
         name = context.getString(R.string.tutorial_task_name5),
-        details = listOf(Detail(description = context.getString(R.string.tutorial_task_detail_description5))),
+        details = listOf(
+            Detail(description = context.getString(R.string.tutorial_task_detail_description5_1)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description5_2)),
+        ),
         userId = userId,
         isDone = false
     ),
@@ -58,10 +64,10 @@ fun TutorialTask.Companion.createInitialTutorialTasks(
         day = 2,
         name = context.getString(R.string.tutorial_task_name7),
         details = listOf(
-            Detail(
-                description = context.getString(R.string.tutorial_task_detail_description7),
-                imageId = R.drawable.eight_rocks
-            )
+            Detail(description = context.getString(R.string.tutorial_task_detail_description7_1)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description7_2), imageId = R.drawable.eight_rocks),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description7_3)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description7_4)),
         ),
         userId = userId,
         isDone = false
@@ -83,7 +89,12 @@ fun TutorialTask.Companion.createInitialTutorialTasks(
     TutorialTask(
         day = 3,
         name = context.getString(R.string.tutorial_task_name10),
-        details = listOf(Detail(description = context.getString(R.string.tutorial_task_detail_description10))),
+        details = listOf(
+            Detail(description = context.getString(R.string.tutorial_task_detail_description10_1)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description10_2)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description10_3)),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description10_4)),
+        ),
         userId = userId,
         isDone = false
     ),
