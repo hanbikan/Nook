@@ -21,9 +21,9 @@ fun NkSequentialDialog(
     var descriptions by remember { mutableStateOf(listOf<String>()) }
 
     LaunchedEffect(Unit) {
-        // description을 개행문자로 자릅니다.
+        // description을 "\n\n"를 기준으로 나눕니다.
         launch(Dispatchers.Default) {
-            descriptions = description.split(Regex("[\n]")).map { it.trim() }.filter { it.isNotEmpty() }
+            descriptions = description.split(Regex("\n\n")).map { it.trim() }.filter { it.isNotEmpty() }
         }
     }
     NkSequentialDialog(
