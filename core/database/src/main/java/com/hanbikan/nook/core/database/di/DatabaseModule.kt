@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.database.di
 
 import android.content.Context
 import androidx.room.Room
+import com.hanbikan.nook.core.database.MIGRATION_6_7
 import com.hanbikan.nook.core.database.NkDatabase
 import dagger.Module
 import dagger.Provides
@@ -22,5 +23,7 @@ object DatabaseModule {
         context,
         NkDatabase::class.java,
         "nk-database"
-    ).build()
+    )
+        .addMigrations(MIGRATION_6_7)
+        .build()
 }

@@ -11,4 +11,6 @@ interface TutorialTaskRepository {
     suspend fun insertTutorialTasks(tutorialTaskList: List<TutorialTask>)
 
     suspend fun updateTutorialTask(tutorialTask: TutorialTask)
+
+    suspend fun resetTutorialTasks()
 }

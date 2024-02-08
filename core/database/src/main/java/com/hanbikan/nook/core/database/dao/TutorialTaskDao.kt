@@ -20,4 +20,7 @@ interface TutorialTaskDao {
 
     @Update
     suspend fun updateTutorialTask(tutorialTaskEntity: TutorialTaskEntity)
+
+    @Query("DELETE FROM tutorial_task")
+    suspend fun resetTutorialTasks()
 }

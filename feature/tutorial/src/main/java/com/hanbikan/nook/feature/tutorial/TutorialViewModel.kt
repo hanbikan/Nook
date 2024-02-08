@@ -1,6 +1,5 @@
 package com.hanbikan.nook.feature.tutorial
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
@@ -13,17 +12,16 @@ import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCa
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTaskUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.cancel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -39,6 +37,7 @@ class TutorialViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
+    private val updateTutorialTasksUseCase: UpdateTutorialTasksUseCase,
 ) : ViewModel() {
 
     // Data for UI
@@ -96,10 +95,14 @@ class TutorialViewModel @Inject constructor(
     private val _isDetailDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDetailDialogShown = _isDetailDialogShown.asStateFlow()
 
-    private val _detailToShow: MutableStateFlow<Detail> = MutableStateFlow(Detail.DEFAULT)
-    val detailToShow = _detailToShow.asStateFlow()
+    private val _detailsToShow: MutableStateFlow<List<Detail>> = MutableStateFlow(listOf())
+    val detailsToShow = _detailsToShow.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTutorialTasksUseCase()
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(tutorialScreenRoute)
         }
@@ -143,14 +146,14 @@ class TutorialViewModel @Inject constructor(
         }
     }
 
-    fun showDetailDialog(detail: Detail) {
-        _detailToShow.value = detail
+    fun showDetailDialog(details: List<Detail>) {
+        _detailsToShow.value = details
         _isDetailDialogShown.value = true
     }
 
     fun hideDetailDialog() {
         _isDetailDialogShown.value = false
-        _detailToShow.value = Detail.DEFAULT
+        _detailsToShow.value = listOf()
     }
 
     fun increaseTutorialDay() {

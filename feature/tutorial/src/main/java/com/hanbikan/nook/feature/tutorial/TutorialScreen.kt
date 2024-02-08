@@ -52,7 +52,7 @@ fun TutorialScreen(
     val tutorialDayRange = viewModel.tutorialDayRange.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value ?: User.DEFAULT
     val tutorialTaskList = viewModel.tutorialTaskList.collectAsStateWithLifecycle().value
-    val detailToShow = viewModel.detailToShow.collectAsStateWithLifecycle().value
+    val detailsToShow = viewModel.detailsToShow.collectAsStateWithLifecycle().value
 
     Box {
         Column(
@@ -98,7 +98,7 @@ fun TutorialScreen(
 
         if (isDetailDialogShown) {
             NkSequentialDialog(
-                description = detailToShow.description,
+                descriptions = detailsToShow.map { it.description },
                 onDismissRequest = viewModel::hideDetailDialog,
                 onConfirmation = viewModel::hideDetailDialog,
                 hasOnlyConfirmationButton = true
@@ -139,7 +139,7 @@ fun TutorialScreenContents(
     increaseTutorialDay: () -> Unit,
     tutorialDayRange: IntRange?,
     switchProgressCardInfoDialog: () -> Unit,
-    onClickInfo: (Detail) -> Unit,
+    onClickInfo: (List<Detail>) -> Unit,
 ) {
     FadeAnimatedVisibility(visible = uiState is TutorialUiState.Success) {
         Column {
@@ -168,7 +168,7 @@ fun TutorialScreenContents(
                     TaskCard(
                         completable = item,
                         onClickCheckbox = { switchTutorialTask(index) },
-                        onClickInfo = item.detail?.let { { onClickInfo(it) } }
+                        onClickInfo = item.details?.let { { onClickInfo(it) } }
                     )
                 }
             }

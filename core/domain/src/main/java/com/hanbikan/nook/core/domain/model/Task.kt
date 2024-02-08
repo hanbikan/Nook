@@ -5,5 +5,5 @@ data class Task(
     val userId: Int,
     override val name: String,
     override val isDone: Boolean,
-    override val detail: Detail? = null,
+    override val details: List<Detail>? = null,
 ) : Completable, HasDetail

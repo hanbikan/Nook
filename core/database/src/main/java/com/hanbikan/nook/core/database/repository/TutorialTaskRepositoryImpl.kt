@@ -31,4 +31,8 @@ class TutorialTaskRepositoryImpl @Inject constructor(
     override suspend fun updateTutorialTask(tutorialTask: TutorialTask) {
         tutorialTaskDao.updateTutorialTask(tutorialTask.toData())
     }
+
+    override suspend fun resetTutorialTasks() {
+        tutorialTaskDao.resetTutorialTasks()
+    }
 }

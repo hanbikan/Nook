@@ -6,7 +6,7 @@ data class TutorialTask(
     val day: Int,
     override val name: String,
     override val isDone: Boolean,
-    override val detail: Detail? = null,
+    override val details: List<Detail>? = null,
 ) : Completable, HasDetail {
     companion object // For companion extension functions outside
 }
