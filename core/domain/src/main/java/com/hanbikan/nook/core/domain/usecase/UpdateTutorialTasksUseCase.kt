@@ -10,10 +10,12 @@ class UpdateTutorialTasksUseCase @Inject constructor(
     private val tutorialTaskRepository: TutorialTaskRepository
 ) {
     suspend operator fun invoke() {
-        tutorialTaskRepository.resetTutorialTasks()
         val users = getAllUsersUseCase().first()
         users.forEach {
-            initializeTutorialTasksUseCase(it.id)
+            val tutorialTasks = tutorialTaskRepository.getTutorialTasksByUserId(it.id)
+            if (tutorialTasks.first().isEmpty()) {
+                initializeTutorialTasksUseCase(it.id)
+            }
         }
     }
 }
