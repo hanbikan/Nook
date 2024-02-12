@@ -6,4 +6,5 @@
     <string name="add_task_placeholder">바위 6개 치기</string>
     <string name="sure_to_delete_task">할 일을 삭제합니다.</string>
     <string name="empty_todo_list">할 일을 추가해보세요.</string>
+    <string name="daily">매일</string>
 </resources>

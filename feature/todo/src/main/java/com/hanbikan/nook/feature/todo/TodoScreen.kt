@@ -144,7 +144,8 @@ fun TodoScreenSuccess(
             TaskCard(
                 completable = item,
                 onClickCheckbox = { onClickCheckbox(index) },
-                onLongClickTask = { onLongClickTask(item) }
+                onLongClickTask = { onLongClickTask(item) },
+                tag = if (item.isDaily) stringResource(id = R.string.daily) else null
             )
         }
     }

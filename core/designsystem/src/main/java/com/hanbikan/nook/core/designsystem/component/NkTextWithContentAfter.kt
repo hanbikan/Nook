@@ -19,8 +19,6 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.DpSize
-import androidx.compose.ui.unit.TextUnit
-import androidx.compose.ui.unit.em
 import com.hanbikan.nook.core.designsystem.theme.Fonts
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 

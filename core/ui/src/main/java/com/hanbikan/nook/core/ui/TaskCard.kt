@@ -60,7 +60,7 @@ fun TaskCard(
             ) {
                 if (tag != null) {
                     Row {
-                        Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
+                        Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
                         NkTag(text = tag)
                     }
                 }
