@@ -9,6 +9,7 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
@@ -18,7 +19,9 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
+import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkText
+import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Completable
@@ -28,6 +31,7 @@ import com.hanbikan.nook.core.domain.model.TutorialTask
 @Composable
 fun TaskCard(
     completable: Completable,
+    tag: String? = null,
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
@@ -48,12 +52,19 @@ fun TaskCard(
                 checked = completable.isDone,
                 onCheckedChange = { onClickCheckbox() },
             )
-            NkText(
+            NkTextWithContentAfter(
                 text = completable.name,
                 style = NkTheme.typography.bodyLarge,
                 fontWeight = FontWeight.Bold,
                 modifier = Modifier.weight(1f)
-            )
+            ) {
+                if (tag != null) {
+                    Row {
+                        Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
+                        NkTag(text = tag)
+                    }
+                }
+            }
             if (onClickInfo != null) {
                 NkInfoButton(
                     onClick = onClickInfo,
