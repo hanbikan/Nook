@@ -30,7 +30,7 @@ class TaskRepositoryImpl @Inject constructor(
         taskDao.deleteTaskById(id)
     }
 
-    override suspend fun resetAllTasks() {
-        taskDao.resetAllTasks()
+    override suspend fun resetAllDailyTasks() {
+        taskDao.resetAllDailyTasks()
     }
 }

@@ -12,5 +12,5 @@ interface TaskRepository {
 
     suspend fun deleteTaskById(id: Int)
 
-    suspend fun resetAllTasks()
+    suspend fun resetAllDailyTasks()
 }

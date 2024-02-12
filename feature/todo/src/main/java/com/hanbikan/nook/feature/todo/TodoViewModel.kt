@@ -82,7 +82,7 @@ class TodoViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
-                val task = Task(userId = it.id, name = name, isDone = false)
+                val task = Task(userId = it.id, name = name, isDaily = true, isDone = false) // TODO: isDaily
                 addTaskUseCase(task)
                 switchAddTaskDialog()
             }
