@@ -83,14 +83,14 @@ fun MeasureViewSize(
 ) {
     SubcomposeLayout { constraints ->
         // subcompose로 크기 측정
-        val measuredSize = subcompose("viewToMeasure", viewToMeasure)[0]
-            .measure(constraints)
-            .let {
+        val measuredSize = subcompose("viewToMeasure", viewToMeasure).getOrNull(0)
+            ?.measure(constraints)
+            ?.let {
                 DpSize(
                     width = it.width.toDp(),
                     height = it.height.toDp()
                 )
-            }
+            } ?: DpSize.Zero
 
         // content 그리기
         val contentPlaceable = subcompose("content") { content(measuredSize) }[0]
