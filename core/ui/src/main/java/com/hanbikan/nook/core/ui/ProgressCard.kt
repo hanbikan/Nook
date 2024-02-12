@@ -47,7 +47,6 @@ fun ProgressCard(
         AnimatedLinearProgressIndicator(
             progress = progress,
             color = NkTheme.colorScheme.tertiary,
-            trackColor = Color.White
         )
     }
 }
