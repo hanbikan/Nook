@@ -28,7 +28,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
-import com.hanbikan.nook.core.designsystem.component.NkDialogWithTextField
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
@@ -39,6 +38,8 @@ import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
+import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
+import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 
 @Composable
 fun TodoScreen(
@@ -46,7 +47,7 @@ fun TodoScreen(
     navigateToPhone: () -> Unit,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
-    val isAddTaskDialogShown = viewModel.isAddTaskDialogShown.collectAsStateWithLifecycle().value
+    val addOrUpdateTaskDialogStatus = viewModel.addOrUpdateTaskDialogStatus.collectAsStateWithLifecycle().value
     val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
@@ -84,7 +85,7 @@ fun TodoScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.SpacingLarge),
-            onClick = viewModel::switchAddTaskDialog,
+            onClick = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.ADD) },
             containerColor = NkTheme.colorScheme.primary,
         ) {
             Icon(
@@ -94,14 +95,16 @@ fun TodoScreen(
             )
         }
 
-        if (isAddTaskDialogShown) {
-            NkDialogWithTextField(
-                title = stringResource(id = R.string.add_task),
-                placeholder = stringResource(id = R.string.add_task_placeholder),
-                onDismissRequest = viewModel::switchAddTaskDialog,
-                onConfirmation = { viewModel.addTask(it) }
-            )
-        }
+        AddOrUpdateTaskDialog(
+            type = addOrUpdateTaskDialogStatus,
+            dismissDialog = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.INVISIBLE) },
+            addTask = { name, isDaily ->
+                viewModel.addTask(name, isDaily)
+            },
+            updateTask = { name, isDaily ->
+                // TODO
+            }
+        )
 
         if (isDeleteTaskDialogShown) {
             NkDialog(

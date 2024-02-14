@@ -10,6 +10,7 @@ import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllTasksByUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTaskUseCase
+import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -58,8 +59,8 @@ class TodoViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     // Dialog
-    private val _isAddTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isAddTaskDialogShown = _isAddTaskDialogShown.asStateFlow()
+    private val _addOrUpdateTaskDialogStatus: MutableStateFlow<AddOrUpdateTaskDialogStatus> = MutableStateFlow(AddOrUpdateTaskDialogStatus.INVISIBLE)
+    val addOrUpdateTaskDialogStatus = _addOrUpdateTaskDialogStatus.asStateFlow()
 
     private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDeleteTaskDialogShown = _isDeleteTaskDialogShown.asStateFlow()
@@ -77,14 +78,14 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun addTask(name: String) {
+    fun addTask(name: String, isDaily: Boolean) {
         if (name.isEmpty()) return
 
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
-                val task = Task(userId = it.id, name = name, isDaily = true, isDone = false) // TODO: isDaily
+                val task = Task(userId = it.id, name = name, isDaily = isDaily, isDone = false)
                 addTaskUseCase(task)
-                switchAddTaskDialog()
+                setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.INVISIBLE)
             }
         }
     }
@@ -111,8 +112,8 @@ class TodoViewModel @Inject constructor(
         switchDeleteTaskDialog()
     }
 
-    fun switchAddTaskDialog() {
-        _isAddTaskDialogShown.value = !isAddTaskDialogShown.value
+    fun setAddOrUpdateTaskDialogStatus(status: AddOrUpdateTaskDialogStatus) {
+        _addOrUpdateTaskDialogStatus.value = status
     }
 
     fun switchDeleteTaskDialog() {
