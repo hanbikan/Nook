@@ -30,29 +30,63 @@ import com.hanbikan.nook.core.designsystem.component.NkTextButton
 import com.hanbikan.nook.core.designsystem.component.NkTextField
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.feature.todo.R
 
 @Composable
-@OptIn(ExperimentalComposeUiApi::class)
 fun AddOrUpdateTaskDialog(
-    type: AddOrUpdateTaskDialogStatus,
+    status: AddOrUpdateTaskDialogStatus,
     dismissDialog: () -> Unit,
     addTask: (name: String, isDaily: Boolean) -> Unit,
     updateTask: (name: String, isDaily: Boolean) -> Unit,
 ) {
-    if (type == AddOrUpdateTaskDialogStatus.INVISIBLE) return
+    if (status is AddOrUpdateTaskDialogStatus.Invisible) return
 
-    val title = when (type) {
-        AddOrUpdateTaskDialogStatus.ADD -> stringResource(id = R.string.add_task)
-        AddOrUpdateTaskDialogStatus.UPDATE -> stringResource(id = R.string.update_task)
-        else -> ""
+    val title = when (status) {
+        is AddOrUpdateTaskDialogStatus.Add -> stringResource(id = R.string.add_task)
+        is AddOrUpdateTaskDialogStatus.Update -> stringResource(id = R.string.update_task)
+        is AddOrUpdateTaskDialogStatus.Invisible -> ""
     }
 
-    var input by remember { mutableStateOf("") }
+    val defaultInput = if (status is AddOrUpdateTaskDialogStatus.Update) {
+        status.taskToUpdate.name
+    } else {
+        ""
+    }
+
+    val defaultIsDaily = if (status is AddOrUpdateTaskDialogStatus.Update) {
+        status.taskToUpdate.isDaily
+    } else {
+        false
+    }
+
+    AddOrUpdateTaskDialog(
+        title = title,
+        defaultInput = defaultInput,
+        defaultIsDaily = defaultIsDaily,
+        status = status,
+        dismissDialog = dismissDialog,
+        addTask = addTask,
+        updateTask = updateTask
+    )
+}
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun AddOrUpdateTaskDialog(
+    title: String,
+    defaultInput: String,
+    defaultIsDaily: Boolean,
+    status: AddOrUpdateTaskDialogStatus,
+    dismissDialog: () -> Unit,
+    addTask: (name: String, isDaily: Boolean) -> Unit,
+    updateTask: (name: String, isDaily: Boolean) -> Unit,
+) {
+    var input by remember { mutableStateOf(defaultInput) }
+    var isDaily by remember { mutableStateOf(defaultIsDaily) }
+
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
-
-    var isDaily by remember { mutableStateOf(false) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -81,7 +115,6 @@ fun AddOrUpdateTaskDialog(
                 modifier = Modifier.focusRequester(focusRequester),
             )
 
-
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
             Row(modifier = Modifier.fillMaxWidth()) {
                 NkCheckboxWithText(
@@ -102,12 +135,11 @@ fun AddOrUpdateTaskDialog(
                 )
                 NkTextButton(
                     onClick = {
-                        when (type) {
-                            AddOrUpdateTaskDialogStatus.ADD -> addTask(input, isDaily)
-                            AddOrUpdateTaskDialogStatus.UPDATE -> updateTask(input, isDaily)
-                            else -> {}
+                        when (status) {
+                            is AddOrUpdateTaskDialogStatus.Add -> addTask(input, isDaily)
+                            is AddOrUpdateTaskDialogStatus.Update -> updateTask(input, isDaily)
+                            is AddOrUpdateTaskDialogStatus.Invisible -> {}
                         }
-                        dismissDialog()
                     },
                     text = stringResource(id = com.hanbikan.nook.core.designsystem.R.string.confirm),
                     modifier = Modifier.weight(1f)
@@ -117,12 +149,14 @@ fun AddOrUpdateTaskDialog(
     }
 }
 
-enum class AddOrUpdateTaskDialogStatus {
-    ADD, UPDATE, INVISIBLE
+sealed interface AddOrUpdateTaskDialogStatus {
+    object Add: AddOrUpdateTaskDialogStatus
+    data class Update(val taskToUpdate: Task): AddOrUpdateTaskDialogStatus
+    object Invisible: AddOrUpdateTaskDialogStatus
 }
 
 @Composable
 @Preview
 fun AddOrUpdateTaskDialogPreview() {
-    AddOrUpdateTaskDialog(type = AddOrUpdateTaskDialogStatus.ADD, {}, { _, _ -> }, { _, _ -> })
+    AddOrUpdateTaskDialog(status = AddOrUpdateTaskDialogStatus.Add, {}, { _, _ -> }, { _, _ -> })
 }

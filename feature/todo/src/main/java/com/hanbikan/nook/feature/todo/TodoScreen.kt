@@ -85,7 +85,7 @@ fun TodoScreen(
             modifier = Modifier
                 .align(Alignment.BottomEnd)
                 .padding(Dimens.SpacingLarge),
-            onClick = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.ADD) },
+            onClick = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Add) },
             containerColor = NkTheme.colorScheme.primary,
         ) {
             Icon(
@@ -96,14 +96,10 @@ fun TodoScreen(
         }
 
         AddOrUpdateTaskDialog(
-            type = addOrUpdateTaskDialogStatus,
-            dismissDialog = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.INVISIBLE) },
-            addTask = { name, isDaily ->
-                viewModel.addTask(name, isDaily)
-            },
-            updateTask = { name, isDaily ->
-                // TODO
-            }
+            status = addOrUpdateTaskDialogStatus,
+            dismissDialog = { viewModel.setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible) },
+            addTask = viewModel::addTask,
+            updateTask = viewModel::updateTask,
         )
 
         if (isDeleteTaskDialogShown) {

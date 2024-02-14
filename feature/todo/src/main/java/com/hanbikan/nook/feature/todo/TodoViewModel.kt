@@ -59,7 +59,7 @@ class TodoViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     // Dialog
-    private val _addOrUpdateTaskDialogStatus: MutableStateFlow<AddOrUpdateTaskDialogStatus> = MutableStateFlow(AddOrUpdateTaskDialogStatus.INVISIBLE)
+    private val _addOrUpdateTaskDialogStatus: MutableStateFlow<AddOrUpdateTaskDialogStatus> = MutableStateFlow(AddOrUpdateTaskDialogStatus.Invisible)
     val addOrUpdateTaskDialogStatus = _addOrUpdateTaskDialogStatus.asStateFlow()
 
     private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -67,10 +67,6 @@ class TodoViewModel @Inject constructor(
 
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
-
-    // Long-click 시 제거할 작업을 잠시 여기에 저장한 뒤, 삭제 버튼을 누를 때 이 값을 참조하여 제거합니다.
-    private val _taskIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
-    val taskIdToDelete = _taskIdToDelete.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -85,15 +81,32 @@ class TodoViewModel @Inject constructor(
             activeUser.value?.let {
                 val task = Task(userId = it.id, name = name, isDaily = isDaily, isDone = false)
                 addTaskUseCase(task)
-                setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.INVISIBLE)
+                setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
         }
     }
 
+    fun updateTask(name: String, isDaily: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            val status = addOrUpdateTaskDialogStatus.value
+            if (status is AddOrUpdateTaskDialogStatus.Update) {
+                val newTask = status.taskToUpdate.copy(name = name, isDaily = isDaily)
+                updateTaskUseCase(newTask)
+                setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
+            }
+        }
+    }
+
+    fun onLongClickTask(task: Task) {
+        val updateStatus = AddOrUpdateTaskDialogStatus.Update(task)
+        setAddOrUpdateTaskDialogStatus(updateStatus)
+    }
+
     fun onConfirmDeleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            taskIdToDelete.value?.let {
-                deleteTaskUseCase(it)
+            val status = addOrUpdateTaskDialogStatus.value
+            if (status is AddOrUpdateTaskDialogStatus.Update) {
+                deleteTaskUseCase(status.taskToUpdate.id)
                 switchDeleteTaskDialog()
             }
         }
@@ -105,11 +118,6 @@ class TodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             updateTaskUseCase(newTask)
         }
-    }
-
-    fun onLongClickTask(task: Task) {
-        _taskIdToDelete.value = task.id
-        switchDeleteTaskDialog()
     }
 
     fun setAddOrUpdateTaskDialogStatus(status: AddOrUpdateTaskDialogStatus) {
