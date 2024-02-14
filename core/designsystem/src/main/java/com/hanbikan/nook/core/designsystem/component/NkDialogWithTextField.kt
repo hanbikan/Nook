@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.designsystem.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -34,7 +35,7 @@ fun NkDialogWithTextField(
     placeholder: String = "",
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
-    contentBelowTextField: @Composable () -> Unit = {},
+    contentBelowTextField: @Composable ColumnScope.() -> Unit = {},
 ) {
     var input by remember { mutableStateOf(defaultInput) }
     val focusRequester = remember { FocusRequester() }
