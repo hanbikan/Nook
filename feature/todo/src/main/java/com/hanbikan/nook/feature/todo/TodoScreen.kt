@@ -72,7 +72,8 @@ fun TodoScreen(
                         userName = activeUser?.name ?: "",
                         taskList = taskList,
                         onClickCheckbox = viewModel::switchTask,
-                        onLongClickTask = viewModel::onLongClickTask
+                        onLongClickTask = viewModel::onLongClickTask,
+                        onClickDeleteAction = viewModel::onClickDeleteAction
                     )
                 }
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
@@ -126,6 +127,7 @@ fun TodoScreenSuccess(
     taskList: List<Task>,
     onClickCheckbox: (Int) -> Unit,
     onLongClickTask: (Task) -> Unit,
+    onClickDeleteAction: (Task) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.padding(Dimens.SideMargin),
@@ -146,8 +148,8 @@ fun TodoScreenSuccess(
                 onClickCheckbox = { onClickCheckbox(index) },
                 onLongClickTask = { onLongClickTask(item) },
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
-                endAction = TaskCardAction.deleteAction {}, // TODO: Show delete dialog
-                startAction = TaskCardAction.deleteAction {}, // TODO: Show delete dialog
+                endAction = TaskCardAction.deleteAction { onClickDeleteAction(item) },
+                startAction = TaskCardAction.deleteAction { onClickDeleteAction(item) },
             )
         }
     }

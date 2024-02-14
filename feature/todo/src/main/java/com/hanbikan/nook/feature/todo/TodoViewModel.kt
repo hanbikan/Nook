@@ -65,6 +65,8 @@ class TodoViewModel @Inject constructor(
     private val _isDeleteTaskDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDeleteTaskDialogShown = _isDeleteTaskDialogShown.asStateFlow()
 
+    private val _taskIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
+
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
@@ -102,11 +104,15 @@ class TodoViewModel @Inject constructor(
         setAddOrUpdateTaskDialogStatus(updateStatus)
     }
 
+    fun onClickDeleteAction(task: Task) {
+        _taskIdToDelete.value = task.id
+        switchDeleteTaskDialog()
+    }
+
     fun onConfirmDeleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
-            val status = addOrUpdateTaskDialogStatus.value
-            if (status is AddOrUpdateTaskDialogStatus.Update) {
-                deleteTaskUseCase(status.taskToUpdate.id)
+            _taskIdToDelete.value?.let {
+                deleteTaskUseCase(it)
                 switchDeleteTaskDialog()
             }
         }
