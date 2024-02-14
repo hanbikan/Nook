@@ -30,11 +30,13 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 @Composable
 fun NkDialogWithTextField(
     title: String,
+    defaultInput: String = "",
     placeholder: String = "",
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
+    contentBelowTextField: @Composable () -> Unit = {},
 ) {
-    var input by remember { mutableStateOf("") }
+    var input by remember { mutableStateOf(defaultInput) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -50,11 +52,14 @@ fun NkDialogWithTextField(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
+            // 제목
             NkText(
                 modifier = Modifier.fillMaxWidth(),
                 text = title,
                 style = NkTheme.typography.titleMedium
             )
+
+            // 입력
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
             NkTextField(
                 value = input,
@@ -63,6 +68,10 @@ fun NkDialogWithTextField(
                 placeholder = { NkPlaceholder(text = placeholder) },
                 modifier = Modifier.focusRequester(focusRequester),
             )
+
+            contentBelowTextField()
+
+            // 하단 버튼
             Row(
                 modifier = Modifier
                     .fillMaxWidth(),
