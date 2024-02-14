@@ -9,6 +9,7 @@ import androidx.compose.foundation.gestures.AnchoredDraggableState
 import androidx.compose.foundation.gestures.DraggableAnchors
 import androidx.compose.foundation.gestures.Orientation
 import androidx.compose.foundation.gestures.anchoredDraggable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -48,6 +49,7 @@ private const val dragThresholdsDp = 64f
 private const val velocityThresholdDp = 100f
 private const val positionalThresholdWeight = 0.5f
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCard(
     completable: Completable,
@@ -58,6 +60,28 @@ fun TaskCard(
     endAction: TaskCardAction? = null,
     startAction: TaskCardAction? = null,
 ) {
+    val density = LocalDensity.current
+    val dragThresholdsPx = with(density) { dragThresholdsDp.dp.toPx() }
+    val state = remember {
+        AnchoredDraggableState(
+            initialValue = DragValue.Center,
+            positionalThreshold = { distance: Float -> distance * positionalThresholdWeight },
+            velocityThreshold = { with(density) { velocityThresholdDp.dp.toPx() } },
+            animationSpec = tween()
+        ).apply {
+            updateAnchors(
+                DraggableAnchors {
+                    if (startAction != null) DragValue.Start at -dragThresholdsPx
+                    DragValue.Center at 0f
+                    if (endAction != null) DragValue.End at dragThresholdsPx
+                }
+            )
+        }
+    }
+    val dragToCenter: () -> Unit = {
+        state.dispatchRawDelta(-state.offset)
+    }
+
     Column {
         Box {
             Layout(
@@ -68,11 +92,16 @@ fun TaskCard(
                         onClickCheckbox = onClickCheckbox,
                         onLongClickTask = onLongClickTask,
                         onClickInfo = onClickInfo,
-                        endAction = endAction,
-                        startAction = startAction
+                        state = state,
                     )
-                    TaskCardActionButton(endAction)
-                    TaskCardActionButton(startAction)
+                    TaskCardActionButton(
+                        action = endAction,
+                        dragToCenter = dragToCenter
+                    )
+                    TaskCardActionButton(
+                        action = startAction,
+                        dragToCenter = dragToCenter
+                    )
                 }
             ) { measurableList, constraints ->
                 val contentPlaceable = measurableList[0].measure(constraints)
@@ -102,28 +131,8 @@ fun TaskCardContent(
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
-    endAction: TaskCardAction? = null,
-    startAction: TaskCardAction? = null,
+    state: AnchoredDraggableState<DragValue>
 ) {
-    val density = LocalDensity.current
-    val dragThresholdsPx = with(density) { dragThresholdsDp.dp.toPx() }
-    val state = remember {
-        AnchoredDraggableState(
-            initialValue = DragValue.Center,
-            positionalThreshold = { distance: Float -> distance * positionalThresholdWeight },
-            velocityThreshold = { with(density) { velocityThresholdDp.dp.toPx() } },
-            animationSpec = tween()
-        ).apply {
-            updateAnchors(
-                DraggableAnchors {
-                    if (startAction != null) DragValue.Start at -dragThresholdsPx
-                    DragValue.Center at 0f
-                    if (endAction != null) DragValue.End at dragThresholdsPx
-                }
-            )
-        }
-    }
-
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -171,16 +180,27 @@ fun TaskCardContent(
 }
 
 @Composable
-fun TaskCardActionButton(action: TaskCardAction?) {
+fun TaskCardActionButton(
+    action: TaskCardAction?,
+    dragToCenter: () -> Unit,
+) {
+    val interactionSource = remember { MutableInteractionSource() }
     if (action != null) {
         Box(
             modifier = Modifier
-                .width(dragThresholdsDp.dp)
+                .width(dragThresholdsDp.dp - Dimens.SpacingSmall)
                 .background(
                     action.backgroundColor,
                     RoundedCornerShape(Dimens.SpacingMedium)
                 )
-                .clickable(onClick = action.onClick),
+                .clickable(
+                    onClick = {
+                        dragToCenter()
+                        action.onClick()
+                    },
+                    interactionSource = interactionSource,
+                    indication = null
+                ),
         ) {
             Icon(
                 modifier = Modifier.align(Alignment.Center),
@@ -194,7 +214,7 @@ fun TaskCardActionButton(action: TaskCardAction?) {
     }
 }
 
-private enum class DragValue { Start, Center, End }
+enum class DragValue { Start, Center, End }
 
 data class TaskCardAction(
     val backgroundColor: Color,
