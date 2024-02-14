@@ -36,6 +36,7 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
+import com.hanbikan.nook.core.ui.TaskCardAction
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
@@ -144,7 +145,9 @@ fun TodoScreenSuccess(
                 completable = item,
                 onClickCheckbox = { onClickCheckbox(index) },
                 onLongClickTask = { onLongClickTask(item) },
-                tag = if (item.isDaily) stringResource(id = R.string.daily) else null
+                tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
+                endAction = TaskCardAction.deleteAction {}, // TODO: Show delete dialog
+                startAction = TaskCardAction.deleteAction {}, // TODO: Show delete dialog
             )
         }
     }
