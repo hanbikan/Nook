@@ -45,7 +45,7 @@ import com.hanbikan.nook.core.domain.model.Completable
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import kotlin.math.roundToInt
 
-private const val dragThresholdsDp = 64f
+private const val dragThresholdsDp = 72f
 private const val velocityThresholdDp = 100f
 private const val positionalThresholdWeight = 0.5f
 
