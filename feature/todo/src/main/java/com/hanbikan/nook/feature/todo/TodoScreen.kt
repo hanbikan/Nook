@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.todo
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -36,7 +37,8 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.ui.TaskCardAction
+import com.hanbikan.nook.core.ui.DragAction
+import com.hanbikan.nook.core.ui.DragActions
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
@@ -148,8 +150,9 @@ fun TodoScreenSuccess(
                 onClickCheckbox = { onClickCheckbox(index) },
                 onLongClickTask = { onLongClickTask(item) },
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
-                endAction = TaskCardAction.deleteAction { onClickDeleteAction(item) },
-                startAction = TaskCardAction.deleteAction { onClickDeleteAction(item) },
+                dragActions = DragActions.withSameActions(
+                    action = DragAction.deleteAction { onClickDeleteAction(item) }
+                )
             )
         }
     }

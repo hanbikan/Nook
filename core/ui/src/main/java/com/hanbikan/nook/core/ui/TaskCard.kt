@@ -57,8 +57,7 @@ fun TaskCard(
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
-    endAction: TaskCardAction? = null,
-    startAction: TaskCardAction? = null,
+    dragActions: DragActions? = null,
 ) {
     val density = LocalDensity.current
     val dragThresholdsPx = with(density) { dragThresholdsDp.dp.toPx() }
@@ -71,15 +70,12 @@ fun TaskCard(
         ).apply {
             updateAnchors(
                 DraggableAnchors {
-                    if (startAction != null) DragValue.Start at -dragThresholdsPx
+                    if (dragActions?.startAction != null) DragValue.Start at -dragThresholdsPx
                     DragValue.Center at 0f
-                    if (endAction != null) DragValue.End at dragThresholdsPx
+                    if (dragActions?.endAction != null) DragValue.End at dragThresholdsPx
                 }
             )
         }
-    }
-    val dragToCenter: () -> Unit = {
-        state.dispatchRawDelta(-state.offset)
     }
 
     Column {
@@ -95,12 +91,12 @@ fun TaskCard(
                         state = state,
                     )
                     TaskCardActionButton(
-                        action = endAction,
-                        dragToCenter = dragToCenter
+                        action = dragActions?.endAction,
+                        dragToCenter = { state.dragToCenter() }
                     )
                     TaskCardActionButton(
-                        action = startAction,
-                        dragToCenter = dragToCenter
+                        action = dragActions?.startAction,
+                        dragToCenter = { state.dragToCenter() }
                     )
                 }
             ) { measurableList, constraints ->
@@ -131,19 +127,19 @@ fun TaskCardContent(
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
-    state: AnchoredDraggableState<DragValue>
+    state: AnchoredDraggableState<DragValue>?
 ) {
-    Row(
-        modifier = Modifier
-            .fillMaxWidth()
-            .offset {
-                IntOffset(
-                    state
-                        .requireOffset()
-                        .roundToInt(), 0
-                )
-            }
+    val draggableModifier = if (state != null) {
+        Modifier
+            .offset { IntOffset(state.requireOffset().roundToInt(), 0) }
             .anchoredDraggable(state, Orientation.Horizontal)
+    } else {
+        Modifier
+    }
+
+    Row(
+        modifier = draggableModifier
+            .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
             .combinedClickable(
                 onClick = onClickCheckbox,
@@ -181,7 +177,7 @@ fun TaskCardContent(
 
 @Composable
 fun TaskCardActionButton(
-    action: TaskCardAction?,
+    action: DragAction?,
     dragToCenter: () -> Unit,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
@@ -211,24 +207,6 @@ fun TaskCardActionButton(
         }
     } else {
         Box {}
-    }
-}
-
-enum class DragValue { Start, Center, End }
-
-data class TaskCardAction(
-    val backgroundColor: Color,
-    val iconImageVector: ImageVector,
-    val iconTint: Color,
-    val onClick: () -> Unit
-) {
-    companion object {
-        fun deleteAction(onClick: () -> Unit) = TaskCardAction(
-            backgroundColor = Color.Red,
-            iconImageVector = Icons.Default.Delete,
-            iconTint = Color.White,
-            onClick = onClick
-        )
     }
 }
 
