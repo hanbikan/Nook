@@ -1,15 +1,15 @@
 [versions]
 agp = "8.1.4"
-navigation-fragment-ktx = "2.7.6"
+navigation-fragment-ktx = "2.7.7"
 org-jetbrains-kotlin-android = "1.8.10"
 core-ktx = "1.9.0"
 junit = "4.13.2"
 androidx-test-ext-junit = "1.1.5"
 espresso-core = "3.5.1"
 lifecycle-runtime-ktx = "2.6.2"
-lifecycle-runtime-compose = "2.6.2"
-activity-compose = "1.8.1"
-compose-bom = "2023.03.00"
+lifecycle-runtime-compose = "2.7.0"
+activity-compose = "1.8.2"
+compose-bom = "2024.02.00"
 appcompat = "1.6.1"
 material = "1.11.0"
 hilt = "2.44"
@@ -19,6 +19,7 @@ org-jetbrains-kotlin-plugin-serialization = "1.8.10"
 room = "2.6.1"
 datastore-preferences = "1.0.0"
 kotlinx-serialization-json = "1.6.2"
+foundation = "1.6.1"
 
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-fragment-ktx" }
@@ -49,6 +50,7 @@ room-compiler = { group = "androidx.room", name = "room-compiler", version.ref =
 room-ktx = { group = "androidx.room", name = "room-ktx", version.ref = "room" }
 datastore-preferences = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore-preferences" }
 kotlinx-serialization-json = { group = "org.jetbrains.kotlinx", name = "kotlinx-serialization-json", version.ref = "kotlinx-serialization-json" }
+foundation = { group = "androidx.compose.foundation", name = "foundation", version.ref = "foundation" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
