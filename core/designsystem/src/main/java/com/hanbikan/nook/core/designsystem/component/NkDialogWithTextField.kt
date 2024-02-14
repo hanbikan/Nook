@@ -9,8 +9,10 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
@@ -32,7 +34,7 @@ fun NkDialogWithTextField(
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
 ) {
-    val input = remember { mutableStateOf("") }
+    var input by remember { mutableStateOf("") }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
 
@@ -55,10 +57,8 @@ fun NkDialogWithTextField(
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
             NkTextField(
-                value = input.value,
-                onValueChange = {
-                    input.value = it
-                },
+                value = input,
+                onValueChange = { input = it },
                 singleLine = true,
                 placeholder = { NkPlaceholder(text = placeholder) },
                 modifier = Modifier.focusRequester(focusRequester),
@@ -74,7 +74,7 @@ fun NkDialogWithTextField(
                     modifier = Modifier.weight(1f)
                 )
                 NkTextButton(
-                    onClick = { onConfirmation(input.value) },
+                    onClick = { onConfirmation(input) },
                     text = stringResource(id = R.string.confirm),
                     modifier = Modifier.weight(1f)
                 )
