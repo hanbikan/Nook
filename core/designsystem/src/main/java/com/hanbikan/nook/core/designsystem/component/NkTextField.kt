@@ -29,14 +29,15 @@ fun NkTextField(
     TextField(
         value = value,
         onValueChange = onValueChange,
-        modifier = modifier.height(48.dp),
+        modifier = modifier,
         placeholder = placeholder,
         keyboardOptions = keyboardOptions,
         keyboardActions = keyboardActions,
         singleLine = singleLine,
         maxLines = maxLines,
-        colors = TextFieldDefaults.textFieldColors(
-            containerColor = NkTheme.colorScheme.secondaryContainer,
+        colors = TextFieldDefaults.colors(
+            focusedContainerColor = NkTheme.colorScheme.secondaryContainer,
+            unfocusedContainerColor = NkTheme.colorScheme.secondaryContainer,
             cursorColor = NkTheme.colorScheme.secondary,
             focusedIndicatorColor = NkTheme.colorScheme.secondary,
             unfocusedIndicatorColor = NkTheme.colorScheme.secondary,
