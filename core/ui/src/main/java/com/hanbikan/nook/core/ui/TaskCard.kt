@@ -21,27 +21,20 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.Layout
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
-import com.hanbikan.nook.core.designsystem.component.NkActionButton
 import com.hanbikan.nook.core.designsystem.component.DragActions
 import com.hanbikan.nook.core.designsystem.component.DragValue
+import com.hanbikan.nook.core.designsystem.component.NkDragToAction
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
-import com.hanbikan.nook.core.designsystem.component.createAnchoredDraggableState
-import com.hanbikan.nook.core.designsystem.component.dragToCenter
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Completable
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import kotlin.math.roundToInt
-
-private const val dragThresholdsDp = 72f
-private const val velocityThresholdDp = 100f
-private const val positionalThresholdWeight = 0.5f
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
@@ -53,54 +46,18 @@ fun TaskCard(
     onClickInfo: (() -> Unit)? = null,
     dragActions: DragActions? = null,
 ) {
-    val anchoredDraggableState = if (dragActions != null) {
-        createAnchoredDraggableState(
-            dragThresholdsDp = dragThresholdsDp,
-            velocityThresholdDp = velocityThresholdDp,
-            positionalThresholdWeight = positionalThresholdWeight
-        )
-    } else {
-        null
-    }
-
     Column {
         Box {
-            if (anchoredDraggableState != null) {
-                // TaskCardActionButton의 높이를 TaskCardContent로 맞춥니다.
-                Layout(
-                    content = {
-                        TaskCardContent(
-                            completable = completable,
-                            tag = tag,
-                            onClickCheckbox = onClickCheckbox,
-                            onLongClickTask = onLongClickTask,
-                            onClickInfo = onClickInfo,
-                            anchoredDraggableState = anchoredDraggableState,
-                        )
-                        NkActionButton(
-                            action = dragActions?.endAction,
-                            dragToCenter = { anchoredDraggableState.dragToCenter() },
-                            dragThresholdsDp = dragThresholdsDp,
-                        )
-                        NkActionButton(
-                            action = dragActions?.startAction,
-                            dragToCenter = { anchoredDraggableState.dragToCenter() },
-                            dragThresholdsDp = dragThresholdsDp,
-                        )
-                    }
-                ) { measurableList, constraints ->
-                    val contentPlaceable = measurableList[0].measure(constraints)
-                    val contentHeightConstraints = constraints.copy(minHeight = contentPlaceable.height, maxHeight = contentPlaceable.height)
-
-                    val endActionPlaceable = measurableList[1].measure(contentHeightConstraints)
-                    val startActionPlaceable = measurableList[2].measure(contentHeightConstraints)
-                    val startActionX = constraints.maxWidth - startActionPlaceable.width // End에 버튼 배치
-
-                    layout(constraints.maxWidth, contentPlaceable.height) {
-                        endActionPlaceable.place(0, 0)
-                        startActionPlaceable.place(startActionX, 0)
-                        contentPlaceable.placeRelative(0, 0)
-                    }
+            if (dragActions != null) {
+                NkDragToAction(dragActions = dragActions) {
+                    TaskCardContent(
+                        modifier = it,
+                        completable = completable,
+                        tag = tag,
+                        onClickCheckbox = onClickCheckbox,
+                        onLongClickTask = onLongClickTask,
+                        onClickInfo = onClickInfo,
+                    )
                 }
             } else {
                 TaskCardContent(
@@ -120,23 +77,15 @@ fun TaskCard(
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCardContent(
+    modifier: Modifier = Modifier,
     completable: Completable,
     tag: String? = null,
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
-    anchoredDraggableState: AnchoredDraggableState<DragValue>? = null,
 ) {
-    val draggableModifier = if (anchoredDraggableState != null) {
-        Modifier
-            .offset { IntOffset(anchoredDraggableState.requireOffset().roundToInt(), 0) }
-            .anchoredDraggable(anchoredDraggableState, Orientation.Horizontal)
-    } else {
-        Modifier
-    }
-
     Row(
-        modifier = draggableModifier
+        modifier = modifier
             .fillMaxWidth()
             .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
             .combinedClickable(
