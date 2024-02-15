@@ -1,4 +1,4 @@
-package com.hanbikan.nook.core.ui
+package com.hanbikan.nook.core.designsystem.component
 
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.ExperimentalFoundationApi
@@ -54,7 +54,7 @@ data class DragAction(
 }
 
 @Composable
-fun ActionButton(
+fun NkActionButton(
     action: DragAction?,
     dragToCenter: () -> Unit,
     dragThresholdsDp: Float,

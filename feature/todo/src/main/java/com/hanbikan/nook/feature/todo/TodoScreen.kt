@@ -1,6 +1,5 @@
 package com.hanbikan.nook.feature.todo
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -37,8 +36,8 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.ui.DragAction
-import com.hanbikan.nook.core.ui.DragActions
+import com.hanbikan.nook.core.designsystem.component.DragAction
+import com.hanbikan.nook.core.designsystem.component.DragActions
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
