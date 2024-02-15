@@ -60,6 +60,7 @@ fun AddOrUpdateTaskDialog(
     NkDialogWithTextField(
         title = title,
         defaultInput = defaultInput,
+        placeholder = stringResource(id = R.string.add_task_placeholder),
         onDismissRequest = dismissDialog,
         onConfirmation = { input ->
             when (status) {
