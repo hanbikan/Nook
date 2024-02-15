@@ -77,13 +77,15 @@ fun TaskCard(
                             onClickInfo = onClickInfo,
                             anchoredDraggableState = anchoredDraggableState,
                         )
-                        TaskCardActionButton(
+                        ActionButton(
                             action = dragActions?.endAction,
-                            dragToCenter = { anchoredDraggableState.dragToCenter() }
+                            dragToCenter = { anchoredDraggableState.dragToCenter() },
+                            dragThresholdsDp = dragThresholdsDp,
                         )
-                        TaskCardActionButton(
+                        ActionButton(
                             action = dragActions?.startAction,
-                            dragToCenter = { anchoredDraggableState.dragToCenter() }
+                            dragToCenter = { anchoredDraggableState.dragToCenter() },
+                            dragThresholdsDp = dragThresholdsDp,
                         )
                     }
                 ) { measurableList, constraints ->
@@ -168,41 +170,6 @@ fun TaskCardContent(
                 modifier = Modifier.padding(Dimens.SpacingSmall)
             )
         }
-    }
-}
-
-@Composable
-fun TaskCardActionButton(
-    action: DragAction?,
-    dragToCenter: () -> Unit,
-) {
-    val interactionSource = remember { MutableInteractionSource() }
-    if (action != null) {
-        Box(
-            modifier = Modifier
-                .width(dragThresholdsDp.dp - Dimens.SpacingSmall)
-                .background(
-                    action.backgroundColor,
-                    RoundedCornerShape(Dimens.SpacingMedium)
-                )
-                .clickable(
-                    onClick = {
-                        dragToCenter()
-                        action.onClick()
-                    },
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-        ) {
-            Icon(
-                modifier = Modifier.align(Alignment.Center),
-                imageVector = action.iconImageVector,
-                contentDescription = null,
-                tint = action.iconTint
-            )
-        }
-    } else {
-        Box {}
     }
 }
 
