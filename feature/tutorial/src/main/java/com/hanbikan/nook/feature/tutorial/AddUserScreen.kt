@@ -71,10 +71,11 @@ fun AddUserScreenContents(
         modifier = Modifier
             .fillMaxSize()
             .padding(Dimens.SideMargin),
-        verticalArrangement = Arrangement.SpaceBetween,
     ) {
         Column(
-            modifier = Modifier.verticalScroll(scrollState),
+            modifier = Modifier
+                .verticalScroll(scrollState)
+                .weight(1f),
             verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
         ) {
             NkText(
