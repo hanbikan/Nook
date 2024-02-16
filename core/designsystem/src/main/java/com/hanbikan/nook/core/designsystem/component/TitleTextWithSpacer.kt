@@ -1,7 +1,9 @@
 package com.hanbikan.nook.core.designsystem.component
 
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.RowScope
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.width
@@ -15,21 +17,19 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 @Composable
 fun TitleTextWithSpacer(
     title: String,
-    onClickInfo: (() -> Unit)? = null,
+    content: (@Composable RowScope.() -> Unit)? = null,
 ) {
     Column {
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingExtraSmall)
         ) {
             NkText(
                 text = title,
                 color = NkTheme.colorScheme.primaryContainer
             )
-            if (onClickInfo != null) {
-                Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
-                NkInfoButton(onClick = onClickInfo)
-            }
+            content?.invoke(this)
         }
         Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
     }

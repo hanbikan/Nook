@@ -23,6 +23,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
+import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkSequentialDialog
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
@@ -160,9 +161,10 @@ fun TutorialScreenContents(
                         title = stringResource(
                             id = R.string.progress_by_day,
                             activeUser.tutorialDay
-                        ),
-                        onClickInfo = switchProgressCardInfoDialog
-                    )
+                        )
+                    ) {
+                        NkInfoButton(onClick = switchProgressCardInfoDialog)
+                    }
                     ProgressCard(completableList = tutorialTaskList)
 
                     // Today's tutorial task list
