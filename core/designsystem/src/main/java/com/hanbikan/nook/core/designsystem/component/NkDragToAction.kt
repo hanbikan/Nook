@@ -30,6 +30,16 @@ import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import kotlin.math.roundToInt
 
+/**
+ * [draggableContent]에 드래그를 적용하고 드래그 시 남는 공간에 [DragAction]을 표시하는 컴포넌트입니다.
+ * @param dragActions [DragActions]
+ * @param dragThresholdsDp 드래그되는 최대 범위입니다.
+ * @param velocityThresholdDp 1초에 [velocityThresholdDp] 이상 움직이면 드래그 처리가 됩니다.(스냅)
+ * @param positionalThresholdWeight [dragThresholdsDp] * [positionalThresholdWeight] 이상 움직이면 드래그
+ * 처리가 됩니다.
+ * @param margin 드래그 되었을 때 [DragAction] 버튼과 [draggableContent] 사이의 간격입니다.
+ * @param draggableContent 드래그가 적용될 메인 컨텐츠입니다.
+ */
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun NkDragToAction(
@@ -38,7 +48,7 @@ fun NkDragToAction(
     velocityThresholdDp: Float = 100f,
     positionalThresholdWeight: Float = 0.5f,
     margin: Dp = Dimens.SpacingSmall,
-    content: @Composable (Modifier) -> Unit,
+    draggableContent: @Composable (Modifier) -> Unit,
 ) {
     val anchoredDraggableState = createAnchoredDraggableState(
         dragThresholdsDp = dragThresholdsDp,
@@ -57,7 +67,7 @@ fun NkDragToAction(
 
     Layout(
         content = {
-            content(draggableModifier)
+            draggableContent(draggableModifier)
             NkActionButton(
                 action = dragActions.endAction,
                 dragToCenter = { anchoredDraggableState.dragToCenter() },
@@ -91,40 +101,40 @@ fun NkDragToAction(
     }
 }
 
+/**
+ * [NkDragToAction] 양쪽에 나타나는 액션 버튼입니다. 클릭되었을 때 [dragToCenter], [DragAction.onClick]를 호출합니다.
+ */
 @Composable
 fun NkActionButton(
-    action: DragAction?,
+    action: DragAction,
     dragToCenter: () -> Unit,
     dragThresholdsDp: Float,
     margin: Dp,
 ) {
     val interactionSource = remember { MutableInteractionSource() }
-    if (action != null) {
-        Box(
-            modifier = Modifier
-                .width(dragThresholdsDp.dp - margin)
-                .background(
-                    action.backgroundColor,
-                    RoundedCornerShape(Dimens.SpacingMedium)
-                )
-                .clickable(
-                    onClick = {
-                        dragToCenter()
-                        action.onClick()
-                    },
-                    interactionSource = interactionSource,
-                    indication = null
-                ),
-        ) {
-            Icon(
-                modifier = Modifier.align(Alignment.Center),
-                imageVector = action.iconImageVector,
-                contentDescription = null,
-                tint = action.iconTint
+
+    Box(
+        modifier = Modifier
+            .width(dragThresholdsDp.dp - margin)
+            .background(
+                action.backgroundColor,
+                RoundedCornerShape(Dimens.SpacingMedium)
             )
-        }
-    } else {
-        Box {}
+            .clickable(
+                onClick = {
+                    dragToCenter()
+                    action.onClick()
+                },
+                interactionSource = interactionSource,
+                indication = null
+            ),
+    ) {
+        Icon(
+            modifier = Modifier.align(Alignment.Center),
+            imageVector = action.iconImageVector,
+            contentDescription = null,
+            tint = action.iconTint
+        )
     }
 }
 
@@ -157,6 +167,10 @@ fun createAnchoredDraggableState(
 
 enum class DragValue { Start, Center, End }
 
+/**
+ * @param startAction 좌측으로 드래그했을 때 우측에 표시되는 [DragAction]
+ * @param endAction 우측으로 드래그했을 때 좌측에 표시되는 [DragAction]
+ */
 data class DragActions(
     val startAction: DragAction,
     val endAction: DragAction,
@@ -169,6 +183,9 @@ data class DragActions(
     }
 }
 
+/**
+ * [NkActionButton]의 UI에 필요한 데이터 클래스
+ */
 data class DragAction(
     val backgroundColor: Color,
     val iconImageVector: ImageVector,
