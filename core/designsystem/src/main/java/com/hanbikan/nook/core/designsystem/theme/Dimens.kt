@@ -17,7 +17,7 @@ object Dimens {
 
     val SideMargin: Dp = SpacingLarge
 
-    val IconExtraSmall: Dp = 12.dp
+    val IconExtraSmall: Dp = 16.dp
 
     val IconSmall: Dp = 24.dp
 

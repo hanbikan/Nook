@@ -3,16 +3,12 @@ package com.hanbikan.nook.core.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.AnchoredDraggableState
-import androidx.compose.foundation.gestures.Orientation
-import androidx.compose.foundation.gestures.anchoredDraggable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -23,9 +19,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.IntOffset
+import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.component.DragActions
-import com.hanbikan.nook.core.designsystem.component.DragValue
 import com.hanbikan.nook.core.designsystem.component.NkDragToAction
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkTag
@@ -34,9 +29,7 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Completable
 import com.hanbikan.nook.core.domain.model.TutorialTask
-import kotlin.math.roundToInt
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 fun TaskCard(
     completable: Completable,
@@ -113,11 +106,8 @@ fun TaskCardContent(
             }
         }
         if (onClickInfo != null) {
-            NkInfoButton(
-                onClick = onClickInfo,
-                size = Dimens.IconSmall,
-                modifier = Modifier.padding(Dimens.SpacingSmall)
-            )
+            Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
+            NkInfoButton(onClick = onClickInfo)
         }
     }
 }
@@ -127,6 +117,7 @@ fun TaskCardContent(
 fun TaskCardPreview() {
     TaskCard(
         completable = TutorialTask(0, 0, 0, "상점 재료 모으기: 목재 30개, 부드러운 목재 30개, 단단한 목재 30개, 철광석 30개", false, null),
-        onClickCheckbox = {}
+        onClickCheckbox = {},
+        onClickInfo = {}
     )
 }

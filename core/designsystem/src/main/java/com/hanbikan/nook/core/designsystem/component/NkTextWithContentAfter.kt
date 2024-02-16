@@ -37,7 +37,10 @@ fun NkTextWithContentAfter(
     style: TextStyle = LocalTextStyle.current,
     content: @Composable () -> Unit,
 ) {
-    MeasureViewSize(viewToMeasure = content) {
+    MeasureViewSize(
+        modifier = modifier,
+        viewToMeasure = content,
+    ) {
         val id = "inlineContent"
         val annotatedString = buildAnnotatedString {
             append(text)
@@ -59,7 +62,6 @@ fun NkTextWithContentAfter(
 
         NkText(
             text = annotatedString,
-            modifier = modifier,
             color = color,
             fontWeight = fontWeight,
             fontFamily = fontFamily,
@@ -76,10 +78,11 @@ fun NkTextWithContentAfter(
 
 @Composable
 fun MeasureViewSize(
+    modifier: Modifier = Modifier,
     viewToMeasure: @Composable () -> Unit,
     content: @Composable (DpSize) -> Unit,
 ) {
-    SubcomposeLayout { constraints ->
+    SubcomposeLayout(modifier = modifier) { constraints ->
         // subcompose로 크기 측정
         val measuredSize = subcompose("viewToMeasure", viewToMeasure).getOrNull(0)
             ?.measure(constraints)
