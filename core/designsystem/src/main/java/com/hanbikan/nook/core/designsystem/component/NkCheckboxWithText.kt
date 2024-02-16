@@ -16,6 +16,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.hanbikan.nook.core.designsystem.theme.Dimens
 
 @Composable
 fun NkCheckboxWithText(
@@ -45,11 +46,14 @@ fun NkCheckboxWithTextSmall(
     checked: Boolean,
     onCheckedChange: ((Boolean) -> Unit)?,
     modifier: Modifier = Modifier,
+    modifierAfterClickable: Modifier = Modifier.padding(Dimens.SpacingExtraSmall),
     textStyle: TextStyle = TextStyle(fontSize = 12.sp), // Smaller font size
     checkboxSize: Dp = 16.dp, // Adjust if needed for visual consistency
 ) {
     Row(
-        modifier = modifier.clickable { onCheckedChange?.invoke(!checked) },
+        modifier = modifier
+            .clickable { onCheckedChange?.invoke(!checked) }
+            .then(modifierAfterClickable),
         verticalAlignment = Alignment.CenterVertically,
     ) {
         // Applying scale to Checkbox for visual size adjustment

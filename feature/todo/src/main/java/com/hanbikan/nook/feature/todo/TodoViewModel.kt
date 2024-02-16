@@ -76,23 +76,23 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun addTask(name: String, isDaily: Boolean) {
+    fun addTask(name: String, isDaily: Boolean, isVisible: Boolean) {
         if (name.isEmpty()) return
 
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
-                val task = Task(userId = it.id, name = name, isDaily = isDaily)
+                val task = Task(userId = it.id, name = name, isDaily = isDaily, isVisible = isVisible)
                 addTaskUseCase(task)
                 setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
         }
     }
 
-    fun updateTask(name: String, isDaily: Boolean) {
+    fun updateTask(name: String, isDaily: Boolean, isVisible: Boolean) {
         viewModelScope.launch(Dispatchers.IO) {
             val status = addOrUpdateTaskDialogStatus.value
             if (status is AddOrUpdateTaskDialogStatus.Update) {
-                val newTask = status.taskToUpdate.copy(name = name, isDaily = isDaily)
+                val newTask = status.taskToUpdate.copy(name = name, isDaily = isDaily, isVisible = isVisible)
                 updateTaskUseCase(newTask)
                 setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
