@@ -21,6 +21,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
@@ -55,6 +56,20 @@ class TodoViewModel @Inject constructor(
                         if (taskList.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
                 }
             }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val visibleTaskList: StateFlow<List<Task>> = taskList
+        .mapLatest { taskList ->
+            taskList.filter { it.isVisible }
+        }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val invisibleTaskList: StateFlow<List<Task>> = taskList
+        .mapLatest { taskList ->
+            taskList.filter { !it.isVisible }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
@@ -121,9 +136,8 @@ class TodoViewModel @Inject constructor(
         }
     }
 
-    fun switchTask(index: Int) {
-        val target = taskList.value.getOrNull(index) ?: return
-        val newTask = target.copy(isDone = !target.isDone)
+    fun switchTask(task: Task) {
+        val newTask = task.copy(isDone = !task.isDone)
         viewModelScope.launch(Dispatchers.IO) {
             updateTaskUseCase(newTask)
         }

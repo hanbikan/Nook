@@ -12,6 +12,7 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -61,7 +62,8 @@ fun TodoScreen(
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
-    val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
+    val visibleTaskList = viewModel.visibleTaskList.collectAsStateWithLifecycle().value
+    val invisibleTaskList = viewModel.invisibleTaskList.collectAsStateWithLifecycle().value
     val showsAllItems = viewModel.showsAllItems.collectAsStateWithLifecycle().value
 
     Box {
@@ -78,7 +80,8 @@ fun TodoScreen(
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.NotEmpty) {
                     TodoScreenSuccess(
                         userName = activeUser?.name ?: "",
-                        taskList = taskList,
+                        visibleTaskList = visibleTaskList,
+                        invisibleTaskList = invisibleTaskList,
                         onClickCheckbox = viewModel::switchTask,
                         onLongClickTask = viewModel::onLongClickTask,
                         onClickDeleteAction = viewModel::onClickDeleteAction,
@@ -134,8 +137,9 @@ fun TodoScreen(
 @Composable
 fun TodoScreenSuccess(
     userName: String,
-    taskList: List<Task>,
-    onClickCheckbox: (Int) -> Unit,
+    visibleTaskList: List<Task>,
+    invisibleTaskList: List<Task>,
+    onClickCheckbox: (Task) -> Unit,
     onLongClickTask: (Task) -> Unit,
     onClickDeleteAction: (Task) -> Unit,
     showsAllItems: Boolean,
@@ -149,7 +153,7 @@ fun TodoScreenSuccess(
 
             // Progress card
             TitleTextWithSpacer(title = stringResource(id = R.string.progress))
-            ProgressCard(completableList = taskList)
+            ProgressCard(completableList = visibleTaskList)
 
             // To-do list
             TitleTextWithSpacer(title = stringResource(id = R.string.todo)) {
@@ -159,17 +163,30 @@ fun TodoScreenSuccess(
                 )
             }
         }
-        itemsIndexed(taskList) { index, item ->
+        items(visibleTaskList) { item ->
             TaskCard(
                 completable = item,
-                onClickCheckbox = { onClickCheckbox(index) },
+                onClickCheckbox = { onClickCheckbox(item) },
                 onLongClickTask = { onLongClickTask(item) },
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
                 dragActions = DragActions.withSameActions(
                     action = DragAction.deleteAction { onClickDeleteAction(item) }
                 ),
-                enabled = item.isVisible,
             )
+        }
+        if (showsAllItems) {
+            items(invisibleTaskList) { item ->
+                TaskCard(
+                    completable = item,
+                    onClickCheckbox = { onClickCheckbox(item) },
+                    onLongClickTask = { onLongClickTask(item) },
+                    tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
+                    dragActions = DragActions.withSameActions(
+                        action = DragAction.deleteAction { onClickDeleteAction(item) }
+                    ),
+                    enabled = false
+                )
+            }
         }
     }
 }
