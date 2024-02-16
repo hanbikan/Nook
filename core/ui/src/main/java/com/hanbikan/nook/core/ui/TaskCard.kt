@@ -3,6 +3,7 @@ package com.hanbikan.nook.core.ui
 import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -19,7 +20,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.component.DragActions
 import com.hanbikan.nook.core.designsystem.component.NkDragToAction
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
@@ -85,28 +85,31 @@ fun TaskCardContent(
                 onClick = onClickCheckbox,
                 onLongClick = onLongClickTask
             )
-            .padding(Dimens.SpacingSmall),
+            .padding(Dimens.SpacingSmall, Dimens.SpacingSmall, Dimens.SpacingMedium, Dimens.SpacingSmall),
         verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
     ) {
-        Checkbox(
-            checked = completable.isDone,
-            onCheckedChange = { onClickCheckbox() },
-        )
-        NkTextWithContentAfter(
-            text = completable.name,
-            style = NkTheme.typography.bodyLarge,
-            fontWeight = FontWeight.Bold,
-            modifier = Modifier.weight(1f)
+        Row(
+            verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (tag != null) {
-                Row {
-                    Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
-                    NkTag(text = tag)
+            Checkbox(
+                checked = completable.isDone,
+                onCheckedChange = { onClickCheckbox() },
+            )
+            NkTextWithContentAfter(
+                text = completable.name,
+                style = NkTheme.typography.bodyLarge,
+                fontWeight = FontWeight.Bold,
+            ) {
+                if (tag != null) {
+                    Row {
+                        Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
+                        NkTag(text = tag)
+                    }
                 }
             }
         }
         if (onClickInfo != null) {
-            Spacer(modifier = Modifier.width(Dimens.SpacingExtraSmall))
             NkInfoButton(onClick = onClickInfo)
         }
     }

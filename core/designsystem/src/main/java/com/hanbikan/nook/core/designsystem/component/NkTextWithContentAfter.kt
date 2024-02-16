@@ -1,5 +1,7 @@
 package com.hanbikan.nook.core.designsystem.component
 
+import android.util.Log
+import androidx.compose.foundation.background
 import androidx.compose.foundation.text.InlineTextContent
 import androidx.compose.foundation.text.appendInlineContent
 import androidx.compose.material3.LocalTextStyle
@@ -25,7 +27,6 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 @Composable
 fun NkTextWithContentAfter(
     text: String,
-    modifier: Modifier = Modifier,
     color: Color = NkTheme.colorScheme.primary,
     fontWeight: FontWeight? = null,
     fontFamily: FontFamily? = Fonts.joa,
@@ -38,7 +39,6 @@ fun NkTextWithContentAfter(
     content: @Composable () -> Unit,
 ) {
     MeasureViewSize(
-        modifier = modifier,
         viewToMeasure = content,
     ) {
         val id = "inlineContent"
@@ -52,7 +52,11 @@ fun NkTextWithContentAfter(
                 Pair(
                     id,
                     InlineTextContent(
-                        placeholder = Placeholder(it.width.toSp(), it.height.toSp(), PlaceholderVerticalAlign.Center)
+                        placeholder = Placeholder(
+                            it.width.toSp(),
+                            it.height.toSp(),
+                            PlaceholderVerticalAlign.Center
+                        )
                     ) {
                         content()
                     }
@@ -71,18 +75,17 @@ fun NkTextWithContentAfter(
             maxLines = maxLines,
             onTextLayout = onTextLayout,
             style = style,
-            inlineContent = inlineContent
+            inlineContent = inlineContent,
         )
     }
 }
 
 @Composable
 fun MeasureViewSize(
-    modifier: Modifier = Modifier,
     viewToMeasure: @Composable () -> Unit,
     content: @Composable (DpSize) -> Unit,
 ) {
-    SubcomposeLayout(modifier = modifier) { constraints ->
+    SubcomposeLayout { constraints ->
         // subcompose로 크기 측정
         val measuredSize = subcompose("viewToMeasure", viewToMeasure).getOrNull(0)
             ?.measure(constraints)
@@ -94,9 +97,8 @@ fun MeasureViewSize(
             } ?: DpSize.Zero
 
         // content 그리기
-        val contentPlaceable = subcompose("content") { content(measuredSize) }[0]
-            .measure(constraints)
-
+        val contentPlaceable =
+            subcompose("content") { content(measuredSize) }[0].measure(constraints)
         layout(contentPlaceable.width, contentPlaceable.height) {
             contentPlaceable.place(0, 0)
         }
