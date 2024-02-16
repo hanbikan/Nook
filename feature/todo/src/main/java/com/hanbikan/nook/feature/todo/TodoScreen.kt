@@ -151,7 +151,8 @@ fun TodoScreenSuccess(
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
                 dragActions = DragActions.withSameActions(
                     action = DragAction.deleteAction { onClickDeleteAction(item) }
-                )
+                ),
+                enabled = item.isVisible,
             )
         }
     }

@@ -17,8 +17,10 @@ import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import com.hanbikan.nook.core.designsystem.component.DragActions
 import com.hanbikan.nook.core.designsystem.component.NkDragToAction
@@ -38,6 +40,7 @@ fun TaskCard(
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
     dragActions: DragActions? = null,
+    enabled: Boolean = true,
 ) {
     Column {
         Box {
@@ -50,6 +53,7 @@ fun TaskCard(
                         onClickCheckbox = onClickCheckbox,
                         onLongClickTask = onLongClickTask,
                         onClickInfo = onClickInfo,
+                        enabled = enabled,
                     )
                 }
             } else {
@@ -59,6 +63,7 @@ fun TaskCard(
                     onClickCheckbox = onClickCheckbox,
                     onLongClickTask = onLongClickTask,
                     onClickInfo = onClickInfo,
+                    enabled = enabled,
                 )
             }
         }
@@ -76,6 +81,7 @@ fun TaskCardContent(
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
+    enabled: Boolean = true,
 ) {
     Row(
         modifier = modifier
@@ -85,7 +91,13 @@ fun TaskCardContent(
                 onClick = onClickCheckbox,
                 onLongClick = onLongClickTask
             )
-            .padding(Dimens.SpacingSmall, Dimens.SpacingSmall, Dimens.SpacingMedium, Dimens.SpacingSmall),
+            .padding(
+                Dimens.SpacingSmall,
+                Dimens.SpacingSmall,
+                Dimens.SpacingMedium,
+                Dimens.SpacingSmall
+            )
+            .alpha(if (enabled) 1.0f else 0.5f),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {
@@ -98,7 +110,8 @@ fun TaskCardContent(
             )
             NkTextWithContentAfter(
                 text = completable.name,
-                style = NkTheme.typography.bodyLarge,
+                style = NkTheme.typography.bodyLarge
+                    .copy(textDecoration = if (enabled) TextDecoration.None else TextDecoration.LineThrough),
                 fontWeight = FontWeight.Bold,
             ) {
                 if (tag != null) {
@@ -119,7 +132,14 @@ fun TaskCardContent(
 @Preview
 fun TaskCardPreview() {
     TaskCard(
-        completable = TutorialTask(0, 0, 0, "상점 재료 모으기: 목재 30개, 부드러운 목재 30개, 단단한 목재 30개, 철광석 30개", false, null),
+        completable = TutorialTask(
+            0,
+            0,
+            0,
+            "상점 재료 모으기: 목재 30개, 부드러운 목재 30개, 단단한 목재 30개, 철광석 30개",
+            false,
+            null
+        ),
         onClickCheckbox = {},
         onClickInfo = {}
     )
