@@ -10,5 +10,6 @@ data class TaskEntity(
     @ColumnInfo(name = "user_id", defaultValue = "-1") val userId: Int,
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
-    @ColumnInfo(name = "is_daily", defaultValue = "1") val isDaily: Boolean
+    @ColumnInfo(name = "is_daily", defaultValue = "1") val isDaily: Boolean,
+    @ColumnInfo(name = "is_visible", defaultValue = "1") val isVisible: Boolean
 )

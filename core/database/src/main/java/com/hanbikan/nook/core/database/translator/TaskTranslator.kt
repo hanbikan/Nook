@@ -8,6 +8,7 @@ fun TaskEntity.toDomain(): Task {
         id = id,
         userId = userId,
         isDaily = isDaily,
+        isVisible = isVisible,
         name = name,
         isDone = isDone
     )
@@ -18,6 +19,7 @@ fun Task.toData(): TaskEntity {
         id = id,
         userId = userId,
         isDaily = isDaily,
+        isVisible = isVisible,
         name = name,
         isDone = isDone
     )

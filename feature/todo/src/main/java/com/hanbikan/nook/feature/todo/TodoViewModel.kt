@@ -81,7 +81,7 @@ class TodoViewModel @Inject constructor(
 
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
-                val task = Task(userId = it.id, name = name, isDaily = isDaily, isDone = false)
+                val task = Task(userId = it.id, name = name, isDaily = isDaily)
                 addTaskUseCase(task)
                 setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
