@@ -170,19 +170,16 @@ fun createAnchoredDraggableState(
     val dragThresholdsPx = with(density) { dragThresholdsDp.dp.toPx() }
     return remember {
         AnchoredDraggableState(
+            anchors = DraggableAnchors {
+                DragValue.Start at -dragThresholdsPx
+                DragValue.Center at 0f
+                DragValue.End at dragThresholdsPx
+            },
             initialValue = DragValue.Center,
             positionalThreshold = { distance: Float -> distance * positionalThresholdWeight },
             velocityThreshold = { with(density) { velocityThresholdDp.dp.toPx() } },
             animationSpec = tween()
-        ).apply {
-            updateAnchors(
-                DraggableAnchors {
-                    DragValue.Start at -dragThresholdsPx
-                    DragValue.Center at 0f
-                    DragValue.End at dragThresholdsPx
-                }
-            )
-        }
+        )
     }
 }
 
