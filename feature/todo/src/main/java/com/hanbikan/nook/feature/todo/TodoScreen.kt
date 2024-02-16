@@ -13,7 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.ripple.rememberRipple
@@ -42,8 +41,8 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.designsystem.component.DragAction
-import com.hanbikan.nook.core.designsystem.component.DragActions
+import com.hanbikan.nook.core.designsystem.component.SwipeAction
+import com.hanbikan.nook.core.designsystem.component.SwipeActions
 import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
@@ -169,8 +168,8 @@ fun TodoScreenSuccess(
                 onClickCheckbox = { onClickCheckbox(item) },
                 onLongClickTask = { onLongClickTask(item) },
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
-                dragActions = DragActions.withSameActions(
-                    action = DragAction.deleteAction { onClickDeleteAction(item) }
+                swipeActions = SwipeActions.withSameActions(
+                    action = SwipeAction.deleteAction { onClickDeleteAction(item) }
                 ),
             )
         }
@@ -181,8 +180,8 @@ fun TodoScreenSuccess(
                     onClickCheckbox = { onClickCheckbox(item) },
                     onLongClickTask = { onLongClickTask(item) },
                     tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
-                    dragActions = DragActions.withSameActions(
-                        action = DragAction.deleteAction { onClickDeleteAction(item) }
+                    swipeActions = SwipeActions.withSameActions(
+                        action = SwipeAction.deleteAction { onClickDeleteAction(item) }
                     ),
                     enabled = false
                 )

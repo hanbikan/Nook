@@ -31,24 +31,45 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import kotlin.math.roundToInt
 
 /**
- * [draggableContent]에 드래그를 적용하고 드래그 시 남는 공간에 [DragAction]을 표시하는 컴포넌트입니다.
- * @param dragActions [DragActions]
- * @param dragThresholdsDp 드래그되는 최대 범위입니다.
+ * [contentToSwipe]에 드래그를 적용하고 드래그 시 남는 공간에 [SwipeAction]을 표시하는 컴포넌트입니다.
+ *
+ * 사용 사례:
+ *
+ * ```
+ * NkSwipeToAction(
+ *     swipeActions = SwipeActions.withSameActions(
+ *         action = SwipeAction.deleteAction { /* TODO: onClickDeleteActionButton */ }
+ *     )
+ * ) { modifier ->
+ *     Row(
+ *         modifier = modifier // YOU MUST ADD IT!
+ *             .fillMaxWidth()
+ *             .background(Color.White, RoundedCornerShape(8.dp))
+ *             .padding(8.dp),
+ *     ) {
+ *         Text(text = "Sample")
+ *     }
+ * }
+ * ```
+ *
+ * @param swipeActions [SwipeActions]
+ * @param dragThresholdsDp 드래그되는 최대 가동 범위입니다.
  * @param velocityThresholdDp 1초에 [velocityThresholdDp] 이상 움직이면 드래그 처리가 됩니다.(스냅)
  * @param positionalThresholdWeight [dragThresholdsDp] * [positionalThresholdWeight] 이상 움직이면 드래그
  * 처리가 됩니다.
- * @param margin 드래그 되었을 때 [DragAction] 버튼과 [draggableContent] 사이의 간격입니다.
- * @param draggableContent 드래그가 적용될 메인 컨텐츠입니다.
+ * @param margin 드래그 되었을 때 [SwipeAction] 버튼과 [contentToSwipe] 사이의 간격입니다.
+ * @param contentToSwipe 드래그가 적용될 메인 컨텐츠입니다. 반드시 인자로 넘어가는 [Modifier]를 적용시켜야 합니다.
  */
+
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-fun NkDragToAction(
-    dragActions: DragActions,
+fun NkSwipeToAction(
+    swipeActions: SwipeActions,
     dragThresholdsDp: Float = 72f,
     velocityThresholdDp: Float = 100f,
     positionalThresholdWeight: Float = 0.5f,
     margin: Dp = Dimens.SpacingSmall,
-    draggableContent: @Composable (Modifier) -> Unit,
+    contentToSwipe: @Composable (Modifier) -> Unit,
 ) {
     val anchoredDraggableState = createAnchoredDraggableState(
         dragThresholdsDp = dragThresholdsDp,
@@ -67,16 +88,16 @@ fun NkDragToAction(
 
     Layout(
         content = {
-            draggableContent(draggableModifier)
+            contentToSwipe(draggableModifier)
             NkActionButton(
-                action = dragActions.endAction,
-                dragToCenter = { anchoredDraggableState.dragToCenter() },
+                action = swipeActions.endAction,
+                moveToCenter = { anchoredDraggableState.moveToCenter() },
                 dragThresholdsDp = dragThresholdsDp,
                 margin = margin,
             )
             NkActionButton(
-                action = dragActions.startAction,
-                dragToCenter = { anchoredDraggableState.dragToCenter() },
+                action = swipeActions.startAction,
+                moveToCenter = { anchoredDraggableState.moveToCenter() },
                 dragThresholdsDp = dragThresholdsDp,
                 margin = margin,
             )
@@ -102,12 +123,12 @@ fun NkDragToAction(
 }
 
 /**
- * [NkDragToAction] 양쪽에 나타나는 액션 버튼입니다. 클릭되었을 때 [dragToCenter], [DragAction.onClick]를 호출합니다.
+ * [NkSwipeToAction] 양쪽에 나타나는 액션 버튼입니다. 클릭되었을 때 [moveToCenter], [SwipeAction.onClick]를 호출합니다.
  */
 @Composable
 fun NkActionButton(
-    action: DragAction,
-    dragToCenter: () -> Unit,
+    action: SwipeAction,
+    moveToCenter: () -> Unit,
     dragThresholdsDp: Float,
     margin: Dp,
 ) {
@@ -122,7 +143,7 @@ fun NkActionButton(
             )
             .clickable(
                 onClick = {
-                    dragToCenter()
+                    moveToCenter()
                     action.onClick()
                 },
                 interactionSource = interactionSource,
@@ -168,15 +189,15 @@ fun createAnchoredDraggableState(
 enum class DragValue { Start, Center, End }
 
 /**
- * @param startAction 좌측으로 드래그했을 때 우측에 표시되는 [DragAction]
- * @param endAction 우측으로 드래그했을 때 좌측에 표시되는 [DragAction]
+ * @param startAction 좌측으로 드래그했을 때 우측에 표시되는 [SwipeAction]
+ * @param endAction 우측으로 드래그했을 때 좌측에 표시되는 [SwipeAction]
  */
-data class DragActions(
-    val startAction: DragAction,
-    val endAction: DragAction,
+data class SwipeActions(
+    val startAction: SwipeAction,
+    val endAction: SwipeAction,
 ) {
     companion object {
-        fun withSameActions(action: DragAction) = DragActions(
+        fun withSameActions(action: SwipeAction) = SwipeActions(
             startAction = action,
             endAction = action
         )
@@ -186,14 +207,14 @@ data class DragActions(
 /**
  * [NkActionButton]의 UI에 필요한 데이터 클래스
  */
-data class DragAction(
+data class SwipeAction(
     val backgroundColor: Color,
     val iconImageVector: ImageVector,
     val iconTint: Color,
     val onClick: () -> Unit,
 ) {
     companion object {
-        fun deleteAction(onClick: () -> Unit) = DragAction(
+        fun deleteAction(onClick: () -> Unit) = SwipeAction(
             backgroundColor = Color.Red,
             iconImageVector = Icons.Default.Delete,
             iconTint = Color.White,
@@ -203,6 +224,6 @@ data class DragAction(
 }
 
 @OptIn(ExperimentalFoundationApi::class)
-fun <T> AnchoredDraggableState<T>.dragToCenter() {
+fun <T> AnchoredDraggableState<T>.moveToCenter() {
     dispatchRawDelta(-offset)
 }

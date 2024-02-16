@@ -22,8 +22,8 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
-import com.hanbikan.nook.core.designsystem.component.DragActions
-import com.hanbikan.nook.core.designsystem.component.NkDragToAction
+import com.hanbikan.nook.core.designsystem.component.SwipeActions
+import com.hanbikan.nook.core.designsystem.component.NkSwipeToAction
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
@@ -40,13 +40,13 @@ fun TaskCard(
     onClickCheckbox: () -> Unit,
     onLongClickTask: (() -> Unit)? = null,
     onClickInfo: (() -> Unit)? = null,
-    dragActions: DragActions? = null,
+    swipeActions: SwipeActions? = null,
     enabled: Boolean = true,
 ) {
     Column {
         Box {
-            if (dragActions != null) {
-                NkDragToAction(dragActions = dragActions) {
+            if (swipeActions != null) {
+                NkSwipeToAction(swipeActions = swipeActions) {
                     TaskCardContent(
                         modifier = it,
                         completable = completable,
