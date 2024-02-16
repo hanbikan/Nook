@@ -24,6 +24,7 @@ fun NkInfoButton(
     tint: Color = NkTheme.colorScheme.primaryContainer,
 ) {
     val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+
     Icon(
         modifier = modifier
             .size(size)

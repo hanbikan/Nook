@@ -27,6 +27,7 @@ import com.hanbikan.nook.core.designsystem.component.NkDragToAction
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
+import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Completable
@@ -97,7 +98,7 @@ fun TaskCardContent(
                 Dimens.SpacingMedium,
                 Dimens.SpacingSmall
             )
-            .alpha(if (enabled) 1.0f else 0.5f),
+            .alpha(getAlphaByEnabled(enabled)),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
     ) {

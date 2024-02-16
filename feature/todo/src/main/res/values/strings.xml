@@ -10,4 +10,6 @@
     <string name="daily">매일</string>
     <string name="repeat_daily">매일 반복</string>
     <string name="hiding">숨기기</string>
+    <string name="show_all_items">모두 보기</string>
+    <string name="show_only_visible_items">일반 보기</string>
 </resources>

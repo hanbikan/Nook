@@ -1,6 +1,8 @@
 package com.hanbikan.nook.feature.todo
 
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -13,11 +15,14 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
@@ -38,6 +43,7 @@ import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.designsystem.component.DragAction
 import com.hanbikan.nook.core.designsystem.component.DragActions
+import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
@@ -56,6 +62,7 @@ fun TodoScreen(
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val taskList = viewModel.taskList.collectAsStateWithLifecycle().value
+    val showsAllItems = viewModel.showsAllItems.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -74,7 +81,9 @@ fun TodoScreen(
                         taskList = taskList,
                         onClickCheckbox = viewModel::switchTask,
                         onLongClickTask = viewModel::onLongClickTask,
-                        onClickDeleteAction = viewModel::onClickDeleteAction
+                        onClickDeleteAction = viewModel::onClickDeleteAction,
+                        showsAllItems = showsAllItems,
+                        switchShowsAllItems = viewModel::switchShowsAllItems,
                     )
                 }
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
@@ -129,6 +138,8 @@ fun TodoScreenSuccess(
     onClickCheckbox: (Int) -> Unit,
     onLongClickTask: (Task) -> Unit,
     onClickDeleteAction: (Task) -> Unit,
+    showsAllItems: Boolean,
+    switchShowsAllItems: () -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.padding(Dimens.SideMargin),
@@ -141,7 +152,12 @@ fun TodoScreenSuccess(
             ProgressCard(completableList = taskList)
 
             // To-do list
-            TitleTextWithSpacer(title = stringResource(id = R.string.todo))
+            TitleTextWithSpacer(title = stringResource(id = R.string.todo)) {
+                VisibilityButton(
+                    showsAllItems = showsAllItems,
+                    switchShowsAllItems = switchShowsAllItems,
+                )
+            }
         }
         itemsIndexed(taskList) { index, item ->
             TaskCard(
@@ -156,6 +172,35 @@ fun TodoScreenSuccess(
             )
         }
     }
+}
+
+@Composable
+fun VisibilityButton(
+    showsAllItems: Boolean,
+    switchShowsAllItems: () -> Unit,
+) {
+    val size = Dimens.IconExtraSmall
+    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
+
+    Icon(
+        imageVector = ImageVector.vectorResource(
+            id = if (showsAllItems) R.drawable.visibility else R.drawable.visibility_off
+        ),
+        contentDescription = stringResource(
+            id = if (showsAllItems) R.string.show_all_items else R.string.show_only_visible_items
+        ),
+        modifier = Modifier
+            .size(size)
+            .clickable(
+                onClick = switchShowsAllItems,
+                interactionSource = interactionSource,
+                indication = rememberRipple(
+                    bounded = false,
+                    radius = size
+                )
+            )
+            .alpha(alpha = getAlphaByEnabled(showsAllItems))
+    )
 }
 
 @Composable

@@ -58,6 +58,9 @@ class TodoViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
+    private val _showsAllItems: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val showsAllItems = _showsAllItems.asStateFlow()
+
     // Dialog
     private val _addOrUpdateTaskDialogStatus: MutableStateFlow<AddOrUpdateTaskDialogStatus> = MutableStateFlow(AddOrUpdateTaskDialogStatus.Invisible)
     val addOrUpdateTaskDialogStatus = _addOrUpdateTaskDialogStatus.asStateFlow()
@@ -124,6 +127,10 @@ class TodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             updateTaskUseCase(newTask)
         }
+    }
+
+    fun switchShowsAllItems() {
+        _showsAllItems.value = !showsAllItems.value
     }
 
     fun setAddOrUpdateTaskDialogStatus(status: AddOrUpdateTaskDialogStatus) {
