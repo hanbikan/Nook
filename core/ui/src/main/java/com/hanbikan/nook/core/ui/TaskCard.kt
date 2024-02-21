@@ -104,6 +104,7 @@ fun TaskCardContent(
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
+            modifier = Modifier.weight(1f)
         ) {
             Checkbox(
                 checked = completable.isDone,
