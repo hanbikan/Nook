@@ -12,6 +12,7 @@ import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
+import androidx.compose.material3.IconButtonDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -176,23 +177,27 @@ fun TutorialScreenContents(
                 IconButton(
                     onClick = decreaseTutorialDay,
                     modifier = Modifier.weight(1f),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = NkTheme.colorScheme.primary,
+                    ),
                     enabled = tutorialDayRange != null && (activeUser.tutorialDay - 1) in tutorialDayRange
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(id = R.string.previous),
-                        tint = NkTheme.colorScheme.primary,
                     )
                 }
                 IconButton(
                     onClick = increaseTutorialDay,
                     modifier = Modifier.weight(1f),
+                    colors = IconButtonDefaults.iconButtonColors(
+                        contentColor = NkTheme.colorScheme.primary,
+                    ),
                     enabled = tutorialDayRange != null && (activeUser.tutorialDay + 1) in tutorialDayRange
                 ) {
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(id = R.string.next),
-                        tint = NkTheme.colorScheme.primary,
                     )
                 }
             }

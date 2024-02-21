@@ -176,7 +176,6 @@ fun TodoScreenSuccess(
                 )
             }
         }
-        Log.e("ASD", visibleTaskList.toString())
         items(visibleTaskList) { item ->
             TaskCard(
                 completable = item,
