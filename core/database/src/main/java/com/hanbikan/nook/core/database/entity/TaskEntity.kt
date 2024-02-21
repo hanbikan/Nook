@@ -3,6 +3,7 @@ package com.hanbikan.nook.core.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
+import com.hanbikan.nook.core.domain.model.Detail
 
 @Entity(tableName = "task")
 data class TaskEntity(
@@ -11,5 +12,6 @@ data class TaskEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "is_done") val isDone: Boolean,
     @ColumnInfo(name = "is_daily", defaultValue = "1") val isDaily: Boolean,
-    @ColumnInfo(name = "is_visible", defaultValue = "1") val isVisible: Boolean
+    @ColumnInfo(name = "is_visible", defaultValue = "1") val isVisible: Boolean,
+    @ColumnInfo(name = "details", defaultValue = "NULL") val details: List<Detail>?,
 )

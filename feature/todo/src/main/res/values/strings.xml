@@ -16,8 +16,8 @@
     <string name="task_name1">화석 4개 발굴하기</string>
     <string name="task_name2">바위 6개 치기</string>
     <string name="task_name3">돈나무 심기</string>
-    <string name="task_detail_description3_1">빛나는 땅을 판 뒤 구멍에 벨을 심으면 돈나무가 자라서 심은 벨을 3배로 돌려줘요. 10,000벨을 심는 것을 추천드려요.</string>
-    <string name="task_detail_description3_2">[주의 사항]\n1~10,000벨을 심으면 반드시 3배가 되지만, 그 이상을 심게 되면 3배가 될 확률이 20%로 줄어듭니다!(실패 시 30,000벨이 드랍됩니다. 즉, 99,000벨을 심으면 높은 확률로 30,000벨이 되어 손해를 보게 돼요.)</string>
+    <string name="task_detail_description3_1">빛나는 땅을 판 뒤 구멍에 벨을 심으면 돈나무가 자라서 심은 벨을 3배로 돌려줘요.(10,000벨 추천!)</string>
+    <string name="task_detail_description3_2">[주의 사항]\n1벨~10,000벨을 심으면 반드시 3배가 되지만, 그 이상을 심게 되면 20% 확률로 3배가 되고 80% 확률로 30,000벨이 됩니다.</string>
     <string name="task_name4">해변가에서 레시피 병 줍기</string>
     <string name="task_name5">너굴쇼핑, 너굴상점, 옷가게 확인하기</string>
     <string name="task_name6">너굴 마일리지+ 2배 보상 얻기</string>
