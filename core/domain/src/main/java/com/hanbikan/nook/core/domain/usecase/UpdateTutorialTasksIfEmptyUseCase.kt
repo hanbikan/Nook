@@ -5,5 +5,5 @@ package com.hanbikan.nook.core.domain.usecase
  * 상위 안드로이드 모듈에서 DI로 구현체를 넣어주는 방식을 선택하였습니다.
  */
 interface UpdateTutorialTasksIfEmptyUseCase {
-    suspend operator fun invoke()
+    suspend operator fun invoke(userId: Int)
 }

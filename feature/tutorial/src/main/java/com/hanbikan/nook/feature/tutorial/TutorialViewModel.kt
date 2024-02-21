@@ -37,7 +37,6 @@ class TutorialViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase,
 ) : ViewModel() {
 
     // Data for UI
@@ -99,10 +98,6 @@ class TutorialViewModel @Inject constructor(
     val detailsToShow = _detailsToShow.asStateFlow()
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
-            updateTutorialTasksIfEmptyUseCase()
-        }
-
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(tutorialScreenRoute)
         }

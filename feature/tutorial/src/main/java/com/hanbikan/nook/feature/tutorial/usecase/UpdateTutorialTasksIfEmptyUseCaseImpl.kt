@@ -11,18 +11,14 @@ import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 class UpdateTutorialTasksIfEmptyUseCaseImpl @Inject constructor(
-    private val getAllUsersUseCase: GetAllUsersUseCase,
     private val tutorialTaskRepository: TutorialTaskRepository,
     @ApplicationContext private val context: Context,
 ) : UpdateTutorialTasksIfEmptyUseCase {
-    override suspend operator fun invoke() {
-        val users = getAllUsersUseCase().first()
-        users.forEach {
-            val tutorialTasks = tutorialTaskRepository.getTutorialTasksByUserId(it.id)
-            if (tutorialTasks.first().isEmpty()) {
-                val tutorialTasksToInsert = TutorialTask.createInitialTutorialTasks(it.id, context)
-                tutorialTaskRepository.insertTutorialTasks(tutorialTasksToInsert)
-            }
+    override suspend operator fun invoke(userId: Int) {
+        val tutorialTasks = tutorialTaskRepository.getTutorialTasksByUserId(userId)
+        if (tutorialTasks.first().isEmpty()) {
+            val tutorialTasksToInsert = TutorialTask.createInitialTutorialTasks(userId, context)
+            tutorialTaskRepository.insertTutorialTasks(tutorialTasksToInsert)
         }
     }
 }

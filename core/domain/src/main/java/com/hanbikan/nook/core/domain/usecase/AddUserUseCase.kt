@@ -8,11 +8,15 @@ import javax.inject.Inject
 class AddUserUseCase @Inject constructor(
     private val userRepository: UserRepository,
     private val appStateRepository: AppStateRepository,
+    private val updateTasksIfEmptyUseCase: UpdateTasksIfEmptyUseCase,
+    private val updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase,
 ) {
     suspend operator fun invoke(user: User) {
         val addedUserId = userRepository.insertUser(user)
 
         // 후속 작업
         appStateRepository.setActiveUserId(addedUserId)
+        updateTasksIfEmptyUseCase(addedUserId)
+        updateTutorialTasksIfEmptyUseCase(addedUserId)
     }
 }
