@@ -12,7 +12,7 @@ import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCa
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTaskUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -37,7 +37,7 @@ class TutorialViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
-    private val updateTutorialTasksUseCase: UpdateTutorialTasksUseCase,
+    private val updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase,
 ) : ViewModel() {
 
     // Data for UI
@@ -100,7 +100,7 @@ class TutorialViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            updateTutorialTasksUseCase()
+            updateTutorialTasksIfEmptyUseCase()
         }
 
         viewModelScope.launch(Dispatchers.IO) {
