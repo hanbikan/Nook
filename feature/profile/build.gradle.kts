@@ -7,7 +7,7 @@ plugins {
 }
 
 android {
-    namespace = "com.hanbikan.nook.feature.phone"
+    namespace = "com.hanbikan.nook.feature.profile"
     compileSdk = 34
 
     defaultConfig {
@@ -43,12 +43,13 @@ android {
 
 dependencies {
 
-    implementation(project(mapOf("path" to ":feature:tutorial")))
-    implementation(project(mapOf("path" to ":feature:todo")))
-    implementation(project(mapOf("path" to ":feature:profile")))
-    implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:designsystem")))
+    implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:ui")))
+
+    implementation(libs.core.ktx)
+    implementation(libs.appcompat)
+    implementation(libs.material)
 
     implementation(libs.core.ktx)
     implementation(libs.lifecycle.runtime.ktx)
@@ -70,9 +71,17 @@ dependencies {
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.test.ext.junit)
     androidTestImplementation(libs.espresso.core)
+    testImplementation(libs.junit)
+    androidTestImplementation(libs.androidx.test.ext.junit)
+    androidTestImplementation(libs.espresso.core)
     androidTestImplementation(platform(libs.compose.bom))
     androidTestImplementation(libs.ui.test.junit4)
 
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+}
+
+// Allow references to generated code
+kapt {
+    correctErrorTypes = true
 }

@@ -95,6 +95,7 @@ fun PhoneScreen(
 fun PhoneScreenPreview() {
     PhoneScreen(
         listOf(
+            NkApp.PROFILE.toNkAppWithNavigation {},
             NkApp.TUTORIAL.toNkAppWithNavigation {},
             NkApp.TODO.toNkAppWithNavigation {},
         ),

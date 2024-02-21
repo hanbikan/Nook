@@ -7,6 +7,8 @@ import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.feature.phone.PhoneScreen
+import com.hanbikan.nook.feature.profile.navigation.navigateToProfile
+import com.hanbikan.nook.feature.profile.navigation.profileScreen
 import com.hanbikan.nook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
 import com.hanbikan.nook.feature.tutorial.navigation.addUserScreen
@@ -37,11 +39,16 @@ fun NavGraphBuilder.phoneGraph(
         )
 
         phoneScreen(
+            navigateToProfile = navController::navigateToProfile,
             navigateToTutorial = navController::navigateToTutorial,
             navigateToTodo = navController::navigateToTodo,
             navigateToAddUser = navController::navigateToAddUser,
         )
 
+        profileScreen(
+            navigateToAddUser = navController::navigateToAddUser,
+            navigateToPhone = navController::navigateToPhone,
+        )
         tutorialScreen(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
@@ -55,6 +62,7 @@ fun NavGraphBuilder.phoneGraph(
 }
 
 fun NavGraphBuilder.phoneScreen(
+    navigateToProfile: () -> Unit,
     navigateToTutorial: () -> Unit,
     navigateToTodo: () -> Unit,
     navigateToAddUser: () -> Unit,
@@ -64,6 +72,7 @@ fun NavGraphBuilder.phoneScreen(
     ) {
         PhoneScreen(
             nkApps = listOf(
+                NkApp.PROFILE.toNkAppWithNavigation(navigateToProfile),
                 NkApp.TUTORIAL.toNkAppWithNavigation(navigateToTutorial),
                 NkApp.TODO.toNkAppWithNavigation(navigateToTodo),
             ),
