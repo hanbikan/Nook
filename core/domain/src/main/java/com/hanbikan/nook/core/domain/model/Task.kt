@@ -8,4 +8,6 @@ data class Task(
     override val name: String,
     override val isDone: Boolean = false,
     override val details: List<Detail>? = null,
-) : Completable, HasDetail
+) : Completable, HasDetail {
+    companion object  // For companion extension functions outside
+}
