@@ -112,7 +112,7 @@ fun TodoScreen(
             Icon(
                 imageVector = Icons.Default.Add,
                 contentDescription = stringResource(id = R.string.add_task),
-                tint = Color.White,
+                tint = NkTheme.colorScheme.onBackground,
             )
         }
 

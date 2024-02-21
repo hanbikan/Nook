@@ -26,6 +26,7 @@ import com.hanbikan.nook.core.designsystem.component.NkInfoButton
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
+import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
@@ -180,6 +181,7 @@ fun TutorialScreenContents(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowLeft,
                         contentDescription = stringResource(id = R.string.previous),
+                        tint = NkTheme.colorScheme.primary,
                     )
                 }
                 IconButton(
@@ -190,6 +192,7 @@ fun TutorialScreenContents(
                     Icon(
                         imageVector = Icons.AutoMirrored.Filled.KeyboardArrowRight,
                         contentDescription = stringResource(id = R.string.next),
+                        tint = NkTheme.colorScheme.primary,
                     )
                 }
             }

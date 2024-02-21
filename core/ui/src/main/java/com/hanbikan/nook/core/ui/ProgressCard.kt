@@ -30,7 +30,7 @@ fun ProgressCard(
     Column(
         modifier = Modifier
             .width(220.dp)
-            .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
+            .background(NkTheme.colorScheme.onBackground, RoundedCornerShape(Dimens.SpacingMedium))
             .padding(Dimens.SpacingMedium, Dimens.SpacingLarge),
         verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
     ) {

@@ -26,7 +26,7 @@ fun NkTag(
     ) {
         NkText(
             text = text,
-            color = Color.White,
+            color = NkTheme.colorScheme.onBackground,
             style = NkTheme.typography.labelSmall
         )
     }

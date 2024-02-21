@@ -87,7 +87,7 @@ fun TaskCardContent(
     Row(
         modifier = modifier
             .fillMaxWidth()
-            .background(Color.White, RoundedCornerShape(Dimens.SpacingMedium))
+            .background(NkTheme.colorScheme.onBackground, RoundedCornerShape(Dimens.SpacingMedium))
             .combinedClickable(
                 onClick = onClickCheckbox,
                 onLongClick = onLongClickTask

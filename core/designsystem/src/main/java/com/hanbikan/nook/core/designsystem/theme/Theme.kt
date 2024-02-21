@@ -20,12 +20,14 @@ import androidx.compose.ui.platform.LocalView
 import androidx.core.view.WindowCompat
 
 private val DarkColorScheme = darkColorScheme(
-    primary = Brown,
-    primaryContainer = LightBrown,
-    secondary = Green,
-    secondaryContainer = LightGreen,
+    primary = CrimeWhite,
+    primaryContainer = CrimeWhite,
+    secondary = LightGreen,
+    secondaryContainer = Green,
     tertiary = Blue,
-    background = CrimeWhite,
+    tertiaryContainer = Color.White,
+    background = Color.Black,
+    onBackground = Brown,
 )
 
 private val LightColorScheme = lightColorScheme(
@@ -36,13 +38,14 @@ private val LightColorScheme = lightColorScheme(
     tertiary = Blue,
     tertiaryContainer = Color.White,
     background = CrimeWhite,
+    onBackground = Color.White,
 )
 
 @Composable
 fun NkTheme(
-    darkTheme: Boolean = false,
+    darkTheme: Boolean = isSystemInDarkTheme(),
     dynamicColor: Boolean = false,
-    content: @Composable () -> Unit
+    content: @Composable () -> Unit,
 ) {
     val colorScheme = when {
         dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
@@ -58,7 +61,7 @@ fun NkTheme(
         SideEffect {
             val window = (view.context as Activity).window
             window.statusBarColor = colorScheme.background.toArgb()
-            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = true
+            WindowCompat.getInsetsController(window, view).isAppearanceLightStatusBars = !darkTheme
         }
     }
 

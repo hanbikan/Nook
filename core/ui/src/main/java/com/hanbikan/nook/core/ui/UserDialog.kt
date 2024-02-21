@@ -61,7 +61,7 @@ fun UserDialog(
                 modifier = Modifier
                     .padding(Dimens.SpacingSmall, 0.dp, Dimens.SpacingSmall, Dimens.SpacingSmall)
                     .background(
-                        color = Color.White,
+                        color = NkTheme.colorScheme.onBackground,
                         shape = RoundedCornerShape(Dimens.SpacingMedium)
                     )
                     .padding(Dimens.SpacingSmall)
