@@ -2,6 +2,7 @@ package com.hanbikan.nook.feature.phone
 
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
@@ -14,7 +15,9 @@ import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.ripple.rememberRipple
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -63,7 +66,8 @@ fun PhoneScreen(
             ) {
                 items(nkApps) {
                     Column(
-                        modifier = Modifier.padding(Dimens.SpacingSmall),
+                        modifier = Modifier
+                            .padding(Dimens.SpacingSmall),
                         horizontalAlignment = Alignment.CenterHorizontally,
                     ) {
                         Image(
@@ -72,7 +76,14 @@ fun PhoneScreen(
                             modifier = Modifier
                                 .aspectRatio(1f)
                                 .clip(RoundedCornerShape(Dimens.SpacingExtraLarge))
-                                .clickable(onClick = it.navigate)
+                                .clickable(
+                                    onClick = it.navigate,
+                                    interactionSource = remember { MutableInteractionSource() },
+                                    indication = rememberRipple(
+                                        bounded = true,
+                                        color = NkTheme.colorScheme.primary,
+                                    )
+                                )
                         )
                         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
                         NkText(text = it.name)

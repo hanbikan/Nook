@@ -33,7 +33,8 @@ fun NkInfoButton(
                 interactionSource = interactionSource,
                 indication = rememberRipple(
                     bounded = false,
-                    radius = size
+                    radius = size,
+                    color = NkTheme.colorScheme.primary,
                 ),
             ),
         imageVector = Icons.Default.Info,

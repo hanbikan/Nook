@@ -226,7 +226,8 @@ fun VisibilityButton(
                     radius = size
                 )
             )
-            .alpha(alpha = getAlphaByEnabled(showsAllItems))
+            .alpha(alpha = getAlphaByEnabled(showsAllItems)),
+        tint = NkTheme.colorScheme.primary
     )
 }
 
