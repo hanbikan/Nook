@@ -1,6 +1,5 @@
 package com.hanbikan.nook.feature.todo
 
-import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -24,7 +23,6 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -124,25 +122,23 @@ fun TodoScreen(
         )
 
         DetailDialog(
+            visible = isDetailDialogShown,
             detailsToShow = detailsToShow,
-            isDetailDialogShown = isDetailDialogShown,
             hideDetailDialog = viewModel::hideDetailDialog
         )
 
-        if (isDeleteTaskDialogShown) {
-            NkDialog(
-                description = stringResource(id = R.string.sure_to_delete_task),
-                onDismissRequest = viewModel::switchDeleteTaskDialog,
-                onConfirmation = viewModel::onConfirmDeleteTask
-            )
-        }
+        NkDialog(
+            visible = isDeleteTaskDialogShown,
+            description = stringResource(id = R.string.sure_to_delete_task),
+            onDismissRequest = viewModel::switchDeleteTaskDialog,
+            onConfirmation = viewModel::onConfirmDeleteTask
+        )
 
-        if (isUserDialogShown) {
-            UserDialog(
-                navigateToAddUser = navigateToAddUser,
-                onDismissRequest = viewModel::switchUserDialog
-            )
-        }
+        UserDialog(
+            visible = isUserDialogShown,
+            navigateToAddUser = navigateToAddUser,
+            onDismissRequest = viewModel::switchUserDialog
+        )
     }
 }
 

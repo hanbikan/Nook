@@ -23,7 +23,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -38,6 +37,7 @@ import com.hanbikan.nook.core.domain.model.User
 
 @Composable
 fun UserDialog(
+    visible: Boolean,
     navigateToAddUser: () -> Unit,
     onDismissRequest: () -> Unit,
     viewModel: UserDialogViewModel = hiltViewModel(),
@@ -46,7 +46,7 @@ fun UserDialog(
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val isDeleteUserDialogShown = viewModel.isDeleteUserDialogShown.collectAsStateWithLifecycle().value
 
-    NkDialogBase(onDismissRequest) {
+    NkDialogBase(visible, onDismissRequest) {
         Column(
             modifier = Modifier.fillMaxWidth()
         ) {
@@ -90,13 +90,12 @@ fun UserDialog(
         }
     }
 
-    if (isDeleteUserDialogShown) {
-        NkDialog(
-            description = stringResource(id = R.string.sure_to_delete_user),
-            onDismissRequest = viewModel::switchIsDeleteUserDialogShown,
-            onConfirmation = viewModel::onConfirmDeleteUser
-        )
-    }
+    NkDialog(
+        visible = isDeleteUserDialogShown,
+        description = stringResource(id = R.string.sure_to_delete_user),
+        onDismissRequest = viewModel::switchIsDeleteUserDialogShown,
+        onConfirmation = viewModel::onConfirmDeleteUser
+    )
 }
 
 @OptIn(ExperimentalFoundationApi::class)
@@ -178,5 +177,5 @@ fun AddUserItem(
 @Composable
 @Preview
 fun UserDialogPreview() {
-    UserDialog({}, {})
+    UserDialog(true, {}, {})
 }

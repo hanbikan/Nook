@@ -1,12 +1,10 @@
 package com.hanbikan.nook.core.designsystem.component
 
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -15,7 +13,6 @@ import androidx.compose.material3.CardDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.painter.Painter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
@@ -28,6 +25,7 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
 @Composable
 fun NkDialog(
+    visible: Boolean,
     description: String,
     painter: Painter? = null,
     onDismissRequest: () -> Unit,
@@ -42,7 +40,7 @@ fun NkDialog(
         NkTheme.typography.titleSmall
     }
 
-    NkDialogBase(onDismissRequest) {
+    NkDialogBase(visible, onDismissRequest) {
         Column(
             modifier = Modifier
                 .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
@@ -84,9 +82,12 @@ fun NkDialog(
 
 @Composable
 fun NkDialogBase(
+    visible: Boolean,
     onDismissRequest: () -> Unit,
     content: @Composable (ColumnScope.() -> Unit),
 ) {
+    if (!visible) return
+
     Dialog(onDismissRequest = { onDismissRequest() }) {
         Card(
             modifier = Modifier
@@ -112,6 +113,7 @@ object NkDialogDefaults {
 @Preview
 fun NkDialogPreview() {
     NkDialog(
+        visible = true,
         description = "할 일을 삭제합니다. 이 작업은 되돌릴 수 없습니다.",
         onDismissRequest = {},
         onConfirmation = {},

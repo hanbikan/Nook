@@ -83,49 +83,45 @@ fun TutorialScreen(
             )
         }
 
-        if (isUserDialogShown) {
-            UserDialog(
-                navigateToAddUser = navigateToAddUser,
-                onDismissRequest = viewModel::switchUserDialog
-            )
-        }
+        UserDialog(
+            visible = isUserDialogShown,
+            navigateToAddUser = navigateToAddUser,
+            onDismissRequest = viewModel::switchUserDialog
+        )
 
-        if (isProgressCardInfoDialogShown) {
-            NkDialog(
-                description = stringResource(id = R.string.progress_card_description),
-                onDismissRequest = viewModel::switchProgressCardInfoDialog,
-                onConfirmation = viewModel::switchProgressCardInfoDialog,
-                hasOnlyConfirmationButton = true
-            )
-        }
+        NkDialog(
+            visible = isProgressCardInfoDialogShown,
+            description = stringResource(id = R.string.progress_card_description),
+            onDismissRequest = viewModel::switchProgressCardInfoDialog,
+            onConfirmation = viewModel::switchProgressCardInfoDialog,
+            hasOnlyConfirmationButton = true
+        )
 
         DetailDialog(
+            visible = isDetailDialogShown,
             detailsToShow = detailsToShow,
-            isDetailDialogShown = isDetailDialogShown,
             hideDetailDialog = viewModel::hideDetailDialog
         )
 
-        if (isNextDayDialogShown) {
-            NkDialog(
-                description = stringResource(
-                    id = R.string.move_to_next_day_description,
-                    activeUser.tutorialDay + 1
-                ),
-                onDismissRequest = viewModel::switchNextDayDialog,
-                onConfirmation = {
-                    viewModel.increaseTutorialDay()
-                    viewModel.switchNextDayDialog()
-                }
-            )
-        }
+        NkDialog(
+            visible = isNextDayDialogShown,
+            description = stringResource(
+                id = R.string.move_to_next_day_description,
+                activeUser.tutorialDay + 1
+            ),
+            onDismissRequest = viewModel::switchNextDayDialog,
+            onConfirmation = {
+                viewModel.increaseTutorialDay()
+                viewModel.switchNextDayDialog()
+            }
+        )
 
-        if (isTutorialEndDialogShown) {
-            NkDialog(
-                description = stringResource(id = R.string.move_to_todo_description),
-                onDismissRequest = viewModel::switchTutorialEndDialog,
-                onConfirmation = navigateToTodo
-            )
-        }
+        NkDialog(
+            visible = isTutorialEndDialogShown,
+            description = stringResource(id = R.string.move_to_todo_description),
+            onDismissRequest = viewModel::switchTutorialEndDialog,
+            onConfirmation = navigateToTodo
+        )
     }
 }
 

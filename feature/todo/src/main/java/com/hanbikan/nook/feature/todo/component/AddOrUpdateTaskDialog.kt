@@ -26,8 +26,6 @@ fun AddOrUpdateTaskDialog(
     addTask: (name: String, isDaily: Boolean, isVisible: Boolean) -> Unit,
     updateTask: (name: String, isDaily: Boolean, isVisible: Boolean) -> Unit,
 ) {
-    if (status is AddOrUpdateTaskDialogStatus.Invisible) return
-
     val title = when (status) {
         is AddOrUpdateTaskDialogStatus.Add -> stringResource(id = R.string.add_task)
         is AddOrUpdateTaskDialogStatus.Update -> stringResource(id = R.string.update_task)
@@ -46,6 +44,7 @@ fun AddOrUpdateTaskDialog(
     var isVisible by remember { mutableStateOf(defaultIsVisible) }
 
     NkDialogWithTextField(
+        visible = status !is AddOrUpdateTaskDialogStatus.Invisible,
         title = title,
         defaultInput = defaultInput,
         placeholder = stringResource(id = R.string.add_task_placeholder),

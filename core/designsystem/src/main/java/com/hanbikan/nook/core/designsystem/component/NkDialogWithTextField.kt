@@ -31,6 +31,7 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
 @Composable
 fun NkDialogWithTextField(
+    visible: Boolean,
     title: String,
     defaultInput: String = "",
     placeholder: String = "",
@@ -38,6 +39,8 @@ fun NkDialogWithTextField(
     onConfirmation: (String) -> Unit,
     contentBelowTextField: @Composable ColumnScope.() -> Unit = {},
 ) {
+    if (!visible) return
+
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
     var textFieldValue by remember { mutableStateOf(
@@ -52,7 +55,7 @@ fun NkDialogWithTextField(
         keyboardController?.show()
     }
 
-    NkDialogBase(onDismissRequest) {
+    NkDialogBase(true, onDismissRequest) {
         Column(
             modifier = Modifier
                 .padding(Dimens.SpacingLarge, Dimens.SpacingMedium, Dimens.SpacingLarge, 0.dp),
@@ -102,5 +105,5 @@ fun NkDialogWithTextField(
 @Composable
 @Preview
 fun NkDialogWithTextFieldPreview() {
-    NkDialogWithTextField(title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
+    NkDialogWithTextField(visible = true, title = "할 일 추가", onDismissRequest = {}, onConfirmation = {})
 }

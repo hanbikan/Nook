@@ -11,6 +11,7 @@ import com.hanbikan.nook.core.designsystem.R
 
 @Composable
 fun NkSequentialDialog(
+    visible: Boolean,
     descriptions: List<String>,
     painters: List<Painter?>,
     onDismissRequest: () -> Unit,
@@ -27,6 +28,7 @@ fun NkSequentialDialog(
     val dynamicHasOnlyConfirmationButton = if (!isLastIndex) { NkDialogDefaults.hasOnlyConfirmationButton } else { hasOnlyConfirmationButton }
 
     NkDialog(
+        visible = visible,
         description = descriptions[index],
         painter = painters[index],
         onDismissRequest = onDismissRequest,

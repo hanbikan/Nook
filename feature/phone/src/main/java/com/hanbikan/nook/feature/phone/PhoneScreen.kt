@@ -81,12 +81,11 @@ fun PhoneScreen(
             }
         }
 
-        if (isUserDialogShown) {
-            UserDialog(
-                navigateToAddUser = navigateToAddUser,
-                onDismissRequest = viewModel::switchUserDialog
-            )
-        }
+        UserDialog(
+            visible = isUserDialogShown,
+            navigateToAddUser = navigateToAddUser,
+            onDismissRequest = viewModel::switchUserDialog
+        )
     }
 }
 
