@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.todo
 
+import android.util.Log
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.interaction.MutableInteractionSource
@@ -45,6 +46,8 @@ import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.designsystem.component.SwipeAction
 import com.hanbikan.nook.core.designsystem.component.SwipeActions
 import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
+import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.ui.DetailDialog
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
@@ -59,12 +62,14 @@ fun TodoScreen(
     val addOrUpdateTaskDialogStatus = viewModel.addOrUpdateTaskDialogStatus.collectAsStateWithLifecycle().value
     val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val isDetailDialogShown = viewModel.isDetailDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
     val visibleTaskList = viewModel.visibleTaskList.collectAsStateWithLifecycle().value
     val invisibleTaskList = viewModel.invisibleTaskList.collectAsStateWithLifecycle().value
     val showsAllItems = viewModel.showsAllItems.collectAsStateWithLifecycle().value
+    val detailsToShow = viewModel.detailsToShow.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -87,6 +92,7 @@ fun TodoScreen(
                         onClickDeleteAction = viewModel::onClickDeleteAction,
                         showsAllItems = showsAllItems,
                         switchShowsAllItems = viewModel::switchShowsAllItems,
+                        onClickInfo = viewModel::showDetailDialog
                     )
                 }
                 FadeAnimatedVisibility(visible = uiState is TodoUiState.Success.Empty) {
@@ -117,6 +123,12 @@ fun TodoScreen(
             updateTask = viewModel::updateTask,
         )
 
+        DetailDialog(
+            detailsToShow = detailsToShow,
+            isDetailDialogShown = isDetailDialogShown,
+            hideDetailDialog = viewModel::hideDetailDialog
+        )
+
         if (isDeleteTaskDialogShown) {
             NkDialog(
                 description = stringResource(id = R.string.sure_to_delete_task),
@@ -144,6 +156,7 @@ fun TodoScreenSuccess(
     onClickDeleteAction: (Task) -> Unit,
     showsAllItems: Boolean,
     switchShowsAllItems: () -> Unit,
+    onClickInfo: (List<Detail>) -> Unit,
 ) {
     LazyColumn(
         modifier = Modifier.padding(Dimens.SideMargin),
@@ -163,11 +176,13 @@ fun TodoScreenSuccess(
                 )
             }
         }
+        Log.e("ASD", visibleTaskList.toString())
         items(visibleTaskList) { item ->
             TaskCard(
                 completable = item,
                 onClickCheckbox = { onClickCheckbox(item) },
                 onLongClickTask = { onLongClickTask(item) },
+                onClickInfo = item.details?.let { { onClickInfo(it) } },
                 tag = if (item.isDaily) stringResource(id = R.string.daily) else null,
                 swipeActions = SwipeActions.withSameActions(
                     action = SwipeAction.deleteAction { onClickDeleteAction(item) }

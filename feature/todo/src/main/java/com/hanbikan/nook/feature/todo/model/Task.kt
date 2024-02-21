@@ -9,7 +9,6 @@ fun Task.Companion.createInitialTasks(
     userId: Int,
     context: Context,
 ): List<Task> = listOf(
-
     Task(
         name = context.getString(R.string.task_name1),
         userId = userId,

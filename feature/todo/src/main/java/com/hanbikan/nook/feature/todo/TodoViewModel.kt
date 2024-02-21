@@ -2,6 +2,7 @@ package com.hanbikan.nook.feature.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.AddTaskUseCase
@@ -90,6 +91,13 @@ class TodoViewModel @Inject constructor(
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
+    // Detail dialog
+    private val _isDetailDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isDetailDialogShown = _isDetailDialogShown.asStateFlow()
+
+    private val _detailsToShow: MutableStateFlow<List<Detail>> = MutableStateFlow(listOf())
+    val detailsToShow = _detailsToShow.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(todoScreenRoute)
@@ -159,6 +167,16 @@ class TodoViewModel @Inject constructor(
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
+    }
+
+    fun showDetailDialog(details: List<Detail>) {
+        _detailsToShow.value = details
+        _isDetailDialogShown.value = true
+    }
+
+    fun hideDetailDialog() {
+        _isDetailDialogShown.value = false
+        _detailsToShow.value = listOf()
     }
 }
 

@@ -15,7 +15,6 @@ import androidx.compose.material3.IconButton
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -24,13 +23,13 @@ import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkInfoButton
-import com.hanbikan.nook.core.designsystem.component.NkSequentialDialog
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.ui.DetailDialog
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.ui.UserDialog
@@ -98,17 +97,11 @@ fun TutorialScreen(
             )
         }
 
-        if (isDetailDialogShown) {
-            NkSequentialDialog(
-                descriptions = detailsToShow.map { it.description },
-                painters = detailsToShow.map { detail ->
-                    detail.imageId?.let { painterResource(id = it) }
-                },
-                onDismissRequest = viewModel::hideDetailDialog,
-                onConfirmation = viewModel::hideDetailDialog,
-                hasOnlyConfirmationButton = true,
-            )
-        }
+        DetailDialog(
+            detailsToShow = detailsToShow,
+            isDetailDialogShown = isDetailDialogShown,
+            hideDetailDialog = viewModel::hideDetailDialog
+        )
 
         if (isNextDayDialogShown) {
             NkDialog(
