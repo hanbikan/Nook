@@ -27,6 +27,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -232,7 +233,10 @@ fun TodoScreenEmpty() {
             modifier = Modifier.size(Dimens.IconMedium)
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
-        NkText(text = stringResource(id = R.string.empty_todo_list))
+        NkText(
+            text = stringResource(id = R.string.empty_todo_list),
+            textAlign = TextAlign.Center,
+        )
         Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
     }
 }
