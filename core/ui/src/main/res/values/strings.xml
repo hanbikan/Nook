@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="profile_nk_app">프로필</string>
+    <string name="profile_nk_app">내 정보</string>
     <string name="tutorial_nk_app">튜토리얼</string>
     <string name="todo_nk_app">TODO</string>
 
