@@ -77,7 +77,10 @@ fun PhoneScreen(
                                 .aspectRatio(1f)
                                 .clip(RoundedCornerShape(Dimens.SpacingExtraLarge))
                                 .clickable(
-                                    onClick = it.navigate,
+                                    onClick = {
+                                        viewModel.setLastVisitedRoute(it.route)
+                                        it.navigate()
+                                    },
                                     interactionSource = remember { MutableInteractionSource() },
                                     indication = rememberRipple(
                                         bounded = true,
@@ -105,9 +108,9 @@ fun PhoneScreen(
 fun PhoneScreenPreview() {
     PhoneScreen(
         listOf(
-            NkApp.PROFILE.toNkAppWithNavigation {},
-            NkApp.TUTORIAL.toNkAppWithNavigation {},
-            NkApp.TODO.toNkAppWithNavigation {},
+            NkApp.PROFILE.toNkAppWithNavigation("") {},
+            NkApp.TUTORIAL.toNkAppWithNavigation("") {},
+            NkApp.TODO.toNkAppWithNavigation("") {},
         ),
         {}
     )

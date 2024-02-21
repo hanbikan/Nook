@@ -12,8 +12,11 @@ data class NkApp(
     val name: String,
     val painter: Painter,
 ) {
-    fun toNkAppWithNavigation(navigate: () -> Unit): NkAppWithNavigation {
-        return NkAppWithNavigation(name, painter, navigate)
+    fun toNkAppWithNavigation(
+        route: String,
+        navigate: () -> Unit,
+    ): NkAppWithNavigation {
+        return NkAppWithNavigation(name, painter, route, navigate)
     }
 
     companion object {
@@ -46,5 +49,6 @@ data class NkApp(
 data class NkAppWithNavigation(
     val name: String,
     val painter: Painter,
+    val route: String,
     val navigate: () -> Unit,
 )

@@ -9,12 +9,15 @@ import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.feature.phone.PhoneScreen
 import com.hanbikan.nook.feature.profile.navigation.navigateToProfile
 import com.hanbikan.nook.feature.profile.navigation.profileScreen
+import com.hanbikan.nook.feature.profile.navigation.profileScreenRoute
 import com.hanbikan.nook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
+import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import com.hanbikan.nook.feature.tutorial.navigation.addUserScreen
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToTutorial
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreen
+import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import com.hanbikan.nook.feature.tutorial.navigation.welcomeScreen
 
 const val phoneGraphRoute = "phone_graph"
@@ -72,9 +75,9 @@ fun NavGraphBuilder.phoneScreen(
     ) {
         PhoneScreen(
             nkApps = listOf(
-                NkApp.PROFILE.toNkAppWithNavigation(navigateToProfile),
-                NkApp.TUTORIAL.toNkAppWithNavigation(navigateToTutorial),
-                NkApp.TODO.toNkAppWithNavigation(navigateToTodo),
+                NkApp.PROFILE.toNkAppWithNavigation(profileScreenRoute, navigateToProfile),
+                NkApp.TUTORIAL.toNkAppWithNavigation(tutorialScreenRoute, navigateToTutorial),
+                NkApp.TODO.toNkAppWithNavigation(todoScreenRoute, navigateToTodo),
             ),
             navigateToAddUser = navigateToAddUser,
         )
