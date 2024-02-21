@@ -17,11 +17,19 @@ data class NkApp(
     }
 
     companion object {
+        val PROFILE: NkApp
+            @Composable get() {
+                return NkApp(
+                    name = stringResource(id = R.string.profile_nk_app),
+                    painter = painterResource(id = R.drawable.profile)
+                )
+            }
+        
         val TUTORIAL: NkApp
             @Composable get() {
                 return NkApp(
                     name = stringResource(id = R.string.tutorial_nk_app),
-                    painter = painterResource(id = R.drawable.tutorial),
+                    painter = painterResource(id = R.drawable.tutorial)
                 )
             }
 
@@ -29,7 +37,7 @@ data class NkApp(
             @Composable get() {
                 return NkApp(
                     name = stringResource(id = R.string.todo_nk_app),
-                    painter = painterResource(id = R.drawable.todo),
+                    painter = painterResource(id = R.drawable.todo)
                 )
             }
     }
