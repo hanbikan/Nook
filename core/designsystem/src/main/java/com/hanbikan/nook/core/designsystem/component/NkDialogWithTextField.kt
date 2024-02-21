@@ -21,13 +21,14 @@ import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
 import androidx.compose.ui.platform.LocalSoftwareKeyboardController
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.TextRange
+import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.R
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
-@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun NkDialogWithTextField(
     title: String,
@@ -37,9 +38,14 @@ fun NkDialogWithTextField(
     onConfirmation: (String) -> Unit,
     contentBelowTextField: @Composable ColumnScope.() -> Unit = {},
 ) {
-    var input by remember { mutableStateOf(defaultInput) }
     val focusRequester = remember { FocusRequester() }
     val keyboardController = LocalSoftwareKeyboardController.current
+    var textFieldValue by remember { mutableStateOf(
+        TextFieldValue(
+            text = defaultInput,
+            selection = TextRange(defaultInput.length)
+        )
+    ) }
 
     LaunchedEffect(Unit) {
         focusRequester.requestFocus()
@@ -63,8 +69,8 @@ fun NkDialogWithTextField(
             // 입력
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
             NkTextField(
-                value = input,
-                onValueChange = { input = it },
+                value = textFieldValue,
+                onValueChange = { textFieldValue = it },
                 singleLine = true,
                 placeholder = { NkPlaceholder(text = placeholder) },
                 modifier = Modifier.focusRequester(focusRequester),
@@ -84,7 +90,7 @@ fun NkDialogWithTextField(
                     modifier = Modifier.weight(1f)
                 )
                 NkTextButton(
-                    onClick = { onConfirmation(input) },
+                    onClick = { onConfirmation(textFieldValue.text) },
                     text = stringResource(id = R.string.confirm),
                     modifier = Modifier.weight(1f)
                 )
