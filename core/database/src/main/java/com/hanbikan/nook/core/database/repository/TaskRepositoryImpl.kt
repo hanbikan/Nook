@@ -18,8 +18,8 @@ class TaskRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertTask(task: Task) {
-        taskDao.insertTasks(task.toData())
+    override suspend fun insertTasks(taskList: List<Task>) {
+        taskDao.insertTasks(*taskList.map { it.toData() }.toTypedArray())
     }
 
     override suspend fun updateTask(task: Task) {

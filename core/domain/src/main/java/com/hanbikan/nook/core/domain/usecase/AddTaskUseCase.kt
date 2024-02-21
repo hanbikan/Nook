@@ -8,6 +8,6 @@ class AddTaskUseCase @Inject constructor(
     private val taskRepository: TaskRepository,
 ) {
     suspend operator fun invoke(task: Task) {
-        taskRepository.insertTask(task)
+        taskRepository.insertTasks(listOf(task))
     }
 }
