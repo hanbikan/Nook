@@ -10,6 +10,7 @@ import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllTasksByUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTaskUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,7 @@ class TodoViewModel @Inject constructor(
     private val updateTaskUseCase: UpdateTaskUseCase,
     private val deleteTaskUseCase: DeleteTaskUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
+    updateTasksIfEmptyUseCase: UpdateTasksIfEmptyUseCase,
 ) : ViewModel() {
 
     // Ui state
@@ -89,6 +91,10 @@ class TodoViewModel @Inject constructor(
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            updateTasksIfEmptyUseCase()
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             setLastVisitedRouteUseCase(todoScreenRoute)
         }
