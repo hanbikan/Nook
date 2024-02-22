@@ -10,6 +10,7 @@ import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowLeft
 import androidx.compose.material.icons.automirrored.filled.KeyboardArrowRight
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.IconButtonDefaults
@@ -23,7 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
-import com.hanbikan.nook.core.designsystem.component.NkInfoButton
+import com.hanbikan.nook.core.designsystem.component.NkSmallButton
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -154,7 +155,10 @@ fun TutorialScreenContents(
                             activeUser.tutorialDay
                         )
                     ) {
-                        NkInfoButton(onClick = switchProgressCardInfoDialog)
+                        NkSmallButton(
+                            onClick = switchProgressCardInfoDialog,
+                            imageVector = Icons.Default.Info
+                        )
                     }
                     ProgressCard(completableList = tutorialTaskList)
 

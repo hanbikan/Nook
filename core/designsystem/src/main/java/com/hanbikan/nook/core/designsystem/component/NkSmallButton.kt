@@ -11,33 +11,33 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
 @Composable
-fun NkInfoButton(
+fun NkSmallButton(
     onClick: () -> Unit,
     modifier: Modifier = Modifier,
+    imageVector: ImageVector,
     size: Dp = Dimens.IconExtraSmall,
     tint: Color = NkTheme.colorScheme.primaryContainer,
 ) {
-    val interactionSource: MutableInteractionSource = remember { MutableInteractionSource() }
-
     Icon(
         modifier = modifier
             .size(size)
             .clickable(
                 onClick = onClick,
-                interactionSource = interactionSource,
+                interactionSource = remember { MutableInteractionSource() },
                 indication = rememberRipple(
                     bounded = false,
                     radius = size,
                     color = NkTheme.colorScheme.primary,
                 ),
             ),
-        imageVector = Icons.Default.Info,
+        imageVector = imageVector,
         contentDescription = null,
         tint = tint
     )
@@ -45,6 +45,9 @@ fun NkInfoButton(
 
 @Composable
 @Preview
-fun NkInfoButtonPreview() {
-    NkInfoButton({})
+fun NkSmallButtonPreview() {
+    NkSmallButton(
+        onClick = {},
+        imageVector = Icons.Default.Info,
+    )
 }

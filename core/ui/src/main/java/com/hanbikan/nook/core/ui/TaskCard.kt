@@ -13,18 +13,19 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Info
 import androidx.compose.material3.Checkbox
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextDecoration
 import androidx.compose.ui.tooling.preview.Preview
 import com.hanbikan.nook.core.designsystem.component.SwipeActions
 import com.hanbikan.nook.core.designsystem.component.NkSwipeToAction
-import com.hanbikan.nook.core.designsystem.component.NkInfoButton
+import com.hanbikan.nook.core.designsystem.component.NkSmallButton
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
 import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
@@ -125,7 +126,10 @@ fun TaskCardContent(
             }
         }
         if (onClickInfo != null) {
-            NkInfoButton(onClick = onClickInfo)
+            NkSmallButton(
+                onClick = onClickInfo,
+                imageVector = Icons.Default.Info
+            )
         }
     }
 }
