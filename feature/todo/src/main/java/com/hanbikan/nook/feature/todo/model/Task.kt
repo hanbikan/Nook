@@ -26,7 +26,7 @@ fun Task.Companion.createInitialTasks(
         details = listOf(
             Detail(
                 description = context.getString(R.string.task_detail_description3_1),
-                imageId = null // TODO
+                imageId = R.drawable.shine_spot
             ),
             Detail(description = context.getString(R.string.task_detail_description3_2))
         )
