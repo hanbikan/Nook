@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
@@ -12,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.NkDialogWithTextField
+import com.hanbikan.nook.core.designsystem.component.NkSmallButton
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
@@ -26,6 +30,10 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val isUpdateNameDialogShown =
+        viewModel.isUpdateNameDialogShown.collectAsStateWithLifecycle().value
+    val isUpdateIslandNameDialogShown =
+        viewModel.isUpdateIslandNameDialogShown.collectAsStateWithLifecycle().value
 
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
 
@@ -50,14 +58,24 @@ fun ProfileScreen(
                 )
 
                 // 이름
-                TitleTextWithSpacer(title = stringResource(id = R.string.name))
+                TitleTextWithSpacer(title = stringResource(id = R.string.name)) {
+                    NkSmallButton(
+                        onClick = viewModel::switchUpdateNameDialog,
+                        imageVector = Icons.Default.Edit,
+                    )
+                }
                 NkText(
                     text = activeUser?.name ?: "",
                     style = NkTheme.typography.headlineMedium,
                 )
 
                 // 섬 이름
-                TitleTextWithSpacer(title = stringResource(id = R.string.island_name))
+                TitleTextWithSpacer(title = stringResource(id = R.string.island_name)) {
+                    NkSmallButton(
+                        onClick = viewModel::switchUpdateIslandNameDialog,
+                        imageVector = Icons.Default.Edit,
+                    )
+                }
                 NkText(
                     text = activeUser?.islandName ?: "",
                     style = NkTheme.typography.headlineMedium,
@@ -71,6 +89,20 @@ fun ProfileScreen(
             visible = isUserDialogShown,
             navigateToAddUser = navigateToAddUser,
             onDismissRequest = viewModel::switchUserDialog
+        )
+
+        NkDialogWithTextField(
+            visible = isUpdateNameDialogShown,
+            title = stringResource(id = R.string.update_name_description),
+            onDismissRequest = viewModel::switchUpdateNameDialog,
+            onConfirmation = viewModel::onConfirmUpdateName
+        )
+
+        NkDialogWithTextField(
+            visible = isUpdateIslandNameDialogShown,
+            title = stringResource(id = R.string.update_island_name_description),
+            onDismissRequest = viewModel::switchUpdateIslandNameDialog,
+            onConfirmation = viewModel::onConfirmUpdateIslandName
         )
     }
 }
