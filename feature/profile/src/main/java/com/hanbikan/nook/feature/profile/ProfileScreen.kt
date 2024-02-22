@@ -8,6 +8,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
@@ -25,6 +26,8 @@ fun ProfileScreen(
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+
+    val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -45,13 +48,20 @@ fun ProfileScreen(
                     style = NkTheme.typography.headlineLarge,
                     fontWeight = FontWeight.Bold,
                 )
-                // TODO: Edit icon in row
 
                 // 이름
                 TitleTextWithSpacer(title = stringResource(id = R.string.name))
+                NkText(
+                    text = activeUser?.name ?: "",
+                    style = NkTheme.typography.headlineMedium,
+                )
 
                 // 섬 이름
                 TitleTextWithSpacer(title = stringResource(id = R.string.island_name))
+                NkText(
+                    text = activeUser?.islandName ?: "",
+                    style = NkTheme.typography.headlineMedium,
+                )
 
                 // TODO: 달성률
             }
@@ -63,4 +73,10 @@ fun ProfileScreen(
             onDismissRequest = viewModel::switchUserDialog
         )
     }
+}
+
+@Composable
+@Preview
+fun ProfileScreenPreview() {
+    ProfileScreen(navigateToAddUser = { /*TODO*/ }, navigateToPhone = { /*TODO*/ })
 }
