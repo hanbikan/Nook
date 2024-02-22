@@ -24,12 +24,12 @@ class AddUserViewModel @Inject constructor(
     val islandName = _islandName.asStateFlow()
 
     fun setName(newName: String) {
-        if (newName.length >= 10) return
+        if (newName.length >= User.NAME_MAX_LENGTH) return
         _name.value = newName
     }
 
     fun setIslandName(newIslandName: String) {
-        if (newIslandName.length >= 10) return
+        if (newIslandName.length >= User.ISLAND_NAME_MAX_LENGTH) return
         _islandName.value = newIslandName
     }
 

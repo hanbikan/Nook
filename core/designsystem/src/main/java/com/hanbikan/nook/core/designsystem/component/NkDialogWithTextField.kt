@@ -37,6 +37,7 @@ fun NkDialogWithTextField(
     placeholder: String = "",
     onDismissRequest: () -> Unit,
     onConfirmation: (String) -> Unit,
+    maxInputLength: Int = Int.MAX_VALUE,
     contentBelowTextField: @Composable ColumnScope.() -> Unit = {},
 ) {
     if (!visible) return
@@ -73,7 +74,11 @@ fun NkDialogWithTextField(
             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
             NkTextField(
                 value = textFieldValue,
-                onValueChange = { textFieldValue = it },
+                onValueChange = {
+                    if (it.text.length <= maxInputLength) {
+                        textFieldValue = it
+                    }
+                },
                 singleLine = true,
                 placeholder = { NkPlaceholder(text = placeholder) },
                 modifier = Modifier.focusRequester(focusRequester),

@@ -8,5 +8,7 @@ data class User(
 ) {
     companion object {
         val DEFAULT = User(id = 0, name = "", islandName = "", tutorialDay = 0)
+        const val NAME_MAX_LENGTH = 10
+        const val ISLAND_NAME_MAX_LENGTH = 10
     }
 }
