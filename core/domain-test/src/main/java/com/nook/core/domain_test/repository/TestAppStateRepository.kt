@@ -1,7 +1,8 @@
-package com.hanbikan.nook.core.domain.repository
+package com.nook.core.domain_test.repository
 
-import com.hanbikan.nook.core.domain.data.activeUserIdTestData
-import com.hanbikan.nook.core.domain.data.lastVisitedRouteTestData
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.nook.core.domain_test.data.activeUserIdTestData
+import com.nook.core.domain_test.data.lastVisitedRouteTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 

@@ -1,7 +1,7 @@
 package com.hanbikan.nook.core.domain
 
-import com.hanbikan.nook.core.domain.repository.testTutorialTaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
+import com.nook.core.domain_test.repository.testTutorialTaskRepository
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
 import org.junit.Assert.assertEquals

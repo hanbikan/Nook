@@ -1,4 +1,4 @@
-package com.hanbikan.nook.core.domain.data
+package com.nook.core.domain_test.data
 
 import com.hanbikan.nook.core.domain.model.TutorialTask
 

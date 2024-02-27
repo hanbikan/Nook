@@ -61,10 +61,6 @@ dependencies {
     kapt(libs.hilt.android.compiler)
 
     implementation(libs.kotlinx.serialization.json)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
 }
 
 // Allow references to generated code

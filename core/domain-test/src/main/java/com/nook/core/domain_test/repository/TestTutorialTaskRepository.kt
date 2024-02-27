@@ -1,7 +1,8 @@
-package com.hanbikan.nook.core.domain.repository
+package com.nook.core.domain_test.repository
 
 import com.hanbikan.nook.core.domain.model.TutorialTask
-import com.hanbikan.nook.core.domain.data.tutorialTasksTestData
+import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
+import com.nook.core.domain_test.data.tutorialTasksTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
