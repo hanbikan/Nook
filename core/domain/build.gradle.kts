@@ -14,4 +14,6 @@ dependencies {
     implementation("javax.inject:javax.inject:1")
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-core:1.7.1")
     implementation(libs.kotlinx.serialization.json)
+
+    testImplementation(project(mapOf("path" to ":core:testing")))
 }

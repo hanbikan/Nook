@@ -3,7 +3,7 @@
     <string name="progress">진행도</string>
     <string name="todo">TODO</string>
     <string name="add_task">할 일 추가</string>
-    <string name="update_task">할 일 수정</string>
+    <string name="정">할 일 수정</string>
     <string name="add_task_placeholder">바위 6개 치기</string>
     <string name="sure_to_delete_task">할 일을 삭제합니다.</string>
     <string name="empty_todo_list">할 일을 추가해보세요.</string>
