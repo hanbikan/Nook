@@ -1,10 +1,11 @@
-package com.hanbikan.nook.core.testing.repository
+package com.hanbikan.nook.core.domain.repository
 
 import com.hanbikan.nook.core.domain.model.TutorialTask
-import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
-import com.hanbikan.nook.core.testing.data.tutorialTasksTestData
+import com.hanbikan.nook.core.domain.data.tutorialTasksTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+
+val testTutorialTaskRepository = TestTutorialTaskRepository()
 
 class TestTutorialTaskRepository : TutorialTaskRepository {
     override fun getTutorialTasksByUserId(userId: Int): Flow<List<TutorialTask>> {

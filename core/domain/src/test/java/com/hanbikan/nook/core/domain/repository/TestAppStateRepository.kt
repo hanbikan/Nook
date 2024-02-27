@@ -1,10 +1,11 @@
-package com.hanbikan.nook.core.testing.repository
+package com.hanbikan.nook.core.domain.repository
 
-import com.hanbikan.nook.core.domain.repository.AppStateRepository
-import com.hanbikan.nook.core.testing.data.activeUserIdTestData
-import com.hanbikan.nook.core.testing.data.lastVisitedRouteTestData
+import com.hanbikan.nook.core.domain.data.activeUserIdTestData
+import com.hanbikan.nook.core.domain.data.lastVisitedRouteTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+
+val testAppStateRepository = TestAppStateRepository()
 
 class TestAppStateRepository : AppStateRepository {
     override fun getActiveUserId(): Flow<Int?> {

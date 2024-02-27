@@ -1,10 +1,11 @@
-package com.hanbikan.nook.core.testing.repository
+package com.hanbikan.nook.core.domain.repository
 
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.repository.UserRepository
-import com.hanbikan.nook.core.testing.data.userTestData
+import com.hanbikan.nook.core.domain.data.userTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
+
+val testUserRepository = TestUserRepository()
 
 class TestUserRepository : UserRepository {
     override fun getAllUsers(): Flow<List<User>> {
