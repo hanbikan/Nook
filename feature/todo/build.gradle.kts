@@ -46,6 +46,7 @@ dependencies {
     implementation(project(mapOf("path" to ":core:designsystem")))
     implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:ui")))
+    implementation(project(mapOf("path" to ":core:common")))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
@@ -79,6 +80,8 @@ dependencies {
 
     debugImplementation(libs.ui.tooling)
     debugImplementation(libs.ui.test.manifest)
+
+    testImplementation(project(mapOf("path" to ":core:testing")))
 }
 
 // Allow references to generated code

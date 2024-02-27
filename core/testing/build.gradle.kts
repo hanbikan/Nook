@@ -2,8 +2,6 @@
 plugins {
     alias(libs.plugins.com.android.library)
     alias(libs.plugins.org.jetbrains.kotlin.android)
-    kotlin("kapt")
-    alias(libs.plugins.com.google.dagger.hilt.android)
 }
 
 android {
@@ -47,20 +45,17 @@ dependencies {
     implementation(project(mapOf("path" to ":core:domain")))
     implementation(project(mapOf("path" to ":core:ui")))
 
-    implementation(libs.core.ktx)
-    implementation(libs.appcompat)
-    implementation(libs.material)
-
-    implementation(libs.hilt.android)
-    implementation(libs.hilt.navigation.compose)
-    kapt(libs.hilt.android.compiler)
-
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.test.ext.junit)
-    androidTestImplementation(libs.espresso.core)
-}
-
-// Allow references to generated code
-kapt {
-    correctErrorTypes = true
+    api("androidx.test:core:1.5.0")
+    api("androidx.test:runner:1.5.2")
+    api("androidx.test:rules:1.5.0")
+    api("androidx.test.ext:junit:1.1.5")
+    api("androidx.test.ext:truth:1.5.0")
+    api("androidx.test.espresso:espresso-core:3.5.1")
+    api("androidx.test.espresso:espresso-contrib:3.5.1")
+    api("androidx.test.espresso:espresso-intents:3.5.1")
+    api("androidx.test.espresso:espresso-accessibility:3.5.1")
+    api("androidx.test.espresso:espresso-web:3.5.1")
+    api("androidx.test.espresso.idling:idling-concurrent:3.5.1")
+    api("androidx.test.espresso:espresso-idling-resource:3.5.1")
+    api("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.7.1")
 }

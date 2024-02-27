@@ -38,6 +38,7 @@ android {
 dependencies {
 
     implementation(project(mapOf("path" to ":core:domain")))
+    implementation(project(mapOf("path" to ":core:common")))
 
     implementation(libs.core.ktx)
     implementation(libs.appcompat)
