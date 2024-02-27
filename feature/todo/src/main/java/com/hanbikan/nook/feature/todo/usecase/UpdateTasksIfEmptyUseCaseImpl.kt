@@ -3,7 +3,6 @@ package com.hanbikan.nook.feature.todo.usecase
 import android.content.Context
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.domain.repository.TaskRepository
-import com.hanbikan.nook.core.domain.usecase.GetAllUsersUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.todo.model.createInitialTasks
 import dagger.hilt.android.qualifiers.ApplicationContext

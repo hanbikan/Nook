@@ -3,7 +3,6 @@ package com.hanbikan.nook.feature.tutorial.usecase
 import android.content.Context
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
-import com.hanbikan.nook.core.domain.usecase.GetAllUsersUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.tutorial.model.createInitialTutorialTasks
 import dagger.hilt.android.qualifiers.ApplicationContext
