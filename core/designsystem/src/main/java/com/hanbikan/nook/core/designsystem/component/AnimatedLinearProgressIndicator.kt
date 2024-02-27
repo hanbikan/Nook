@@ -20,9 +20,9 @@ fun AnimatedLinearProgressIndicator(
         label = "AnimatedLinearProgressIndicator",
     )
     LinearProgressIndicator(
-        progress = animateFloat,
+        progress = { animateFloat },
         modifier = modifier,
         color = color,
-        trackColor = trackColor
+        trackColor = trackColor,
     )
 }
