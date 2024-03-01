@@ -3,7 +3,7 @@ package com.hanbikan.nook.core.designsystem.component
 import androidx.annotation.StringRes
 import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
-import androidx.compose.material.icons.filled.ArrowBack
+import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material.icons.filled.Search
@@ -28,7 +28,7 @@ data class AppBarIcon(
     companion object {
         @Composable
         fun backAppBarIcon(onClick: () -> Unit) = AppBarIcon(
-            imageVector = Icons.Default.ArrowBack,
+            imageVector = Icons.AutoMirrored.Filled.ArrowBack,
             contentDescription = stringResource(id = R.string.back),
             onClick = onClick
         )
