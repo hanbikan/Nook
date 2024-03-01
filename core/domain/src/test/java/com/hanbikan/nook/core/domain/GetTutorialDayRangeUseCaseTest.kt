@@ -14,7 +14,7 @@ class GetTutorialDayRangeUseCaseTest {
     )
 
     @Test
-    fun `verify day range is correct for given user ID`() = runTest {
+    fun getTutorialDayRange_returnsMinMaxDayRangeForUser() = runTest {
         val testUserId = 0
         val result = useCase(testUserId).first()
 
