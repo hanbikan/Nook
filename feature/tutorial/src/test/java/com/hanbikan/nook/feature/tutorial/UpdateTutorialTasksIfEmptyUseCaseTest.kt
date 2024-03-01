@@ -14,22 +14,25 @@ import org.junit.Assert.assertNotEquals
 import org.junit.Before
 import org.junit.Test
 import org.junit.runner.RunWith
+import org.mockito.ArgumentMatchers
 import org.mockito.Mock
 import org.mockito.junit.MockitoJUnitRunner
 import org.mockito.kotlin.mock
 
-
 @RunWith(MockitoJUnitRunner::class)
 class UpdateTutorialTasksIfEmptyUseCaseTest {
-    private lateinit var testTutorialTaskRepository: TutorialTaskRepository
-    private lateinit var useCase: UpdateTutorialTasksIfEmptyUseCase
 
     @Mock
     lateinit var context: Context
 
+    private lateinit var testTutorialTaskRepository: TutorialTaskRepository
+    private lateinit var useCase: UpdateTutorialTasksIfEmptyUseCase
+
     @Before
     fun setup() {
-        context = mock<Context> {}
+        context = mock<Context> {
+            on { getString(ArgumentMatchers.anyInt()) }.thenReturn("")
+        }
 
         testTutorialTaskRepository = TestTutorialTaskRepository()
         useCase = UpdateTutorialTasksIfEmptyUseCaseImpl(
