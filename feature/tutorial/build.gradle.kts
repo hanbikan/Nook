@@ -69,6 +69,7 @@ dependencies {
     debugImplementation(libs.ui.test.manifest)
 
     testImplementation(project(mapOf("path" to ":core:testing")))
+    testImplementation(project(mapOf("path" to ":core:domain-test")))
 }
 
 // Allow references to generated code

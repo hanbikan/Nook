@@ -54,4 +54,7 @@ dependencies {
     api(platform(libs.compose.bom))
     api(libs.ui.test.junit4)
     api(libs.kotlinx.coroutines.test)
+
+    api(libs.mockito.inline)
+    api(libs.mockito.kotlin)
 }
