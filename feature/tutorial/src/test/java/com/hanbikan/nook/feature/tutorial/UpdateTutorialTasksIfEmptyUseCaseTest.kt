@@ -22,39 +22,39 @@ import org.mockito.kotlin.mock
 @RunWith(MockitoJUnitRunner::class)
 class UpdateTutorialTasksIfEmptyUseCaseTest {
     private lateinit var testTutorialTaskRepository: TutorialTaskRepository
-    private lateinit var updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase
+    private lateinit var useCase: UpdateTutorialTasksIfEmptyUseCase
 
     @Mock
     lateinit var context: Context
 
     @Before
-    fun setUp() {
+    fun setup() {
         context = mock<Context> {}
 
         testTutorialTaskRepository = TestTutorialTaskRepository()
-        updateTutorialTasksIfEmptyUseCase = UpdateTutorialTasksIfEmptyUseCaseImpl(
+        useCase = UpdateTutorialTasksIfEmptyUseCaseImpl(
             testTutorialTaskRepository,
             context
         )
     }
 
     @Test
-    fun updateTutorialTasks_IfNotEmpty_KeepsPreviousTasksUnchanged() = runTest {
+    fun updateTutorialTasks_ifNotEmpty_keepsPreviousTasksUnchanged() = runTest {
         val userIdWithTutorialTask = tutorialTasksTestData[0].userId
         val prevTutorialTasks = testTutorialTaskRepository.getTutorialTasksByUserId(userIdWithTutorialTask).first()
-        updateTutorialTasksIfEmptyUseCase(userIdWithTutorialTask)
+        useCase(userIdWithTutorialTask)
         val tutorialTasks = testTutorialTaskRepository.getTutorialTasksByUserId(userIdWithTutorialTask).first()
         assertEquals(prevTutorialTasks, tutorialTasks)
     }
 
     @Test
-    fun updateTutorialTasks_IfEmpty_UpdatesTutorialTasks() = runTest {
+    fun updateTutorialTasks_ifEmpty_updatesTutorialTasks() = runTest {
         val userIdWithoutTutorialTask = userTestData.find { user ->
             // tutorialTasksTestData에서 자신의 id를 찾을 수 없는 경우 찾기
             tutorialTasksTestData.firstOrNull { it.userId == user.id } == null
         }!!.id
         val prevTutorialTasks = testTutorialTaskRepository.getTutorialTasksByUserId(userIdWithoutTutorialTask).first()
-        updateTutorialTasksIfEmptyUseCase(userIdWithoutTutorialTask)
+        useCase(userIdWithoutTutorialTask)
         val tutorialTask = testTutorialTaskRepository.getTutorialTasksByUserId(userIdWithoutTutorialTask)
         assertNotEquals(prevTutorialTasks, tutorialTask)
     }
