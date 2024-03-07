@@ -39,8 +39,9 @@ Nook follows the Clean Architecture and completely modularizes each feature and 
 ## Screenshots
 
 <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/ea780d52-4316-443a-a0ac-681a3ab8b0cc"/>
-<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/ba3847e1-3c25-4e87-9e54-5fca17238061"/>
-<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/1dd56aa3-53ba-4f5d-b501-6e3f39edc752"/>
+
+
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/ba3847e1-3c25-4e87-9e54-5fca17238061"/> <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/1dd56aa3-53ba-4f5d-b501-6e3f39edc752"/>
 
 # License
 ```
