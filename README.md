@@ -37,12 +37,10 @@ Nook follows the Clean Architecture and completely modularizes each feature and 
 - [[Compose] SwipeToAction 구현(AnchoredDraggableState, Layout)](https://rccode.tistory.com/388)
 
 ## Screenshots
-<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/5ae364ed-76e4-4da5-a23f-85981897ea12"/>
 
-<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/83e42bc5-5850-41a4-b1fd-a84dd3742e6f"/>
-
-<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/807b182c-f92e-4d17-bf79-e80764025289"/>
-
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/ea780d52-4316-443a-a0ac-681a3ab8b0cc"/>
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/ba3847e1-3c25-4e87-9e54-5fca17238061"/>
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/1dd56aa3-53ba-4f5d-b501-6e3f39edc752"/>
 
 # License
 ```
