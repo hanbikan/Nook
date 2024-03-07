@@ -11,19 +11,29 @@ Nook demonstrates Compose android app with Hilt, Coroutines, Flow, Room based on
   - Navigation
   - Room
   - Flow
-  - Coroutine
+  - Coroutines
+  - DataStore
+- [Hilt](https://dagger.dev/hilt/)
+- [Retrofit](https://github.com/square/retrofit), [OkHttp](https://square.github.io/okhttp/)
+- [kotlinx.serialization](https://github.com/Kotlin/kotlinx.serialization)
+- [Material 3](https://m3.material.io/)
+- Test
+  - JUnit 4
+  - [mockito-kotlin](https://github.com/mockito/mockito-kotlin)
 - Architecture
   - MVVM
   - Multi Module
-- [Hilt](https://dagger.dev/hilt/)
-- [Retrofit2](https://github.com/square/retrofit), [OkHttp](https://square.github.io/okhttp/)
-- [Material 3](https://m3.material.io/)
 
-## Architecture
-Nook follows the Clean Architecture.
+## Architecture & Multi Module
+Nook follows the Clean Architecture and completely modularizes each feature and layer.
+<img width="815" alt="image" src="https://github.com/hanbikan/Nook/assets/58168528/92c8a1e2-7099-49b3-b80a-075208579bc2">
 
-## Multi Module
-Nook completely modularizes each feature and layer.
+## Articles(KR)
+- [AnimatedVisibility 오버랩 이슈 해결](https://rccode.tistory.com/379)
+- [Room Migration 방법](https://rccode.tistory.com/381)
+- [UI State Flow 이슈 해결](https://rccode.tistory.com/384)
+- [Android Dependent Use Case 이슈 해결](https://rccode.tistory.com/385)
+- [[Compose] SwipeToAction 구현(AnchoredDraggableState, Layout)](https://rccode.tistory.com/388)
 
 ## Screenshots
 <img width="300" src="https://github.com/hanbikan/Nook/assets/58168528/5ae364ed-76e4-4da5-a23f-85981897ea12"/>
