@@ -26,6 +26,7 @@ Nook demonstrates Compose android app with Hilt, Coroutines, Flow, Room based on
 
 ## Architecture & Multi Module
 Nook follows the Clean Architecture and completely modularizes each feature and layer.
+
 <img width="815" alt="image" src="https://github.com/hanbikan/Nook/assets/58168528/92c8a1e2-7099-49b3-b80a-075208579bc2">
 
 ## Articles(KR)
@@ -36,11 +37,11 @@ Nook follows the Clean Architecture and completely modularizes each feature and 
 - [[Compose] SwipeToAction 구현(AnchoredDraggableState, Layout)](https://rccode.tistory.com/388)
 
 ## Screenshots
-<img width="300" src="https://github.com/hanbikan/Nook/assets/58168528/5ae364ed-76e4-4da5-a23f-85981897ea12"/>
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/5ae364ed-76e4-4da5-a23f-85981897ea12"/>
 
-<img width="300" src="https://github.com/hanbikan/Nook/assets/58168528/83e42bc5-5850-41a4-b1fd-a84dd3742e6f"/>
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/83e42bc5-5850-41a4-b1fd-a84dd3742e6f"/>
 
-<img width="300" src="https://github.com/hanbikan/Nook/assets/58168528/807b182c-f92e-4d17-bf79-e80764025289"/>
+<img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/807b182c-f92e-4d17-bf79-e80764025289"/>
 
 
 # License
