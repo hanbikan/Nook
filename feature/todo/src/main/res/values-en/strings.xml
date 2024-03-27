@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="progress">Progress</string>
+    <string name="todo">To-Do</string>
+    <string name="add_task">Add Task</string>
+    <string name="update_task">Edit Task</string>
+    <string name="add_task_placeholder">Hit 6 rocks</string>
+    <string name="sure_to_delete_task">Are you sure you want to delete this task?</string>
+    <string name="empty_todo_list">Try adding some tasks.</string>
+    <string name="daily">Daily</string>
+    <string name="repeat_daily">Repeat Daily</string>
+    <string name="hiding">Hide</string>
+    <string name="show_all_items">Show All</string>
+    <string name="show_only_visible_items">Normal View</string>
+
+    <string name="task_name1">Dig up 4 fossils</string>
+    <string name="task_name2">Hit 6 rocks</string>
+    <string name="task_name3">Plant a money tree</string>
+    <string name="task_detail_description3_1">After digging a glowing spot, plant bells in the hole, and a money tree will grow to triple the bells you planted (10,000 bells recommended!)</string>
+    <string name="task_detail_description3_2">[Caution]\nPlanting 1 to 10,000 bells will always triple your money, but planting more gives you a 20% chance to triple and an 80% chance to get 30,000 bells.</string>
+    <string name="task_name4">Pick up recipe bottles on the beach</string>
+    <string name="task_name5">Check Nook\'s Shopping, Nook\'s Cranny, and Able Sisters Shop</string>
+    <string name="task_name6">Get Nook Miles+ rewards</string>
+</resources>
