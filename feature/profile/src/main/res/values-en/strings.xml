@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile">Profile</string>
+    <string name="name">Name</string>
+    <string name="island_name">Island Name</string>
+    <string name="update_name_description">Change your name.</string>
+    <string name="update_island_name_description">Change your island name.</string>
+</resources>
