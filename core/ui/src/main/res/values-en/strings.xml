@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="profile_nk_app">Profile</string>
+    <string name="tutorial_nk_app">Tutorial</string>
+    <string name="todo_nk_app">To-Do</string>
+
+    <string name="close">Close</string>
+    <string name="add_user">Add Another Account</string>
+    <string name="sure_to_delete_user">Are you sure you want to delete this account?</string>
+    <string name="task_count">%d Tasks</string>
+    <string name="done_task_percent">%d%% Completed</string>
+    <string name="welcome_text">Hello, %s!</string>
+</resources>
