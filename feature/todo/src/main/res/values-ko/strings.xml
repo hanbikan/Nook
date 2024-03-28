@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="progress">진행도</string>
+    <string name="todo">TODO</string>
+    <string name="add_task">할 일 추가</string>
+    <string name="update_task">할 일 수정</string>
+    <string name="add_task_placeholder">바위 6개 치기</string>
+    <string name="sure_to_delete_task">할 일을 삭제합니다.</string>
+    <string name="empty_todo_list">할 일을 추가해보세요.</string>
+    <string name="daily">매일</string>
+    <string name="repeat_daily">매일 반복</string>
+    <string name="hiding">숨기기</string>
+    <string name="show_all_items">모두 보기</string>
+    <string name="show_only_visible_items">일반 보기</string>
+
+    <string name="task_name1">화석 4개 발굴하기</string>
+    <string name="task_name2">바위 6개 치기</string>
+    <string name="task_name3">돈나무 심기</string>
+    <string name="task_detail_description3_1">빛나는 땅을 판 뒤 구멍에 벨을 심으면 돈나무가 자라서 심은 벨을 3배로 돌려줘요.(10,000벨 추천!)</string>
+    <string name="task_detail_description3_2">[주의 사항]\n1벨~10,000벨을 심으면 반드시 3배가 되지만, 그 이상을 심게 되면 20% 확률로 3배가 되고 80% 확률로 30,000벨이 됩니다.</string>
+    <string name="task_name4">해변가에서 레시피 병 줍기</string>
+    <string name="task_name5">너굴쇼핑, 너굴상점, 옷가게 확인하기</string>
+    <string name="task_name6">너굴 마일리지+ 2배 보상 얻기</string>
+
+</resources>
