@@ -3,6 +3,7 @@
     <string name="profile_nk_app">내 정보</string>
     <string name="tutorial_nk_app">튜토리얼</string>
     <string name="todo_nk_app">TODO</string>
+    <string name="museum_nk_app">박물관</string>
 
     <string name="close">닫기</string>
     <string name="add_user">다른 계정 추가</string>

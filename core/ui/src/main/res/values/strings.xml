@@ -3,6 +3,7 @@
     <string name="profile_nk_app">Profile</string>
     <string name="tutorial_nk_app">Tutorial</string>
     <string name="todo_nk_app">To-Do</string>
+    <string name="museum_nk_app">Museum</string>
 
     <string name="close">Close</string>
     <string name="add_user">Add Another Account</string>

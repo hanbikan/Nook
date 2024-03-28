@@ -6,6 +6,9 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.hanbikan.nook.core.ui.NkApp
+import com.hanbikan.nook.feature.museum.navigation.museumScreen
+import com.hanbikan.nook.feature.museum.navigation.museumScreenRoute
+import com.hanbikan.nook.feature.museum.navigation.navigateToMuseum
 import com.hanbikan.nook.feature.phone.PhoneScreen
 import com.hanbikan.nook.feature.profile.navigation.navigateToProfile
 import com.hanbikan.nook.feature.profile.navigation.profileScreen
@@ -46,6 +49,7 @@ fun NavGraphBuilder.phoneGraph(
             navigateToTutorial = navController::navigateToTutorial,
             navigateToTodo = navController::navigateToTodo,
             navigateToAddUser = navController::navigateToAddUser,
+            navigateToMuseum = navController::navigateToMuseum,
         )
 
         profileScreen(
@@ -61,6 +65,10 @@ fun NavGraphBuilder.phoneGraph(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
         )
+        museumScreen(
+            navigateToAddUser = navController::navigateToAddUser,
+            navigateToPhone = navController::navigateToPhone,
+        )
     }
 }
 
@@ -69,6 +77,7 @@ fun NavGraphBuilder.phoneScreen(
     navigateToTutorial: () -> Unit,
     navigateToTodo: () -> Unit,
     navigateToAddUser: () -> Unit,
+    navigateToMuseum: () -> Unit,
 ) {
     composable(
         route = phoneScreenRoute,
@@ -78,6 +87,7 @@ fun NavGraphBuilder.phoneScreen(
                 NkApp.PROFILE.toNkAppWithNavigation(profileScreenRoute, navigateToProfile),
                 NkApp.TUTORIAL.toNkAppWithNavigation(tutorialScreenRoute, navigateToTutorial),
                 NkApp.TODO.toNkAppWithNavigation(todoScreenRoute, navigateToTodo),
+                NkApp.MUSEUM.toNkAppWithNavigation(museumScreenRoute, navigateToMuseum),
             ),
             navigateToAddUser = navigateToAddUser,
         )

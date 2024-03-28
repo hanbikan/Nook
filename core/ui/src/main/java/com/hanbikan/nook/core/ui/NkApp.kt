@@ -43,6 +43,14 @@ data class NkApp(
                     painter = painterResource(id = R.drawable.todo)
                 )
             }
+
+        val MUSEUM: NkApp
+            @Composable get() {
+                return NkApp(
+                    name = stringResource(id = R.string.museum_nk_app),
+                    painter = painterResource(id = R.drawable.museum)
+                )
+            }
     }
 }
 
