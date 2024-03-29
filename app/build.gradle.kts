@@ -23,8 +23,6 @@ android {
         vectorDrawables {
             useSupportLibrary = true
         }
-
-        buildConfigField("String", "API_KEY", gradleLocalProperties(rootDir).getProperty("API_KEY"))
     }
 
     buildTypes {
