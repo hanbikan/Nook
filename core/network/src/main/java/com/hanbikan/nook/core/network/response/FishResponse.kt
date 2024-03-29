@@ -3,7 +3,7 @@ package com.hanbikan.nook.core.network.response
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Fish(
+data class FishResponse(
     val url: String,
     val name: String,
     val number: Int,
