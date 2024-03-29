@@ -40,7 +40,7 @@ object NetworkModule {
         return Interceptor { chain ->
             val newRequest = chain.request().newBuilder()
                 .addHeader("X-API-KEY", BuildConfig.API_KEY)
-                .addHeader("Accept-Version", "1.0.0")
+                .addHeader("Accept-Version", "1.6.0")
                 .build()
             chain.proceed(newRequest)
         }
