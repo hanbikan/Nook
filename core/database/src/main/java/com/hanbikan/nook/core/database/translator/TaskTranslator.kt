@@ -23,6 +23,6 @@ fun Task.toData(): TaskEntity {
         isVisible = isVisible,
         name = name,
         isDone = isDone,
-        details = details
+        details = details,
     )
 }

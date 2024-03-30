@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.map
 import javax.inject.Inject
 
 class UserRepositoryImpl @Inject constructor(
-    private val userDao: UserDao
-): UserRepository {
+    private val userDao: UserDao,
+) : UserRepository {
     override fun getAllUsers(): Flow<List<User>> {
         return userDao.getAllUsers().map { users ->
             users.map { it.toDomain() }
