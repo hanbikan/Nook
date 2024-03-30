@@ -6,6 +6,7 @@ import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
+import com.hanbikan.nook.core.database.dao.CollectionDao
 import com.hanbikan.nook.core.database.dao.TaskDao
 import com.hanbikan.nook.core.database.dao.TutorialTaskDao
 import com.hanbikan.nook.core.database.dao.UserDao
@@ -37,6 +38,7 @@ abstract class NkDatabase : RoomDatabase() {
     abstract fun taskDao(): TaskDao
     abstract fun tutorialTaskDao(): TutorialTaskDao
     abstract fun userDao(): UserDao
+    abstract fun collectionDao(): CollectionDao
 }
 
 val MIGRATION_6_7 = object : Migration(6, 7) {
