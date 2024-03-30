@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fish_progress">물고기 수집률</string>
+    <string name="bug_progress">벌레 수집률</string>
+    <string name="sea_creature_progress">해산물 수집률</string>
+</resources>

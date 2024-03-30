@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="fish_progress">Fish collection rate</string>
+    <string name="bug_progress">Bug collection rate</string>
+    <string name="sea_creature_progress">Sea creature collection rate</string>
+</resources>

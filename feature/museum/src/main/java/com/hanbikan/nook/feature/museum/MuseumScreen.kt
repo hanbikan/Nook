@@ -13,6 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AnimatedLinearProgressIndicator
@@ -50,7 +51,7 @@ fun MuseumScreen(
             Column(
                 modifier = Modifier.padding(Dimens.SideMargin),
             ) {
-                CollectionProgress("물고기 수집률", fishList)
+                CollectionProgress(stringResource(id = R.string.fish_progress), fishList)
             }
         }
 
