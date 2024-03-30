@@ -5,3 +5,11 @@ interface Collectable {
     val imageUrl: String
     val isCollected: Boolean
 }
+
+fun List<Collectable>.calculateProgress(): Float {
+    return if (isEmpty()) {
+        0f
+    } else {
+        count { it.isCollected }.toFloat() / count()
+    }
+}
