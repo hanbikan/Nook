@@ -26,6 +26,7 @@ mockito-kotlin = "5.2.1"
 retrofit = "2.11.0"
 logging-interceptor = "4.10.0"
 retrofit2-kotlinx-serialization-converter = "0.8.0"
+glide-compose = "1.0.0-beta01"
 
 [libraries]
 androidx-navigation-compose = { module = "androidx.navigation:navigation-compose", version.ref = "navigation-fragment-ktx" }
@@ -64,6 +65,7 @@ mockito-kotlin = { group = "org.mockito.kotlin", name = "mockito-kotlin", versio
 retrofit = { group = "com.squareup.retrofit2", name = "retrofit", version.ref = "retrofit" }
 logging-interceptor = { group = "com.squareup.okhttp3", name = "logging-interceptor", version.ref = "logging-interceptor" }
 retrofit2-kotlinx-serialization-converter = { group = "com.jakewharton.retrofit", name = "retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2-kotlinx-serialization-converter" }
+glide-compose = { group = "com.github.bumptech.glide", name = "compose", version.ref = "glide-compose" }
 
 [plugins]
 com-android-application = { id = "com.android.application", version.ref = "agp" }
