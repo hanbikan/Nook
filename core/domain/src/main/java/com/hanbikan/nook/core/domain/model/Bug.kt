@@ -5,4 +5,4 @@ data class Bug(
     override val imageUrl: String,
     override val isCollected: Boolean,
     override val timesByMonth: Map<Int, String>,
-) : Collectable, TimeSensitive
+) : MonthlyCollectible

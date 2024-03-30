@@ -8,4 +8,4 @@ data class Fish(
     override val imageUrl: String,
     override val timesByMonth: Map<Int, String>,
     override val isCollected: Boolean,
-) : Collectable, TimeSensitive
+) : MonthlyCollectible

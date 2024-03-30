@@ -1,6 +1,7 @@
 package com.hanbikan.nook.feature.museum
 
 import androidx.compose.foundation.background
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -22,7 +23,7 @@ import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Collectable
+import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import kotlin.math.roundToInt
@@ -51,7 +52,13 @@ fun MuseumScreen(
             Column(
                 modifier = Modifier.padding(Dimens.SideMargin),
             ) {
-                CollectionProgress(stringResource(id = R.string.fish_progress), fishList)
+                CollectionProgress(
+                    name = stringResource(id = R.string.fish_progress),
+                    collectibleList = fishList,
+                    onClick = {
+
+                    }
+                )
             }
         }
 
@@ -66,13 +73,15 @@ fun MuseumScreen(
 @Composable
 fun CollectionProgress(
     name: String,
-    collectableList: List<Collectable>
+    collectibleList: List<Collectible>,
+    onClick: () -> Unit,
 ) {
-    val progress: Float = collectableList.calculateProgress()
+    val progress: Float = collectibleList.calculateProgress()
 
     Column(
         modifier = Modifier
             .fillMaxWidth()
+            .clickable(onClick = onClick)
             .background(NkTheme.colorScheme.onBackground, RoundedCornerShape(Dimens.SpacingMedium))
             .padding(Dimens.SpacingMedium),
     ) {

@@ -1,12 +1,12 @@
 package com.hanbikan.nook.core.domain.model
 
-interface Collectable {
+interface Collectible {
     val name: String
     val imageUrl: String
     val isCollected: Boolean
 }
 
-fun List<Collectable>.calculateProgress(): Float {
+fun List<Collectible>.calculateProgress(): Float {
     return if (isEmpty()) {
         0f
     } else {
