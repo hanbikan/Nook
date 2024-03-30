@@ -1,8 +1,10 @@
 package com.hanbikan.nook.core.database.di
 
+import com.hanbikan.nook.core.database.repository.CollectionRepositoryImpl
 import com.hanbikan.nook.core.database.repository.TaskRepositoryImpl
 import com.hanbikan.nook.core.database.repository.TutorialTaskRepositoryImpl
 import com.hanbikan.nook.core.database.repository.UserRepositoryImpl
+import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.repository.TaskRepository
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
 import com.hanbikan.nook.core.domain.repository.UserRepository
@@ -29,4 +31,9 @@ interface DatabaseRepositoryModule {
     fun bindsUserRepository(
         userRepositoryImpl: UserRepositoryImpl,
     ): UserRepository
+
+    @Binds
+    fun bindsCollectionRepository(
+        collectionRepositoryImpl: CollectionRepositoryImpl,
+    ): CollectionRepository
 }
