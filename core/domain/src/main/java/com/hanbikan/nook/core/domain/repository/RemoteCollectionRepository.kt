@@ -1,8 +1,8 @@
 package com.hanbikan.nook.core.domain.repository
 
-import com.hanbikan.nook.core.domain.response.FishResponse
+import com.hanbikan.nook.core.domain.model.Fish
 
 interface RemoteCollectionRepository {
 
-    suspend fun getAllFishes(): List<FishResponse>
+    suspend fun getAllFishes(userId: Int, isNorth: Boolean): List<Fish>
 }

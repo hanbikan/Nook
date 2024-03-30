@@ -10,16 +10,18 @@ import com.hanbikan.nook.core.database.dao.CollectionDao
 import com.hanbikan.nook.core.database.dao.TaskDao
 import com.hanbikan.nook.core.database.dao.TutorialTaskDao
 import com.hanbikan.nook.core.database.dao.UserDao
+import com.hanbikan.nook.core.database.entity.FishEntity
 import com.hanbikan.nook.core.database.entity.TaskEntity
 import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 10,
+    version = 11,
     entities = [
         TaskEntity::class,
         UserEntity::class,
         TutorialTaskEntity::class,
+        FishEntity::class,
     ],
     autoMigrations = [
         AutoMigration (from = 1, to = 2),
@@ -30,6 +32,7 @@ import com.hanbikan.nook.core.database.entity.UserEntity
         AutoMigration (from = 7, to = 8),
         AutoMigration (from = 8, to = 9),
         AutoMigration (from = 9, to = 10),
+        AutoMigration (from = 10, to = 11),
     ],
     exportSchema = true
 )
