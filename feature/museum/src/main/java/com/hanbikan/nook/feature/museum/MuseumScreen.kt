@@ -32,6 +32,7 @@ import kotlin.math.roundToInt
 fun MuseumScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
+    navigateToMonthlyCollectible: () -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
@@ -56,7 +57,7 @@ fun MuseumScreen(
                     name = stringResource(id = R.string.fish_progress),
                     collectibleList = fishList,
                     onClick = {
-
+                        navigateToMonthlyCollectible()
                     }
                 )
             }

@@ -3,24 +3,46 @@ package com.hanbikan.nook.feature.museum.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
+import androidx.navigation.navigation
+import com.hanbikan.nook.feature.museum.MonthlyCollectibleScreen
 import com.hanbikan.nook.feature.museum.MuseumScreen
 
-const val museumScreenRoute = "museum_screen_route"
+const val museumGraphRoute = "museum_graph_route"
 
-fun NavGraphBuilder.museumScreen(
+const val museumScreenRoute = "museum_screen_route"
+const val monthlyCollectibleScreenRoute = "monthly_collectible_screen_route"
+
+fun NavGraphBuilder.museumGraph(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
+    navigateToMonthlyCollectible: () -> Unit,
 ) {
-    composable(
-        route = museumScreenRoute,
+    navigation(
+        route = museumGraphRoute,
+        startDestination = museumScreenRoute,
     ) {
-        MuseumScreen(
-            navigateToAddUser = navigateToAddUser,
-            navigateToPhone = navigateToPhone,
-        )
+        composable(
+            route = museumScreenRoute,
+        ) {
+            MuseumScreen(
+                navigateToAddUser = navigateToAddUser,
+                navigateToPhone = navigateToPhone,
+                navigateToMonthlyCollectible = navigateToMonthlyCollectible,
+            )
+        }
+
+        composable(
+            route = monthlyCollectibleScreenRoute,
+        ) {
+            MonthlyCollectibleScreen()
+        }
     }
 }
 
 fun NavController.navigateToMuseum() {
-    navigate(museumScreenRoute)
+    navigate(museumGraphRoute)
+}
+
+fun NavController.navigateToMonthlyCollectible() {
+    navigate(monthlyCollectibleScreenRoute)
 }

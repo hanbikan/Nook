@@ -6,8 +6,10 @@ import androidx.navigation.NavHostController
 import androidx.navigation.compose.composable
 import androidx.navigation.navigation
 import com.hanbikan.nook.core.ui.NkApp
-import com.hanbikan.nook.feature.museum.navigation.museumScreen
+import com.hanbikan.nook.feature.museum.navigation.museumGraph
+import com.hanbikan.nook.feature.museum.navigation.museumGraphRoute
 import com.hanbikan.nook.feature.museum.navigation.museumScreenRoute
+import com.hanbikan.nook.feature.museum.navigation.navigateToMonthlyCollectible
 import com.hanbikan.nook.feature.museum.navigation.navigateToMuseum
 import com.hanbikan.nook.feature.phone.PhoneScreen
 import com.hanbikan.nook.feature.profile.navigation.navigateToProfile
@@ -65,9 +67,10 @@ fun NavGraphBuilder.phoneGraph(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
         )
-        museumScreen(
+        museumGraph(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
+            navigateToMonthlyCollectible = navController::navigateToMonthlyCollectible,
         )
     }
 }
@@ -87,7 +90,7 @@ fun NavGraphBuilder.phoneScreen(
                 NkApp.PROFILE.toNkAppWithNavigation(profileScreenRoute, navigateToProfile),
                 NkApp.TUTORIAL.toNkAppWithNavigation(tutorialScreenRoute, navigateToTutorial),
                 NkApp.TODO.toNkAppWithNavigation(todoScreenRoute, navigateToTodo),
-                NkApp.MUSEUM.toNkAppWithNavigation(museumScreenRoute, navigateToMuseum),
+                NkApp.MUSEUM.toNkAppWithNavigation(museumGraphRoute, navigateToMuseum),
             ),
             navigateToAddUser = navigateToAddUser,
         )
