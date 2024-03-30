@@ -13,8 +13,19 @@ class Converters {
     }
 
     @TypeConverter
-    fun toDetailList(detailsString: String?): List<Detail>? {
-        if (detailsString == null) return null
-        return Json.decodeFromString(detailsString)
+    fun toDetailList(string: String?): List<Detail>? {
+        if (string == null) return null
+        return Json.decodeFromString(string)
+    }
+
+    @TypeConverter
+    fun fromMapIntString(map: Map<Int, String>): String {
+        return Json.encodeToString(map.mapKeys { it.key.toString() })
+    }
+
+    @TypeConverter
+    fun toMapIntString(string: String): Map<Int, String> {
+        return Json.decodeFromString<Map<String, String>>(string)
+            .mapKeys { it.key.toInt() }
     }
 }
