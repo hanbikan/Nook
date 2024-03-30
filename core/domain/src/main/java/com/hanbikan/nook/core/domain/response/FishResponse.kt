@@ -1,4 +1,4 @@
-package com.hanbikan.nook.core.network.response
+package com.hanbikan.nook.core.domain.response
 
 import kotlinx.serialization.Serializable
 
