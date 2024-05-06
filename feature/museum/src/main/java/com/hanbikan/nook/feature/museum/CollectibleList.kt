@@ -14,6 +14,8 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.domain.model.Collectible
 
+private val CollectibleItemSize = 100.dp
+
 @Composable
 fun CollectibleList(
     collectibles: List<Collectible>

@@ -13,7 +13,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -22,7 +21,9 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 data class ChipGroup(
     val chips: List<ChipItem>,
     val selectedIndex: Int = 0,
-)
+) {
+    fun copyWithIndex(index: Int) = this.copy(selectedIndex = index)
+}
 
 data class ChipItem(
     val text: String
@@ -60,11 +61,11 @@ fun NkChipItem(
     Box(
         modifier = Modifier
             .background(
-                color = if (selected) Color.Black else Color.Transparent,
+                color = if (selected) NkTheme.colorScheme.primary else NkTheme.colorScheme.background,
                 shape = radiusShape
             )
             .border(
-                border = BorderStroke(1.dp, NkTheme.colorScheme.onBackground),
+                border = BorderStroke(1.dp, NkTheme.colorScheme.primary),
                 shape = radiusShape
             )
             .clickable(onClick = onClick)
@@ -76,7 +77,7 @@ fun NkChipItem(
     ) {
         NkText(
             text = text,
-            color = if (selected) Color.White else Color.Black
+            color = if (selected) NkTheme.colorScheme.background else NkTheme.colorScheme.primary
         )
     }
 }
