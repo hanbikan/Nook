@@ -8,7 +8,6 @@ import androidx.navigation.navigation
 import com.hanbikan.nook.core.ui.NkApp
 import com.hanbikan.nook.feature.museum.navigation.museumGraph
 import com.hanbikan.nook.feature.museum.navigation.museumGraphRoute
-import com.hanbikan.nook.feature.museum.navigation.museumScreenRoute
 import com.hanbikan.nook.feature.museum.navigation.navigateToMonthlyCollectible
 import com.hanbikan.nook.feature.museum.navigation.navigateToMuseum
 import com.hanbikan.nook.feature.phone.PhoneScreen
@@ -71,6 +70,7 @@ fun NavGraphBuilder.phoneGraph(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
             navigateToMonthlyCollectible = navController::navigateToMonthlyCollectible,
+            navigateUp = navController::navigateUp
         )
     }
 }

@@ -16,6 +16,7 @@ fun NavGraphBuilder.museumGraph(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
     navigateToMonthlyCollectible: () -> Unit,
+    navigateUp: () -> Unit,
 ) {
     navigation(
         route = museumGraphRoute,
@@ -34,7 +35,9 @@ fun NavGraphBuilder.museumGraph(
         composable(
             route = monthlyCollectibleScreenRoute,
         ) {
-            MonthlyCollectibleScreen()
+            MonthlyCollectibleScreen(
+                navigateUp = navigateUp,
+            )
         }
     }
 }
