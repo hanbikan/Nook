@@ -3,4 +3,6 @@
     <string name="fish_progress">Fish collection rate</string>
     <string name="bug_progress">Bug collection rate</string>
     <string name="sea_creature_progress">Sea creature collection rate</string>
+    <string name="overall">Overall</string>
+    <string name="monthly">Monthly</string>
 </resources>

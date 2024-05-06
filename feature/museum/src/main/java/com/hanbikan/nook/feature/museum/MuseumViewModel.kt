@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.museum
 
+import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
@@ -9,6 +10,7 @@ import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetFishesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,11 +24,15 @@ import javax.inject.Inject
 class MuseumViewModel @Inject constructor(
     private val getFishesByUserIdUseCase: GetFishesByUserIdUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
+    @ApplicationContext context: Context,
 ) : ViewModel() {
 
     private val _viewTypeChipGroup: MutableStateFlow<ChipGroup> = MutableStateFlow(
         ChipGroup(
-            chips = listOf(ChipItem("Overall"), ChipItem("Monthly")), // TODO: Apply i18n with strings.xml
+            chips = listOf(
+                ChipItem(context.getString(R.string.overall)),
+                ChipItem(context.getString(R.string.monthly))
+            ),
             selectedIndex = 0
         )
     )
