@@ -56,7 +56,7 @@ fun NkChipItem(
     isLarge: Boolean,
     onClick: () -> Unit,
 ) {
-    val radiusShape = RoundedCornerShape(Dimens.SpacingLarge)
+    val radiusShape = RoundedCornerShape(Dimens.SpacingExtraLarge)
 
     Box(
         modifier = Modifier
@@ -93,6 +93,7 @@ fun NkChipGroupPreview() {
                 ChipItem("Cream"),
             )
         ),
+        isLarge = true,
         onClickItem = {}
     )
 }

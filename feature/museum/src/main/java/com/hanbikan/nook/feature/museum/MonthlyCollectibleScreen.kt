@@ -35,7 +35,8 @@ fun MonthlyCollectibleScreen(
             ) {
                 NkChipGroup(
                     chipGroup = viewTypeChipGroup,
-                    onClickItem = viewModel::onClickViewType
+                    isLarge = true,
+                    onClickItem = viewModel::onClickViewType,
                 )
 
                 CollectibleList(collectibles = collectibles)
