@@ -13,6 +13,7 @@ import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
+import com.hanbikan.nook.core.domain.model.Collectible
 
 @Composable
 fun MonthlyCollectibleScreen(
@@ -39,8 +40,32 @@ fun MonthlyCollectibleScreen(
                     onClickItem = viewModel::onClickViewType,
                 )
 
-                CollectibleList(collectibles = collectibles)
+                when (viewTypeChipGroup.selectedIndex) {
+                    0 -> {
+                        OverallCollectibleContents(collectibles = collectibles)
+                    }
+                    1 -> {
+                        MonthlyCollectibleContents(collectibles = collectibles)
+                    }
+                }
             }
         }
     }
+}
+
+@Composable
+fun OverallCollectibleContents(
+    collectibles: List<Collectible>
+) {
+    // TODO: 진행도
+    CollectibleList(collectibles = collectibles)
+}
+
+@Composable
+fun MonthlyCollectibleContents(
+    collectibles: List<Collectible>
+) {
+    // TODO: 1~12월
+    // TODO: 진행도
+    // TODO: normal view or time view
 }

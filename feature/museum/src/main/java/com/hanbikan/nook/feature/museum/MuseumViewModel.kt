@@ -26,7 +26,7 @@ class MuseumViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     @ApplicationContext context: Context,
 ) : ViewModel() {
-
+    // TODO: ui state? view type -> month & sort by(normal view or time view)
     private val _viewTypeChipGroup: MutableStateFlow<ChipGroup> = MutableStateFlow(
         ChipGroup(
             chips = listOf(
