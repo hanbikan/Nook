@@ -1,16 +1,12 @@
 package com.hanbikan.nook.feature.museum
 
-import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hanbikan.nook.core.designsystem.component.ChipGroup
-import com.hanbikan.nook.core.designsystem.component.ChipItem
-import com.hanbikan.nook.core.domain.model.Fish
+import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetFishesByUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetAllCollectiblesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -22,22 +18,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MuseumViewModel @Inject constructor(
-    private val getFishesByUserIdUseCase: GetFishesByUserIdUseCase,
+    private val getAllCollectiblesByUserIdUseCase: GetAllCollectiblesByUserIdUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
-    @ApplicationContext context: Context,
 ) : ViewModel() {
-    // TODO: ui state? view type -> month & sort by(normal view or time view)
-    private val _viewTypeChipGroup: MutableStateFlow<ChipGroup> = MutableStateFlow(
-        ChipGroup(
-            chips = listOf(
-                ChipItem(context.getString(R.string.overall)),
-                ChipItem(context.getString(R.string.monthly))
-            ),
-            selectedIndex = 0
-        )
-    )
-    val viewTypeChipGroup = _viewTypeChipGroup.asStateFlow()
-
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
@@ -46,22 +29,17 @@ class MuseumViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val fishList: StateFlow<List<Fish>> = activeUser
+    val allCollectibles: StateFlow<List<List<Collectible>>> = activeUser
         .mapLatest {
             if (it == null) {
                 listOf()
             } else {
-                getFishesByUserIdUseCase(it.id)
+                getAllCollectiblesByUserIdUseCase(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
-
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
-    }
-
-    fun onClickViewType(index: Int) {
-        _viewTypeChipGroup.value = viewTypeChipGroup.value.copyWithIndex(index)
     }
 }

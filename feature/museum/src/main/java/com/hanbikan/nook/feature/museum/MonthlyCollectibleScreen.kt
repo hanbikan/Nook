@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -20,10 +21,10 @@ import com.hanbikan.nook.core.domain.model.Collectible
 @Composable
 fun MonthlyCollectibleScreen(
     navigateUp: () -> Unit,
-    viewModel: MuseumViewModel = hiltViewModel(),
+    viewModel: CollectibleViewModel = hiltViewModel(),
 ) {
-    val monthlyCollectibles = viewModel.fishList.collectAsStateWithLifecycle().value
-    val viewTypeChipGroup = viewModel.viewTypeChipGroup.collectAsStateWithLifecycle().value
+    val monthlyCollectibles = viewModel.collectibleList.collectAsStateWithLifecycle().value
+    val monthlyViewType = viewModel.monthlyViewType.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -34,16 +35,18 @@ fun MonthlyCollectibleScreen(
             )
 
             Column(
-                modifier = Modifier.padding(Dimens.SideMargin, 0.dp),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(Dimens.SideMargin, 0.dp),
             ) {
                 NkChipGroup(
-                    chipGroup = viewTypeChipGroup,
+                    chipGroup = monthlyViewType,
                     isLarge = true,
                     onClickItem = viewModel::onClickViewType,
                 )
                 Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
 
-                when (viewTypeChipGroup.selectedIndex) {
+                when (monthlyViewType.selectedIndex) {
                     0 -> {
                         OverallCollectibleContents(collectibles = monthlyCollectibles)
                     }

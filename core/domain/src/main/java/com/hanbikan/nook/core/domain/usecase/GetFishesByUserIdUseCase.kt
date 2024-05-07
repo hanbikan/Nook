@@ -16,7 +16,7 @@ class GetFishesByUserIdUseCase @Inject constructor(
             // 로컬에 없는 경우 네트워크를 호출하여 업데이트 합니다.
             val remoteFishes = remoteCollectionRepository.getAllFishes(
                 userId = userId,
-                isNorth = true, // TODO
+                isNorth = true, // TODO: 북반구/남반구 정보 반영
             )
             collectionRepository.insertFishes(remoteFishes)
             collectionRepository.getAllFishesByUserId(userId).first()

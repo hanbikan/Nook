@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
@@ -15,7 +16,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
-import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Collectible
@@ -23,9 +23,9 @@ import com.hanbikan.nook.core.domain.model.Collectible
 @Composable
 fun CollectibleScreen(
     navigateUp: () -> Unit,
-    viewModel: MuseumViewModel = hiltViewModel(),
+    viewModel: CollectibleViewModel = hiltViewModel(),
 ) {
-    val collectibles = viewModel.fishList.collectAsStateWithLifecycle().value
+    val collectibles = viewModel.collectibleList.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -49,6 +49,7 @@ fun OverallCollectibleContents(
     collectibles: List<Collectible>
 ) {
     Column(
+        modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NkAnimatedCircularProgress(

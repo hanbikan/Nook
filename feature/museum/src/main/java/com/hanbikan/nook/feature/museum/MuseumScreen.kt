@@ -11,6 +11,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
@@ -28,16 +30,20 @@ import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import kotlin.math.roundToInt
 
+// 각각의 컬렉션에 대한 이름입니다.(ex. 물고기 수집률)
+val progressNameIds = listOf(
+    R.string.fish_progress
+)
+
 @Composable
 fun MuseumScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
-    navigateToMonthlyCollectible: () -> Unit,
+    navigateToMonthlyCollectible: (Int) -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
+    val allCollectibles = viewModel.allCollectibles.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
-    
-    val fishList = viewModel.fishList.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -50,16 +56,18 @@ fun MuseumScreen(
                 ),
             )
 
-            Column(
+            LazyColumn(
                 modifier = Modifier.padding(Dimens.SideMargin),
             ) {
-                CollectionProgress(
-                    name = stringResource(id = R.string.fish_progress),
-                    collectibleList = fishList,
-                    onClick = {
-                        navigateToMonthlyCollectible()
-                    }
-                )
+                itemsIndexed(allCollectibles) { index, item ->
+                    CollectionProgress(
+                        name = stringResource(id = progressNameIds[index]),
+                        collectibleList = item,
+                        onClick = {
+                            navigateToMonthlyCollectible(index)
+                        }
+                    )
+                }
             }
         }
 
