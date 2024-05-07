@@ -14,13 +14,13 @@ import com.bumptech.glide.integration.compose.GlideImage
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.domain.model.Collectible
 
-private val CollectibleItemSize = 100.dp
+private val CollectibleItemSize = 80.dp
 
 @Composable
 fun CollectibleList(
     collectibles: List<Collectible>
 ) {
-    LazyVerticalGrid(columns = GridCells.Adaptive(100.dp)) {
+    LazyVerticalGrid(columns = GridCells.Adaptive(CollectibleItemSize)) {
         items(collectibles) {
             CollectibleItem(it)
         }

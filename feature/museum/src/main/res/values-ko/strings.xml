@@ -5,4 +5,5 @@
     <string name="sea_creature_progress">해산물 수집률</string>
     <string name="overall">전체</string>
     <string name="monthly">월별</string>
+    <string name="progress_rate">수집 진행도</string>
 </resources>

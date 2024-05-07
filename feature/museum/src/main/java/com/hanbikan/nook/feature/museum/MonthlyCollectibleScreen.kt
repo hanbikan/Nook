@@ -2,15 +2,20 @@ package com.hanbikan.nook.feature.museum
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
+import com.hanbikan.nook.core.designsystem.component.NkCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Collectible
@@ -32,13 +37,14 @@ fun MonthlyCollectibleScreen(
             )
 
             Column(
-                modifier = Modifier.padding(Dimens.SideMargin, 0.dp)
+                modifier = Modifier.padding(Dimens.SideMargin, 0.dp),
             ) {
                 NkChipGroup(
                     chipGroup = viewTypeChipGroup,
                     isLarge = true,
                     onClickItem = viewModel::onClickViewType,
                 )
+                Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
 
                 when (viewTypeChipGroup.selectedIndex) {
                     0 -> {
@@ -57,8 +63,16 @@ fun MonthlyCollectibleScreen(
 fun OverallCollectibleContents(
     collectibles: List<Collectible>
 ) {
-    // TODO: 진행도
-    CollectibleList(collectibles = collectibles)
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        NkCircularProgress(
+            progress = 0.6f, // TODO
+            description = stringResource(id = R.string.progress_rate)
+        )
+        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+        CollectibleList(collectibles = collectibles)
+    }
 }
 
 @Composable

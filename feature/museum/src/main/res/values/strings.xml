@@ -5,4 +5,5 @@
     <string name="sea_creature_progress">Sea creature collection rate</string>
     <string name="overall">Overall</string>
     <string name="monthly">Monthly</string>
+    <string name="progress_rate">Progress</string>
 </resources>
