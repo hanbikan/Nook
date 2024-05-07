@@ -15,7 +15,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
-import com.hanbikan.nook.core.designsystem.component.NkCircularProgress
+import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Collectible
@@ -66,7 +66,7 @@ fun OverallCollectibleContents(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        NkCircularProgress(
+        NkAnimatedCircularProgress(
             progress = 0.6f, // TODO
             description = stringResource(id = R.string.progress_rate)
         )
