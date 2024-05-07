@@ -7,23 +7,25 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Collectible
 
 @Composable
-fun MonthlyCollectibleScreen(
+fun CollectibleScreen(
     navigateUp: () -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
-    val monthlyCollectibles = viewModel.fishList.collectAsStateWithLifecycle().value
-    val viewTypeChipGroup = viewModel.viewTypeChipGroup.collectAsStateWithLifecycle().value
+    val collectibles = viewModel.fishList.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -36,31 +38,24 @@ fun MonthlyCollectibleScreen(
             Column(
                 modifier = Modifier.padding(Dimens.SideMargin, 0.dp),
             ) {
-                NkChipGroup(
-                    chipGroup = viewTypeChipGroup,
-                    isLarge = true,
-                    onClickItem = viewModel::onClickViewType,
-                )
-                Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
-
-                when (viewTypeChipGroup.selectedIndex) {
-                    0 -> {
-                        OverallCollectibleContents(collectibles = monthlyCollectibles)
-                    }
-                    1 -> {
-                        MonthlyCollectibleContents(collectibles = monthlyCollectibles)
-                    }
-                }
+                OverallCollectibleContents(collectibles = collectibles)
             }
         }
     }
 }
 
 @Composable
-fun MonthlyCollectibleContents(
+fun OverallCollectibleContents(
     collectibles: List<Collectible>
 ) {
-    // TODO: 1~12월
-    // TODO: 진행도
-    // TODO: normal view or time view
+    Column(
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        NkAnimatedCircularProgress(
+            progress = 0.6f, // TODO
+            description = stringResource(id = R.string.progress_rate)
+        )
+        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+        CollectibleList(collectibles = collectibles)
+    }
 }
