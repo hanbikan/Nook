@@ -7,12 +7,18 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.ChipGroup
+import com.hanbikan.nook.core.designsystem.component.ChipItem
+import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -24,7 +30,7 @@ fun MonthlyCollectibleScreen(
     viewModel: CollectibleViewModel = hiltViewModel(),
 ) {
     val monthlyCollectibles = viewModel.collectibleList.collectAsStateWithLifecycle().value
-    val monthlyViewType = viewModel.monthlyViewType.collectAsStateWithLifecycle().value
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -40,17 +46,26 @@ fun MonthlyCollectibleScreen(
                     .padding(Dimens.SideMargin, 0.dp),
             ) {
                 NkChipGroup(
-                    chipGroup = monthlyViewType,
+                    chipGroup = ChipGroup(
+                        chips = listOf(
+                            ChipItem(stringResource(id = R.string.overall)),
+                            ChipItem(stringResource(id = R.string.monthly))
+                        ),
+                        selectedIndex = uiState.chipIndex
+                    ),
                     isLarge = true,
                     onClickItem = viewModel::onClickViewType,
                 )
                 Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
 
-                when (monthlyViewType.selectedIndex) {
-                    0 -> {
+                when (uiState) {
+                    is CollectibleScreenUiState.Loading -> {
+                        // Loading
+                    }
+                    is CollectibleScreenUiState.OverallView -> {
                         OverallCollectibleContents(collectibles = monthlyCollectibles)
                     }
-                    1 -> {
+                    is CollectibleScreenUiState.MonthlyView -> {
                         MonthlyCollectibleContents(collectibles = monthlyCollectibles)
                     }
                 }
@@ -63,7 +78,20 @@ fun MonthlyCollectibleScreen(
 fun MonthlyCollectibleContents(
     collectibles: List<Collectible>
 ) {
-    // TODO: 1~12월
-    // TODO: 진행도
-    // TODO: normal view or time view
+    /*Column(
+        modifier = Modifier.fillMaxWidth(),
+        horizontalAlignment = Alignment.CenterHorizontally,
+    ) {
+        LazyRow {
+            items() {
+
+            }
+        }
+        NkAnimatedCircularProgress(
+            progress = 0.6f, // TODO
+            description = stringResource(id = R.string.progress_rate)
+        )
+        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+        // TODO: normal view or time view
+    }*/
 }
