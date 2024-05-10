@@ -46,14 +46,15 @@ fun CollectibleScreen(
 
 @Composable
 fun OverallCollectibleContents(
-    collectibles: List<Collectible>
+    collectibles: List<Collectible>,
 ) {
+    val progress = collectibles.count { it.isCollected }.toFloat() / collectibles.count()
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NkAnimatedCircularProgress(
-            progress = 0.6f, // TODO
+            progress = progress,
             description = stringResource(id = R.string.progress_rate)
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingMedium))

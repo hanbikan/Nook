@@ -56,19 +56,22 @@ class CollectibleViewModel @Inject constructor(
     fun onClickViewType(index: Int) {
         _uiState.value = when (index) {
             0 -> {
-                CollectibleScreenUiState.OverallView(collectibleList.value)
+                CollectibleScreenUiState.OverallView(collectibleList = collectibleList.value)
             }
             else -> {
-                CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList.value)
+                CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList = collectibleList.value)
             }
         }
     }
 }
 
 sealed class CollectibleScreenUiState(val chipIndex: Int) {
-    object Loading : CollectibleScreenUiState(-1)
-    class OverallView(collectibleList: List<Collectible>) : CollectibleScreenUiState(0)
-    sealed class MonthlyView : CollectibleScreenUiState(1) {
+
+    object Loading : CollectibleScreenUiState(chipIndex = -1)
+
+    class OverallView(collectibleList: List<Collectible>) : CollectibleScreenUiState(chipIndex = 0)
+
+    sealed class MonthlyView : CollectibleScreenUiState(chipIndex = 1) {
         class GeneralView(collectibleList: List<Collectible>) : MonthlyView()
         class HourView(hourToCollectibleList: Map<Int, List<MonthlyCollectible>>) : MonthlyView()
     }
