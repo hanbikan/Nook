@@ -7,7 +7,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,7 +18,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
-import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -45,22 +44,29 @@ fun MonthlyCollectibleScreen(
                     .fillMaxWidth()
                     .padding(Dimens.SideMargin, 0.dp),
             ) {
-                NkChipGroup(
-                    chipGroup = ChipGroup(
-                        chips = listOf(
-                            ChipItem(stringResource(id = R.string.overall)),
-                            ChipItem(stringResource(id = R.string.monthly))
+                if (uiState.chipIndex != null) {
+                    NkChipGroup(
+                        chipGroup = ChipGroup(
+                            chips = listOf(
+                                ChipItem(stringResource(id = R.string.overall)),
+                                ChipItem(stringResource(id = R.string.monthly))
+                            ),
+                            selectedIndex = uiState.chipIndex
                         ),
-                        selectedIndex = uiState.chipIndex
-                    ),
-                    isLarge = true,
-                    onClickItem = viewModel::onClickViewType,
-                )
-                Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+                        isLarge = true,
+                        onClickItem = viewModel::onClickViewType,
+                    )
+                    Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+                }
 
                 when (uiState) {
                     is CollectibleScreenUiState.Loading -> {
-                        // Loading
+                        Box(
+                            modifier = Modifier.fillMaxSize(),
+                            contentAlignment = Alignment.Center,
+                        ) {
+                            CircularProgressIndicator()
+                        }
                     }
                     is CollectibleScreenUiState.OverallView -> {
                         OverallCollectibleContents(collectibles = monthlyCollectibles)

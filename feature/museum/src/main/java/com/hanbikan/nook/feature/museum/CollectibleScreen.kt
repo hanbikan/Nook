@@ -48,7 +48,12 @@ fun CollectibleScreen(
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
 ) {
-    val progress = collectibles.count { it.isCollected }.toFloat() / collectibles.count()
+    val progress = if (collectibles.isEmpty()) {
+        0f
+    } else {
+        collectibles.count { it.isCollected }.toFloat() / collectibles.count()
+    }
+
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,

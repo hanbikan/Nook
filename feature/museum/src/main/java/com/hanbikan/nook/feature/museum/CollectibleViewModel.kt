@@ -67,13 +67,13 @@ class CollectibleViewModel @Inject constructor(
     }
 
     fun onClickCollectibleItem(index: Int) {
-
+        // TODO
     }
 }
 
-sealed class CollectibleScreenUiState(val chipIndex: Int) {
+sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
-    object Loading : CollectibleScreenUiState(chipIndex = -1)
+    object Loading : CollectibleScreenUiState(chipIndex = null)
 
     class OverallView(collectibleList: List<Collectible>) : CollectibleScreenUiState(chipIndex = 0)
 
