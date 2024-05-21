@@ -1,10 +1,12 @@
 package com.hanbikan.nook.feature.museum
 
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.grid.GridCells
 import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
 import androidx.compose.foundation.lazy.grid.items
+import androidx.compose.foundation.lazy.grid.itemsIndexed
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -18,11 +20,15 @@ private val CollectibleItemSize = 80.dp
 
 @Composable
 fun CollectibleList(
-    collectibles: List<Collectible>
+    collectibles: List<Collectible>,
+    onClickCollectibleItem: (Int) -> Unit,
 ) {
     LazyVerticalGrid(columns = GridCells.Adaptive(CollectibleItemSize)) {
-        items(collectibles) {
-            CollectibleItem(it)
+        itemsIndexed(collectibles) { index, item ->
+            CollectibleItem(
+                item = item,
+                onClick = { onClickCollectibleItem(index) }
+            )
         }
     }
 }
@@ -30,10 +36,13 @@ fun CollectibleList(
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CollectibleItem(
-    item: Collectible
+    item: Collectible,
+    onClick: () -> Unit,
 ) {
     Column(
-        modifier = Modifier.size(CollectibleItemSize),
+        modifier = Modifier
+            .size(CollectibleItemSize)
+            .clickable { onClick() },
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         GlideImage(

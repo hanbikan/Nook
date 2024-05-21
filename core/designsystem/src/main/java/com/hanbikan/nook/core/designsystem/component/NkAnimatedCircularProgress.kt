@@ -10,6 +10,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableFloatStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -31,6 +32,7 @@ fun NkAnimatedCircularProgress(
     animationDelayMillis: Long = 200L,
 ) {
     var progressToShow by remember { mutableFloatStateOf(0f) }
+    var isFirstToModify by remember { mutableStateOf(true) }
     val animatedProgress by animateFloatAsState(
         targetValue = progressToShow,
         animationSpec = tween(durationMillis = animationDurationMillis),
@@ -38,8 +40,11 @@ fun NkAnimatedCircularProgress(
     )
     val progressAsPercent = "${(animatedProgress * 100).toInt()}%"
 
-    LaunchedEffect(Unit) {
-        delay(animationDelayMillis)
+    LaunchedEffect(progress) {
+        if (isFirstToModify) {
+            delay(animationDelayMillis)
+            isFirstToModify = false
+        }
         progressToShow = progress
     }
 

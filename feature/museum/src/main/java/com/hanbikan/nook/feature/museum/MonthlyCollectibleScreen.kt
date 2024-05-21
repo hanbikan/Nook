@@ -69,10 +69,16 @@ fun MonthlyCollectibleScreen(
                         }
                     }
                     is CollectibleScreenUiState.OverallView -> {
-                        OverallCollectibleContents(collectibles = monthlyCollectibles)
+                        OverallCollectibleContents(
+                            collectibles = monthlyCollectibles,
+                            onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                        )
                     }
                     is CollectibleScreenUiState.MonthlyView -> {
-                        MonthlyCollectibleContents(collectibles = monthlyCollectibles)
+                        MonthlyCollectibleContents(
+                            collectibles = monthlyCollectibles,
+                            onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                        )
                     }
                 }
             }
@@ -82,7 +88,8 @@ fun MonthlyCollectibleScreen(
 
 @Composable
 fun MonthlyCollectibleContents(
-    collectibles: List<Collectible>
+    collectibles: List<Collectible>,
+    onClickCollectibleItem: (Int) -> Unit,
 ) {
     /*Column(
         modifier = Modifier.fillMaxWidth(),

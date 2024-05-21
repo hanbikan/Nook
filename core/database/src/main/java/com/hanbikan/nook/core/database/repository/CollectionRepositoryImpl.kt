@@ -25,4 +25,8 @@ class CollectionRepositoryImpl @Inject constructor(
     override suspend fun updateFish(fish: Fish) {
         collectionDao.updateFish(fish.toData())
     }
+
+    override suspend fun deleteAllFishes() {
+        collectionDao.deleteAllFishes()
+    }
 }

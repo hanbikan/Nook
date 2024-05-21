@@ -17,4 +17,7 @@ interface CollectionDao {
 
     @Update
     suspend fun updateFish(fishEntity: FishEntity)
+
+    @Query("DELETE FROM fish")
+    fun deleteAllFishes()
 }

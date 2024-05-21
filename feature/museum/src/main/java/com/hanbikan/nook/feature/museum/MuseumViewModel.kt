@@ -4,22 +4,23 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetFishesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.mapLatest
+import kotlinx.coroutines.flow.flatMapLatest
+import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.stateIn
 import javax.inject.Inject
 
 @HiltViewModel
 class MuseumViewModel @Inject constructor(
-    private val getFishesByUserIdUseCase: GetFishesByUserIdUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
+    collectionRepository: CollectionRepository,
 ) : ViewModel() {
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -30,11 +31,11 @@ class MuseumViewModel @Inject constructor(
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val fishes: StateFlow<List<Fish>> = activeUser
-        .mapLatest {
+        .flatMapLatest {
             if (it == null) {
-                listOf()
+                flowOf(listOf())
             } else {
-                getFishesByUserIdUseCase(it.id)
+                collectionRepository.getAllFishesByUserId(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())

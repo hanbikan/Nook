@@ -19,6 +19,7 @@ import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.domain.model.Collectible
+import com.hanbikan.nook.core.domain.model.calculateProgress
 
 @Composable
 fun CollectibleScreen(
@@ -38,7 +39,10 @@ fun CollectibleScreen(
             Column(
                 modifier = Modifier.padding(Dimens.SideMargin, 0.dp),
             ) {
-                OverallCollectibleContents(collectibles = collectibles)
+                OverallCollectibleContents(
+                    collectibles = collectibles,
+                    onClickCollectibleItem = viewModel::onClickCollectibleItem
+                )
             }
         }
     }
@@ -47,22 +51,20 @@ fun CollectibleScreen(
 @Composable
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
+    onClickCollectibleItem: (Int) -> Unit,
 ) {
-    val progress = if (collectibles.isEmpty()) {
-        0f
-    } else {
-        collectibles.count { it.isCollected }.toFloat() / collectibles.count()
-    }
-
     Column(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         NkAnimatedCircularProgress(
-            progress = progress,
+            progress = collectibles.calculateProgress(),
             description = stringResource(id = R.string.progress_rate)
         )
         Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
-        CollectibleList(collectibles = collectibles)
+        CollectibleList(
+            collectibles = collectibles,
+            onClickCollectibleItem = onClickCollectibleItem,
+        )
     }
 }

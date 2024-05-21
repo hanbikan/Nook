@@ -9,4 +9,6 @@ interface CollectionRepository {
     suspend fun insertFishes(fishList: List<Fish>)
 
     suspend fun updateFish(fish: Fish)
+
+    suspend fun deleteAllFishes()
 }
