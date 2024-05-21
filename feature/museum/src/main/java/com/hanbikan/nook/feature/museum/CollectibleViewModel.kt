@@ -7,7 +7,7 @@ import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.MonthlyCollectible
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetFishesByUserIdUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import com.hanbikan.nook.feature.museum.navigation.COLLECTIBLE_SEQUENCE_INDEX
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -24,7 +24,7 @@ import javax.inject.Inject
 class CollectibleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getActiveUserUseCase: GetActiveUserUseCase,
-    getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
+    getFishesByUserIdUseCase: GetFishesByUserIdUseCase,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CollectibleScreenUiState> = MutableStateFlow(
@@ -43,7 +43,7 @@ class CollectibleViewModel @Inject constructor(
                 listOf()
             } else {
                 when (collectibleSequenceIndex) {
-                    CollectibleSequence.FISH.ordinal -> getAllFishesByUserIdUseCase(userId = it.id)
+                    CollectibleSequence.FISH.ordinal -> getFishesByUserIdUseCase(userId = it.id)
                     else -> listOf()
                 }
             }
@@ -64,6 +64,10 @@ class CollectibleViewModel @Inject constructor(
                 CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList = collectibleList.value)
             }
         }
+    }
+
+    fun onClickCollectibleItem(index: Int) {
+
     }
 }
 
