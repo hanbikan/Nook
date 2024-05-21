@@ -3,8 +3,8 @@ package com.hanbikan.nook.feature.profile
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
     val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -49,7 +49,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val newUser = it.copy(name = name)
-                updateUserUseCase(newUser)
+                userRepository.insertUser(newUser)
             }
             switchUpdateNameDialog()
         }
@@ -59,7 +59,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val newUser = it.copy(islandName = islandName)
-                updateUserUseCase(newUser)
+                userRepository.insertUser(newUser)
             }
             switchUpdateIslandNameDialog()
         }

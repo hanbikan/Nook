@@ -6,13 +6,11 @@ import com.hanbikan.nook.core.common.executeIfBothNonNull
 import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
-import com.hanbikan.nook.core.domain.usecase.GetTutorialTasksByUserIdAndDayUseCase
-import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTaskUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -31,12 +29,11 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TutorialViewModel @Inject constructor(
-    private val getTutorialTasksByUserIdAndDayUseCase: GetTutorialTasksByUserIdAndDayUseCase,
-    private val updateTutorialTaskUseCase: UpdateTutorialTaskUseCase,
-    setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
+    private val tutorialTaskRepository: TutorialTaskRepository,
+    private val appStateRepository: AppStateRepository,
+    private val userRepository: UserRepository,
 ) : ViewModel() {
 
     // Data for UI
@@ -60,7 +57,7 @@ class TutorialViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getTutorialTasksByUserIdAndDayUseCase(it.id, it.tutorialDay)
+                tutorialTaskRepository.getTutorialTasksByUserIdAndDay(it.id, it.tutorialDay)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
@@ -99,7 +96,7 @@ class TutorialViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            setLastVisitedRouteUseCase(tutorialScreenRoute)
+            appStateRepository.setLastVisitedRoute(tutorialScreenRoute)
         }
 
         viewModelScope.launch(Dispatchers.IO) {
@@ -137,7 +134,7 @@ class TutorialViewModel @Inject constructor(
         val target = tutorialTaskList.value.getOrNull(index) ?: return
         val newTutorialTask = target.copy(isDone = !target.isDone)
         viewModelScope.launch(Dispatchers.IO) {
-            updateTutorialTaskUseCase(newTutorialTask)
+            tutorialTaskRepository.updateTutorialTask(newTutorialTask)
         }
     }
 
@@ -156,7 +153,7 @@ class TutorialViewModel @Inject constructor(
             executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
                 val nextTutorialDay = activeUser.tutorialDay + 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
+                    userRepository.insertUser(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }
@@ -167,7 +164,7 @@ class TutorialViewModel @Inject constructor(
             executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
                 val nextTutorialDay = activeUser.tutorialDay - 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
+                    userRepository.insertUser(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }

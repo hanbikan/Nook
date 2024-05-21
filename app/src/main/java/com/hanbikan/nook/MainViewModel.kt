@@ -2,7 +2,7 @@ package com.hanbikan.nook
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hanbikan.nook.core.domain.usecase.GetLastVisitedRouteUseCase
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MainViewModel @Inject constructor(
-    private val getLastVisitedRouteUseCase: GetLastVisitedRouteUseCase
+    private val appStateRepository: AppStateRepository
 ): ViewModel() {
 
     private val _isReady: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -23,7 +23,7 @@ class MainViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            getLastVisitedRouteUseCase().collect {
+            appStateRepository.getLastVisitedRoute().collect {
                 _isReady.value = true
                 _lastVisitedRoute.value = it
             }

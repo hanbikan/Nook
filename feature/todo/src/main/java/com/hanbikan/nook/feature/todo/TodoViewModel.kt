@@ -5,13 +5,9 @@ import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.Detail
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.usecase.AddTaskUseCase
-import com.hanbikan.nook.core.domain.usecase.DeleteTaskUseCase
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.hanbikan.nook.core.domain.repository.TaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllTasksByUserIdUseCase
-import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateTaskUseCase
-import com.hanbikan.nook.core.domain.usecase.UpdateTasksIfEmptyUseCase
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -21,7 +17,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -32,12 +27,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TodoViewModel @Inject constructor(
-    setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
-    getAllTasksByUserIdUseCase: GetAllTasksByUserIdUseCase,
-    private val addTaskUseCase: AddTaskUseCase,
-    private val updateTaskUseCase: UpdateTaskUseCase,
-    private val deleteTaskUseCase: DeleteTaskUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
+    private val taskRepository: TaskRepository,
+    private val appStateRepository: AppStateRepository,
 ) : ViewModel() {
 
     // Ui state
@@ -54,7 +46,7 @@ class TodoViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getAllTasksByUserIdUseCase(it.id).onEach { taskList ->
+                taskRepository.getAllTasksByUserId(it.id).onEach { taskList ->
                     _uiState.value =
                         if (taskList.isEmpty()) TodoUiState.Success.Empty else TodoUiState.Success.NotEmpty
                 }
@@ -100,7 +92,7 @@ class TodoViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            setLastVisitedRouteUseCase(todoScreenRoute)
+            appStateRepository.setLastVisitedRoute(todoScreenRoute)
         }
     }
 
@@ -110,7 +102,7 @@ class TodoViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val task = Task(userId = it.id, name = name, isDaily = isDaily, isVisible = isVisible)
-                addTaskUseCase(task)
+                taskRepository.insertTasks(listOf(task))
                 setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
         }
@@ -121,7 +113,7 @@ class TodoViewModel @Inject constructor(
             val status = addOrUpdateTaskDialogStatus.value
             if (status is AddOrUpdateTaskDialogStatus.Update) {
                 val newTask = status.taskToUpdate.copy(name = name, isDaily = isDaily, isVisible = isVisible)
-                updateTaskUseCase(newTask)
+                taskRepository.updateTask(newTask)
                 setAddOrUpdateTaskDialogStatus(AddOrUpdateTaskDialogStatus.Invisible)
             }
         }
@@ -140,7 +132,7 @@ class TodoViewModel @Inject constructor(
     fun onConfirmDeleteTask() {
         viewModelScope.launch(Dispatchers.IO) {
             _taskIdToDelete.value?.let {
-                deleteTaskUseCase(it)
+                taskRepository.deleteTaskById(it)
                 switchDeleteTaskDialog()
             }
         }
@@ -149,7 +141,7 @@ class TodoViewModel @Inject constructor(
     fun switchTask(task: Task) {
         val newTask = task.copy(isDone = !task.isDone)
         viewModelScope.launch(Dispatchers.IO) {
-            updateTaskUseCase(newTask)
+            taskRepository.updateTask(newTask)
         }
     }
 

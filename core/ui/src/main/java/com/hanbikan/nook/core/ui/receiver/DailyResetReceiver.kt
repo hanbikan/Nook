@@ -3,7 +3,7 @@ package com.hanbikan.nook.core.ui.receiver
 import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
-import com.hanbikan.nook.core.domain.usecase.ResetAllDailyTasksUseCase
+import com.hanbikan.nook.core.domain.repository.TaskRepository
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
@@ -14,11 +14,11 @@ import javax.inject.Inject
 class DailyResetReceiver : BroadcastReceiver() {
 
     @Inject
-    lateinit var resetAllDailyTasksUseCase: ResetAllDailyTasksUseCase
+    lateinit var taskRepository: TaskRepository
 
     override fun onReceive(context: Context?, intent: Intent?) {
         CoroutineScope(Dispatchers.IO).launch {
-            resetAllDailyTasksUseCase()
+            taskRepository.resetAllDailyTasks()
         }
     }
 }

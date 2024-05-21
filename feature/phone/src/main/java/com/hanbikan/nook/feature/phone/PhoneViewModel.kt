@@ -2,7 +2,7 @@ package com.hanbikan.nook.feature.phone
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hanbikan.nook.core.domain.usecase.SetLastVisitedRouteUseCase
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class PhoneViewModel @Inject constructor(
-    private val setLastVisitedRouteUseCase: SetLastVisitedRouteUseCase,
+    private val appStateRepository: AppStateRepository,
 ): ViewModel() {
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -24,7 +24,7 @@ class PhoneViewModel @Inject constructor(
 
     fun setLastVisitedRoute(route: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            setLastVisitedRouteUseCase(route)
+            appStateRepository.setLastVisitedRoute(route)
         }
     }
 }

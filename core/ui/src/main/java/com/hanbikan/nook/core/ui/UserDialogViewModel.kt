@@ -3,10 +3,9 @@ package com.hanbikan.nook.core.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.usecase.DeleteUserByIdUseCase
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllUsersUseCase
-import com.hanbikan.nook.core.domain.usecase.SetActiveUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,13 +18,12 @@ import javax.inject.Inject
 
 @HiltViewModel
 class UserDialogViewModel @Inject constructor(
-    getAllUsersUseCase: GetAllUsersUseCase,
-    private val deleteUserByIdUseCase: DeleteUserByIdUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
-    private val setActiveUserIdUseCase: SetActiveUserIdUseCase,
+    private val userRepository: UserRepository,
+    private val appStateRepository: AppStateRepository
 ) : ViewModel() {
 
-    val users: StateFlow<List<User>> = getAllUsersUseCase()
+    val users: StateFlow<List<User>> = userRepository.getAllUsers()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     val activeUser: StateFlow<User?> = getActiveUserUseCase()
@@ -39,7 +37,7 @@ class UserDialogViewModel @Inject constructor(
 
     fun setActiveUserId(id: Int) {
         viewModelScope.launch(Dispatchers.IO) {
-            setActiveUserIdUseCase(id)
+            appStateRepository.setActiveUserId(id)
         }
     }
 
@@ -50,7 +48,7 @@ class UserDialogViewModel @Inject constructor(
     fun onConfirmDeleteUser() {
         viewModelScope.launch(Dispatchers.IO) {
             userIdToDelete.value?.let {
-                deleteUserByIdUseCase(it)
+                userRepository.deleteUserById(it)
                 switchIsDeleteUserDialogShown()
             }
         }
