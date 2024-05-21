@@ -14,6 +14,7 @@ import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
@@ -58,7 +59,12 @@ fun CollectibleItem(
                 model = item.imageUrl,
                 contentDescription = item.name,
             )
-            NkText(text = item.name)
+            NkText(
+                text = item.name,
+                style = NkTheme.typography.bodySmall,
+                maxLines = 1,
+                fontWeight = if (item.isCollected) FontWeight.Bold else FontWeight.Normal
+            )
         }
 
         if (item.isCollected) {
