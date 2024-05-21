@@ -7,8 +7,9 @@ import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.MonthlyCollectible
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllCollectiblesByUserIdUseCase
-import com.hanbikan.nook.feature.museum.navigation.COLLECTIBLE_INDEX_TO_SHOW
+import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
+import com.hanbikan.nook.feature.museum.model.CollectibleSequence
+import com.hanbikan.nook.feature.museum.navigation.COLLECTIBLE_SEQUENCE_INDEX
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -23,7 +24,7 @@ import javax.inject.Inject
 class CollectibleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getActiveUserUseCase: GetActiveUserUseCase,
-    getAllCollectiblesByUserIdUseCase: GetAllCollectiblesByUserIdUseCase,
+    getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<CollectibleScreenUiState> = MutableStateFlow(
@@ -37,13 +38,14 @@ class CollectibleViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val collectibleList: StateFlow<List<Collectible>> = activeUser
         .mapLatest {
-            if (it == null) {
+            val collectibleSequenceIndex: Int? = savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX]
+            if (it == null || collectibleSequenceIndex == null) {
                 listOf()
             } else {
-                getAllCollectiblesByUserIdUseCase(
-                    userId = it.id,
-                    index = checkNotNull(savedStateHandle[COLLECTIBLE_INDEX_TO_SHOW])
-                )
+                when (collectibleSequenceIndex) {
+                    CollectibleSequence.FISH.ordinal -> getAllFishesByUserIdUseCase(userId = it.id)
+                    else -> listOf()
+                }
             }
         }
         .onEach {

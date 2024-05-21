@@ -3,9 +3,10 @@ package com.hanbikan.nook.feature.museum
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.Collectible
+import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllCollectiblesByUserIdUseCase
+import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +19,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class MuseumViewModel @Inject constructor(
-    private val getAllCollectiblesByUserIdUseCase: GetAllCollectiblesByUserIdUseCase,
+    private val getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
     getActiveUserUseCase: GetActiveUserUseCase,
 ) : ViewModel() {
     // Dialog
@@ -29,12 +30,12 @@ class MuseumViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val allCollectibles: StateFlow<List<List<Collectible>>> = activeUser
+    val fishes: StateFlow<List<Fish>> = activeUser
         .mapLatest {
             if (it == null) {
                 listOf()
             } else {
-                getAllCollectiblesByUserIdUseCase(it.id)
+                getAllFishesByUserIdUseCase(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())

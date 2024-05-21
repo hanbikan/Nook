@@ -28,12 +28,8 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
+import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import kotlin.math.roundToInt
-
-// 각각의 컬렉션에 대한 이름입니다.(ex. 물고기 수집률)
-val progressNameIds = listOf(
-    R.string.fish_progress
-)
 
 @Composable
 fun MuseumScreen(
@@ -42,7 +38,7 @@ fun MuseumScreen(
     navigateToMonthlyCollectible: (Int) -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
-    val allCollectibles = viewModel.allCollectibles.collectAsStateWithLifecycle().value
+    val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     Box {
@@ -56,18 +52,14 @@ fun MuseumScreen(
                 ),
             )
 
-            LazyColumn(
+            Column(
                 modifier = Modifier.padding(Dimens.SideMargin),
             ) {
-                itemsIndexed(allCollectibles) { index, item ->
-                    CollectionProgress(
-                        name = stringResource(id = progressNameIds[index]),
-                        collectibleList = item,
-                        onClick = {
-                            navigateToMonthlyCollectible(index)
-                        }
-                    )
-                }
+                CollectionProgress(
+                    name = stringResource(id = R.string.fish_progress),
+                    collectibleList = fishes,
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
+                )
             }
         }
 

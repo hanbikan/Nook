@@ -14,8 +14,8 @@ const val museumGraphRoute = "museum_graph_route"
 const val museumScreenRoute = "museum_screen_route"
 
 const val MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE = "monthly_collectible_screen_route"
-const val COLLECTIBLE_INDEX_TO_SHOW = "collectibleIndexToShow"
-const val monthlyCollectibleScreenRoute = "$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/{$COLLECTIBLE_INDEX_TO_SHOW}"
+const val COLLECTIBLE_SEQUENCE_INDEX = "collectibleSequenceIndex"
+const val monthlyCollectibleScreenRoute = "$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/{$COLLECTIBLE_SEQUENCE_INDEX}"
 
 fun NavGraphBuilder.museumGraph(
     navigateToAddUser: () -> Unit,
@@ -40,7 +40,7 @@ fun NavGraphBuilder.museumGraph(
         composable(
             route = monthlyCollectibleScreenRoute,
             arguments = listOf(
-                navArgument(COLLECTIBLE_INDEX_TO_SHOW) { type = NavType.IntType }
+                navArgument(COLLECTIBLE_SEQUENCE_INDEX) { type = NavType.IntType }
             )
         ) {
             MonthlyCollectibleScreen(
@@ -54,6 +54,6 @@ fun NavController.navigateToMuseum() {
     navigate(museumGraphRoute)
 }
 
-fun NavController.navigateToMonthlyCollectible(index: Int) {
-    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/$index")
+fun NavController.navigateToMonthlyCollectible(collectibleSequenceIndex: Int) {
+    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/$collectibleSequenceIndex")
 }
