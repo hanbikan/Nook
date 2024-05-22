@@ -3,15 +3,16 @@ package com.hanbikan.nook.feature.museum
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ExperimentalLayoutApi
+import androidx.compose.foundation.layout.FlowRow
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.lazy.grid.GridCells
-import androidx.compose.foundation.lazy.grid.LazyVerticalGrid
-import androidx.compose.foundation.lazy.grid.itemsIndexed
+import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
@@ -37,6 +38,10 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
+
+
+private val CollectibleItemWidth = 90.dp
+private val CollectibleItemHeight = 80.dp
 
 @Composable
 fun CollectibleScreen(
@@ -102,24 +107,33 @@ fun CollectibleScreen(
     }
 }
 
+@OptIn(ExperimentalLayoutApi::class)
 @Composable
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
     onClickCollectibleItem: (Int) -> Unit,
 ) {
-    Column(
+    LazyColumn(
         modifier = Modifier.fillMaxWidth(),
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        NkAnimatedCircularProgress(
-            progress = collectibles.calculateProgress(),
-            description = stringResource(id = R.string.progress_rate)
-        )
-        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
-        CollectibleList(
-            collectibles = collectibles,
-            onClickCollectibleItem = onClickCollectibleItem,
-        )
+        item {
+            NkAnimatedCircularProgress(
+                progress = collectibles.calculateProgress(),
+                description = stringResource(id = R.string.progress_rate)
+            )
+            Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+        }
+        item {
+            FlowRow {
+                collectibles.forEachIndexed { index, item ->
+                    CollectibleItem(
+                        item = item,
+                        onClick = { onClickCollectibleItem(index) }
+                    )
+                }
+            }
+        }
     }
 }
 
@@ -146,23 +160,6 @@ fun MonthlyCollectibleContents(
     }*/
 }
 
-private val CollectibleItemSize = 80.dp
-
-@Composable
-fun CollectibleList(
-    collectibles: List<Collectible>,
-    onClickCollectibleItem: (Int) -> Unit,
-) {
-    LazyVerticalGrid(columns = GridCells.Adaptive(CollectibleItemSize)) {
-        itemsIndexed(collectibles) { index, item ->
-            CollectibleItem(
-                item = item,
-                onClick = { onClickCollectibleItem(index) }
-            )
-        }
-    }
-}
-
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CollectibleItem(
@@ -171,7 +168,8 @@ fun CollectibleItem(
 ) {
     Box(
         modifier = Modifier
-            .size(CollectibleItemSize)
+            .width(CollectibleItemWidth)
+            .height(CollectibleItemHeight)
             .clickable { onClick() }
     ) {
         Column(
@@ -179,7 +177,7 @@ fun CollectibleItem(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             GlideImage(
-                modifier = Modifier.size(CollectibleItemSize * 0.5f),
+                modifier = Modifier.size(CollectibleItemHeight * 0.5f),
                 model = item.imageUrl,
                 contentDescription = item.name,
             )
