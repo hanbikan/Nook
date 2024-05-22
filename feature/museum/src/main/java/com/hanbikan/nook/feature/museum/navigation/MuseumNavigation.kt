@@ -6,7 +6,7 @@ import androidx.navigation.NavType
 import androidx.navigation.compose.composable
 import androidx.navigation.navArgument
 import androidx.navigation.navigation
-import com.hanbikan.nook.feature.museum.MonthlyCollectibleScreen
+import com.hanbikan.nook.feature.museum.CollectibleScreen
 import com.hanbikan.nook.feature.museum.MuseumScreen
 
 const val museumGraphRoute = "museum_graph_route"
@@ -43,7 +43,7 @@ fun NavGraphBuilder.museumGraph(
                 navArgument(COLLECTIBLE_SEQUENCE_INDEX) { type = NavType.IntType }
             )
         ) {
-            MonthlyCollectibleScreen(
+            CollectibleScreen(
                 navigateUp = navigateUp,
             )
         }

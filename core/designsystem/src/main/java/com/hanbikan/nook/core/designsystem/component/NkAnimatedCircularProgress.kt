@@ -29,7 +29,7 @@ fun NkAnimatedCircularProgress(
     size: Dp = 200.dp,
     description: String = "",
     animationDurationMillis: Int = 750,
-    animationDelayMillis: Long = 200L,
+    animationDelayMillis: Long = 150L,
 ) {
     var progressToShow by remember { mutableFloatStateOf(0f) }
     var isFirstToModify by remember { mutableStateOf(true) }
