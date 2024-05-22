@@ -13,7 +13,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
@@ -140,7 +140,7 @@ fun OverallCollectibleContents(
                 Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             }
             if (itemsPerRow > 0) {
-                items(collectibles.chunked(itemsPerRow)) { rowItems ->
+                itemsIndexed(collectibles.chunked(itemsPerRow)) { rowIndex, rowItems ->
                     Row(
                         modifier = Modifier.fillMaxWidth(),
                         horizontalArrangement = Arrangement.Start,
@@ -148,7 +148,7 @@ fun OverallCollectibleContents(
                         rowItems.forEachIndexed { index, item ->
                             CollectibleItem(
                                 item = item,
-                                onClick = { onClickCollectibleItem(index) }
+                                onClick = { onClickCollectibleItem(rowIndex * itemsPerRow + index) }
                             )
                         }
                     }
