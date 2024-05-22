@@ -20,7 +20,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
@@ -41,6 +41,7 @@ import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
+import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
@@ -49,6 +50,7 @@ import com.hanbikan.nook.core.domain.model.calculateProgress
 
 private val CollectibleItemWidth = 90.dp
 private val CollectibleItemHeight = 80.dp
+private val GradientHeight = Dimens.SpacingMedium
 
 @Composable
 fun CollectibleScreen(
@@ -84,7 +86,6 @@ fun CollectibleScreen(
                         isLarge = true,
                         onClickItem = viewModel::onClickViewType,
                     )
-                    Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
                 }
 
                 when (uiState) {
@@ -119,38 +120,43 @@ fun OverallCollectibleContents(
     collectibles: List<Collectible>,
     onClickCollectibleItem: (Int) -> Unit,
 ) {
-    var containerWidth by remember { mutableStateOf(0) }
+    var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
     val itemsPerRow = (containerWidth / itemWidth).toInt()
 
-    LazyColumn(
-        modifier = Modifier
-            .fillMaxWidth()
-            .onGloballyPositioned { containerWidth = it.size.width },
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        item {
-            NkAnimatedCircularProgress(
-                progress = collectibles.calculateProgress(),
-                description = stringResource(id = R.string.progress_rate)
-            )
-            Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
-        }
-        if (itemsPerRow > 0) {
-            items(collectibles.chunked(itemsPerRow)) { rowItems ->
-                Row(
-                    modifier = Modifier.fillMaxWidth(),
-                    horizontalArrangement = Arrangement.Start,
-                ) {
-                    rowItems.forEachIndexed { index, item ->
-                        CollectibleItem(
-                            item = item,
-                            onClick = { onClickCollectibleItem(index) }
-                        )
+    Box {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { containerWidth = it.size.width },
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(GradientHeight))
+                NkAnimatedCircularProgress(
+                    progress = collectibles.calculateProgress(),
+                    description = stringResource(id = R.string.progress_rate)
+                )
+                Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+            }
+            if (itemsPerRow > 0) {
+                items(collectibles.chunked(itemsPerRow)) { rowItems ->
+                    Row(
+                        modifier = Modifier.fillMaxWidth(),
+                        horizontalArrangement = Arrangement.Start,
+                    ) {
+                        rowItems.forEachIndexed { index, item ->
+                            CollectibleItem(
+                                item = item,
+                                onClick = { onClickCollectibleItem(index) }
+                            )
+                        }
                     }
                 }
             }
         }
+
+        NkTopBackgroundGradient(height = GradientHeight)
     }
 }
 
