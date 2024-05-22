@@ -32,7 +32,7 @@ fun NkAnimatedCircularProgress(
     animationDelayMillis: Long = 150L,
 ) {
     var progressToShow by remember { mutableFloatStateOf(0f) }
-    var isFirstToModify by remember { mutableStateOf(true) }
+    var shouldDelay by remember { mutableStateOf(true) }
     val animatedProgress by animateFloatAsState(
         targetValue = progressToShow,
         animationSpec = tween(durationMillis = animationDurationMillis),
@@ -41,9 +41,9 @@ fun NkAnimatedCircularProgress(
     val progressAsPercent = "${(animatedProgress * 100).toInt()}%"
 
     LaunchedEffect(progress) {
-        if (isFirstToModify) {
+        if (shouldDelay) {
             delay(animationDelayMillis)
-            isFirstToModify = false
+            shouldDelay = false
         }
         progressToShow = progress
     }
