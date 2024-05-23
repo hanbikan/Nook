@@ -64,7 +64,7 @@ class CollectibleViewModel @Inject constructor(
             _uiState.value = when (uiStateValue) {
                 is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                     CollectibleScreenUiState.MonthlyView.GeneralView(
-                        collectibleList = it,
+                        collectibleList = getCollectibleListForMonth(it, uiStateValue.month),
                         month = uiStateValue.month
                     )
                 }
@@ -90,7 +90,7 @@ class CollectibleViewModel @Inject constructor(
             else -> {
                 val month = getCurrentMonth()
                 CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList = getCollectibleListForMonth(month),
+                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
                     month = month
                 )
             }
@@ -116,7 +116,7 @@ class CollectibleViewModel @Inject constructor(
         when (uiStateValue) {
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList = getCollectibleListForMonth(month),
+                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
                     month = month
                 )
             }
@@ -126,8 +126,8 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    private fun getCollectibleListForMonth(month: Int): List<Collectible> {
-        return collectibleList.value.filter {
+    private fun getCollectibleListForMonth(collectibleList: List<Collectible>, month: Int): List<Collectible> {
+        return collectibleList.filter {
             it is MonthlyCollectible && it.belongsToMonth(month)
         }
     }
