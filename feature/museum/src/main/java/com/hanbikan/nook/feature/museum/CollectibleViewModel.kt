@@ -7,6 +7,7 @@ import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.MonthlyCollectible
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.model.parseTimeRange
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
@@ -55,7 +56,10 @@ class CollectibleViewModel @Inject constructor(
                 flowOf(listOf())
             } else {
                 when (collectibleSequenceIndex) {
-                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(userId = it.id)
+                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(
+                        userId = it.id
+                    )
+
                     else -> flowOf(listOf())
                 }
             }
@@ -70,12 +74,14 @@ class CollectibleViewModel @Inject constructor(
                         month = uiStateValue.month
                     )
                 }
+
                 is CollectibleScreenUiState.MonthlyView.HourView -> {
                     CollectibleScreenUiState.MonthlyView.HourView(
-                        hourToCollectibleList = mapOf(), // TODO
+                        collectibleList = getCollectibleListForMonth(it, uiStateValue.month),
                         month = uiStateValue.month
                     )
                 }
+
                 else -> { // Loading or OverallView
                     CollectibleScreenUiState.OverallView(it)
                 }
@@ -110,15 +116,20 @@ class CollectibleViewModel @Inject constructor(
                     month = month
                 )
             }
+
             is CollectibleScreenUiState.MonthlyView.HourView -> {
-                // TODO
+                _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
+                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
+                    month = month
+                )
             }
         }
     }
 
     fun onClickCollectibleItem(collectible: Collectible) {
         viewModelScope.launch(Dispatchers.IO + handler) {
-            val item: Collectible = collectibleList.value.find { it == collectible } ?: return@launch
+            val item: Collectible =
+                collectibleList.value.find { it == collectible } ?: return@launch
             when (collectibleSequenceIndex) {
                 CollectibleSequence.FISH.ordinal -> {
                     val fish = (item as Fish).copy(isCollected = !item.isCollected)
@@ -128,7 +139,10 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    private fun getCollectibleListForMonth(collectibleList: List<Collectible>, month: Int): List<Collectible> {
+    private fun getCollectibleListForMonth(
+        collectibleList: List<Collectible>,
+        month: Int
+    ): List<Collectible> {
         return collectibleList.filter {
             it is MonthlyCollectible && it.belongsToMonth(month)
         }
@@ -147,15 +161,46 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
     class OverallView(val collectibleList: List<Collectible>) :
         CollectibleScreenUiState(chipIndex = 0)
 
-    sealed class MonthlyView(val month: Int) : CollectibleScreenUiState(chipIndex = 1) {
+    sealed class MonthlyView(
+        val collectibleList: List<Collectible>,
+        val month: Int,
+    ) : CollectibleScreenUiState(chipIndex = 1) {
         class GeneralView(
-            val collectibleList: List<Collectible>,
+            collectibleList: List<Collectible>,
             month: Int
-        ) : MonthlyView(month)
+        ) : MonthlyView(collectibleList, month)
 
         class HourView(
-            val hourToCollectibleList: Map<Int, List<MonthlyCollectible>>,
+            collectibleList: List<Collectible>,
             month: Int
-        ) : MonthlyView(month)
+        ) : MonthlyView(collectibleList, month) {
+
+            val hourToCollectibleList = getHourToCollectibleListForMonth(collectibleList, month)
+
+            private fun getHourToCollectibleListForMonth(
+                collectibleList: List<Collectible>,
+                month: Int
+            ): Map<Int, List<Collectible>> {
+                val map = buildMap<Int, MutableList<Collectible>> {
+                    repeat(24) { hour ->
+                        put(hour, mutableListOf())
+                    }
+                }
+
+                collectibleList.forEach { item ->
+                    if (item is MonthlyCollectible && item.belongsToMonth(month)) {
+                        val times = item.timesByMonth[month]
+                        val hours = times?.parseTimeRange() ?: listOf()
+                        hours.forEach { hour ->
+                            map[hour]?.add(item)
+                        }
+                    }
+                }
+
+                return map
+                    .mapValues { it.value.toList() }
+                    .toMap()
+            }
+        }
     }
 }

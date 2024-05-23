@@ -8,6 +8,9 @@ interface MonthlyCollectible: Collectible {
     }
 }
 
+/**
+ * "4 AM - 9 AM" returns [4,5,6,7,8,9]
+ */
 fun String.parseTimeRange(): List<Int> {
     if (this == "NA") {
         return listOf()
@@ -45,7 +48,7 @@ fun String.parseTimeRange(): List<Int> {
  * @param period "AM" or "PM"
  * @return Hour in 24-hour clock format
  */
-fun convertTo24Hour(hour: Int, period: String): Int {
+private fun convertTo24Hour(hour: Int, period: String): Int {
     return when (period.uppercase()) {
         "AM" -> if (hour == 12) 0 else hour
         "PM" -> if (hour == 12) 12 else hour + 12
