@@ -13,6 +13,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyRow
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -28,7 +30,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
@@ -225,9 +226,47 @@ fun MonthlyCollectibleContents(
             }
 
             is CollectibleScreenUiState.MonthlyView.HourView -> {
-                // TODO: hour view
+                HourViewContents(
+                    uiState = uiState,
+                    onClickCollectibleItem = onClickCollectibleItem,
+                )
             }
         }
+    }
+}
+
+@Composable
+fun HourViewContents(
+    uiState: CollectibleScreenUiState.MonthlyView.HourView,
+    onClickCollectibleItem: (Collectible) -> Unit,
+) {
+    Box {
+        LazyColumn {
+            item {
+                Spacer(modifier = Modifier.height(GradientHeight))
+            }
+            items(uiState.hourToCollectibleListForMonth.keys.sorted()) { hour ->
+                val collectiblesForHour = uiState.hourToCollectibleListForMonth[hour]
+                if (collectiblesForHour?.isNotEmpty() == true) {
+                    NkText(
+                        modifier = Modifier.padding(horizontal = Dimens.SideMargin),
+                        style = NkTheme.typography.titleLarge,
+                        text = formatTime(hour),
+                    )
+                    LazyRow {
+                        items(collectiblesForHour) { item ->
+                            CollectibleItem(
+                                item = item,
+                                onClick = { onClickCollectibleItem(item) }
+                            )
+                        }
+                    }
+                    Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                }
+            }
+        }
+
+        NkTopBackgroundGradient(height = GradientHeight)
     }
 }
 
@@ -269,4 +308,8 @@ fun CollectibleItem(
             )
         }
     }
+}
+
+private fun formatTime(hour: Int): String {
+    return String.format("%02d:00~", hour)
 }
