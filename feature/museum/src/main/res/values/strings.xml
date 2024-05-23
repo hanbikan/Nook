@@ -18,4 +18,6 @@
     <string name="october">Oct</string>
     <string name="november">Nov</string>
     <string name="december">Dec</string>
+    <string name="general_view">General view</string>
+    <string name="hour_view">Hour view</string>
 </resources>

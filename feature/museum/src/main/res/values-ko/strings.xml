@@ -18,4 +18,6 @@
     <string name="october">10월</string>
     <string name="november">11월</string>
     <string name="december">12월</string>
+    <string name="general_view">기본 보기</string>
+    <string name="hour_view">시간 단위로 보기</string>
 </resources>

@@ -25,9 +25,12 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -66,7 +69,24 @@ fun CollectibleScreen(
                 leftAppBarIcons = listOf(
                     AppBarIcon.backAppBarIcon(onClick = navigateUp)
                 ),
-                // TODO: MonthlyView -> 일반 정렬 or time 정렬
+                rightAppBarIcons = if (uiState is CollectibleScreenUiState.MonthlyView) {
+                    val icon = if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
+                        AppBarIcon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
+                            contentDescription = stringResource(id = R.string.general_view),
+                            onClick = viewModel::onClickMonthlyViewType
+                        )
+                    } else {
+                        AppBarIcon(
+                            imageVector = ImageVector.vectorResource(id = R.drawable.time),
+                            contentDescription = stringResource(id = R.string.hour_view),
+                            onClick = viewModel::onClickMonthlyViewType
+                        )
+                    }
+                    listOf(icon)
+                } else {
+                    listOf()
+                }
             )
 
             Column(
