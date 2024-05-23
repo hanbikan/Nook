@@ -23,6 +23,7 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -60,6 +61,7 @@ class CollectibleViewModel @Inject constructor(
             }
         }
         .onEach {
+            // 기반 데이터가 변경 또는 초기화 되었으므로 uiState를 업데이트 합니다.
             val uiStateValue = uiState.value
             _uiState.value = when (uiStateValue) {
                 is CollectibleScreenUiState.MonthlyView.GeneralView -> {
@@ -97,18 +99,6 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    fun onClickCollectibleItem(collectible: Collectible) {
-        viewModelScope.launch(Dispatchers.IO + handler) {
-            val item: Collectible = collectibleList.value.find { it == collectible } ?: return@launch
-            when (collectibleSequenceIndex) {
-                CollectibleSequence.FISH.ordinal -> {
-                    val fish = (item as Fish).copy(isCollected = !item.isCollected)
-                    collectionRepository.updateFish(fish)
-                }
-            }
-        }
-    }
-
     fun onClickMonth(month: Int) {
         val uiStateValue = uiState.value
         if (uiStateValue !is CollectibleScreenUiState.MonthlyView) return
@@ -126,6 +116,18 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
+    fun onClickCollectibleItem(collectible: Collectible) {
+        viewModelScope.launch(Dispatchers.IO + handler) {
+            val item: Collectible = collectibleList.value.find { it == collectible } ?: return@launch
+            when (collectibleSequenceIndex) {
+                CollectibleSequence.FISH.ordinal -> {
+                    val fish = (item as Fish).copy(isCollected = !item.isCollected)
+                    collectionRepository.updateFish(fish)
+                }
+            }
+        }
+    }
+
     private fun getCollectibleListForMonth(collectibleList: List<Collectible>, month: Int): List<Collectible> {
         return collectibleList.filter {
             it is MonthlyCollectible && it.belongsToMonth(month)
@@ -133,7 +135,8 @@ class CollectibleViewModel @Inject constructor(
     }
 
     private fun getCurrentMonth(): Int {
-        return 1 // TODO
+        val calendar: Calendar = Calendar.getInstance()
+        return calendar.get(Calendar.MONTH) + 1
     }
 }
 

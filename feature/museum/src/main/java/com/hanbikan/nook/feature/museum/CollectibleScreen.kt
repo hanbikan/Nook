@@ -66,7 +66,7 @@ fun CollectibleScreen(
                 leftAppBarIcons = listOf(
                     AppBarIcon.backAppBarIcon(onClick = navigateUp)
                 ),
-                // TODO: 일반 정렬 or time 정렬
+                // TODO: MonthlyView -> 일반 정렬 or time 정렬
             )
 
             Column(
