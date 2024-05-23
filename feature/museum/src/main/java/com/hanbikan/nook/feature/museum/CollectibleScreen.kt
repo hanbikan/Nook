@@ -192,6 +192,7 @@ fun MonthlyCollectibleContents(
                 ),
                 selectedIndex = uiState.month - 1 // 0-index임에 유의
             ),
+            autoScroll = true,
             onClickItem = { index -> onClickMonth(index + 1) },
         )
 

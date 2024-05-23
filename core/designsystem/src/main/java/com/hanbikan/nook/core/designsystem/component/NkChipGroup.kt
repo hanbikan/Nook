@@ -10,8 +10,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
@@ -36,17 +38,33 @@ fun NkChipGroup(
     paddingValues: PaddingValues = PaddingValues(0.dp),
     chipGroup: ChipGroup,
     isLarge: Boolean = false,
+    autoScroll: Boolean = false,
     onClickItem: (Int) -> Unit,
 ) {
+    val selectedIndex = chipGroup.selectedIndex
+    val listState = rememberLazyListState()
+
+    if (autoScroll) {
+        LaunchedEffect(chipGroup) {
+            val listWidth = listState.layoutInfo.viewportEndOffset - listState.layoutInfo.viewportStartOffset
+            val itemWidth = listState.layoutInfo.visibleItemsInfo.first().size
+            listState.animateScrollToItem(
+                index = chipGroup.selectedIndex,
+                scrollOffset = -(listWidth / 2 - itemWidth) // 중앙에 배치되게
+            )
+        }
+    }
+
     LazyRow(
         modifier = modifier,
         contentPadding = paddingValues,
         horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
+        state = listState,
     ) {
         itemsIndexed(chipGroup.chips) { index, item ->
             NkChipItem(
                 text = item.text,
-                selected = index == chipGroup.selectedIndex,
+                selected = index == selectedIndex,
                 isLarge = isLarge,
                 onClick = { onClickItem(index) }
             )
