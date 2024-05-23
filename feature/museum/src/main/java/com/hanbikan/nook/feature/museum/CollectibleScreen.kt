@@ -199,7 +199,7 @@ fun MonthlyCollectibleContents(
         when (uiState) {
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                 OverallCollectibleContents(
-                    collectibles = uiState.collectibleList,
+                    collectibles = uiState.collectibleListForMonth,
                     onClickCollectibleItem = onClickCollectibleItem,
                 )
             }

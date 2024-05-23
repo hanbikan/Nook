@@ -70,14 +70,14 @@ class CollectibleViewModel @Inject constructor(
             _uiState.value = when (uiStateValue) {
                 is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                     CollectibleScreenUiState.MonthlyView.GeneralView(
-                        collectibleList = getCollectibleListForMonth(it, uiStateValue.month),
+                        collectibleList = it,
                         month = uiStateValue.month
                     )
                 }
 
                 is CollectibleScreenUiState.MonthlyView.HourView -> {
                     CollectibleScreenUiState.MonthlyView.HourView(
-                        collectibleList = getCollectibleListForMonth(it, uiStateValue.month),
+                        collectibleList = it,
                         month = uiStateValue.month
                     )
                 }
@@ -90,16 +90,15 @@ class CollectibleViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
     fun onClickViewType(index: Int) {
-        _uiState.value = when (index) {
-            0 -> {
-                CollectibleScreenUiState.OverallView(collectibleList = collectibleList.value)
+        when (index) {
+            CollectibleScreenViewType.OVERALL.chipIndex -> {
+                _uiState.value = CollectibleScreenUiState.OverallView(collectibleList = collectibleList.value)
             }
 
-            else -> {
-                val month = getCurrentMonth()
-                CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
-                    month = month
+            CollectibleScreenViewType.MONTHLY.chipIndex -> {
+                _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
+                    collectibleList = collectibleList.value,
+                    month = getCurrentMonth()
                 )
             }
         }
@@ -112,14 +111,14 @@ class CollectibleViewModel @Inject constructor(
         when (uiStateValue) {
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
+                    collectibleList = collectibleList.value,
                     month = month
                 )
             }
 
             is CollectibleScreenUiState.MonthlyView.HourView -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
-                    collectibleList = getCollectibleListForMonth(collectibleList.value, month),
+                    collectibleList = collectibleList.value,
                     month = month
                 )
             }
@@ -139,15 +138,6 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    private fun getCollectibleListForMonth(
-        collectibleList: List<Collectible>,
-        month: Int
-    ): List<Collectible> {
-        return collectibleList.filter {
-            it is MonthlyCollectible && it.belongsToMonth(month)
-        }
-    }
-
     private fun getCurrentMonth(): Int {
         val calendar: Calendar = Calendar.getInstance()
         return calendar.get(Calendar.MONTH) + 1
@@ -156,26 +146,29 @@ class CollectibleViewModel @Inject constructor(
 
 sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
-    object Loading : CollectibleScreenUiState(chipIndex = null)
+    object Loading : CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.LOADING.chipIndex)
 
     class OverallView(val collectibleList: List<Collectible>) :
-        CollectibleScreenUiState(chipIndex = 0)
+        CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.OVERALL.chipIndex)
 
     sealed class MonthlyView(
-        val collectibleList: List<Collectible>,
         val month: Int,
-    ) : CollectibleScreenUiState(chipIndex = 1) {
-        class GeneralView(
-            collectibleList: List<Collectible>,
-            month: Int
-        ) : MonthlyView(collectibleList, month)
+    ) : CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.MONTHLY.chipIndex) {
+        class GeneralView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
+            val collectibleListForMonth: List<Collectible> = getCollectibleListForMonth(collectibleList, month)
 
-        class HourView(
-            collectibleList: List<Collectible>,
-            month: Int
-        ) : MonthlyView(collectibleList, month) {
+            private fun getCollectibleListForMonth(
+                collectibleList: List<Collectible>,
+                month: Int
+            ): List<Collectible> {
+                return collectibleList.filter {
+                    it is MonthlyCollectible && it.belongsToMonth(month)
+                }
+            }
+        }
 
-            val hourToCollectibleList = getHourToCollectibleListForMonth(collectibleList, month)
+        class HourView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
+            val hourToCollectibleListForMonth = getHourToCollectibleListForMonth(collectibleList, month)
 
             private fun getHourToCollectibleListForMonth(
                 collectibleList: List<Collectible>,
@@ -203,4 +196,8 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
             }
         }
     }
+}
+
+private enum class CollectibleScreenViewType(val chipIndex: Int?) {
+    LOADING(null), OVERALL(0), MONTHLY(1)
 }
