@@ -54,17 +54,29 @@ class CollectibleViewModel @Inject constructor(
                 flowOf(listOf())
             } else {
                 when (collectibleSequenceIndex) {
-                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(
-                        userId = it.id
-                    )
-
+                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(userId = it.id)
                     else -> flowOf(listOf())
                 }
             }
         }
         .onEach {
-            if (it.isNotEmpty()) {
-                _uiState.value = CollectibleScreenUiState.OverallView(it)
+            val uiStateValue = uiState.value
+            _uiState.value = when (uiStateValue) {
+                is CollectibleScreenUiState.MonthlyView.GeneralView -> {
+                    CollectibleScreenUiState.MonthlyView.GeneralView(
+                        collectibleList = it,
+                        month = uiStateValue.month
+                    )
+                }
+                is CollectibleScreenUiState.MonthlyView.HourView -> {
+                    CollectibleScreenUiState.MonthlyView.HourView(
+                        hourToCollectibleList = mapOf(), // TODO
+                        month = uiStateValue.month
+                    )
+                }
+                else -> { // Loading or OverallView
+                    CollectibleScreenUiState.OverallView(it)
+                }
             }
         }
         .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
@@ -76,7 +88,7 @@ class CollectibleViewModel @Inject constructor(
             }
 
             else -> {
-                val month = 1 // TODO: 현재 달
+                val month = getCurrentMonth()
                 CollectibleScreenUiState.MonthlyView.GeneralView(
                     collectibleList = getCollectibleListForMonth(month),
                     month = month
@@ -118,6 +130,10 @@ class CollectibleViewModel @Inject constructor(
         return collectibleList.value.filter {
             it is MonthlyCollectible && it.belongsToMonth(month)
         }
+    }
+
+    private fun getCurrentMonth(): Int {
+        return 1 // TODO
     }
 }
 
