@@ -97,9 +97,9 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    fun onClickCollectibleItem(index: Int) {
+    fun onClickCollectibleItem(collectible: Collectible) {
         viewModelScope.launch(Dispatchers.IO + handler) {
-            val item = collectibleList.value[index]
+            val item: Collectible = collectibleList.value.find { it == collectible } ?: return@launch
             when (collectibleSequenceIndex) {
                 CollectibleSequence.FISH.ordinal -> {
                     val fish = (item as Fish).copy(isCollected = !item.isCollected)

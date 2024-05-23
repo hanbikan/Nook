@@ -120,7 +120,7 @@ fun CollectibleScreen(
 @Composable
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
-    onClickCollectibleItem: (Int) -> Unit,
+    onClickCollectibleItem: (Collectible) -> Unit,
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
@@ -144,10 +144,10 @@ fun OverallCollectibleContents(
             if (itemsPerRow > 0) {
                 itemsIndexed(collectibles.chunked(itemsPerRow)) { rowIndex, rowItems ->
                     Row {
-                        rowItems.forEachIndexed { index, item ->
+                        rowItems.forEach { item ->
                             CollectibleItem(
                                 item = item,
-                                onClick = { onClickCollectibleItem(rowIndex * itemsPerRow + index) }
+                                onClick = { onClickCollectibleItem(item) }
                             )
                         }
                         if (rowItems.count() < itemsPerRow) {
@@ -168,7 +168,7 @@ fun OverallCollectibleContents(
 fun MonthlyCollectibleContents(
     uiState: CollectibleScreenUiState.MonthlyView,
     onClickMonth: (Int) -> Unit,
-    onClickCollectibleItem: (Int) -> Unit,
+    onClickCollectibleItem: (Collectible) -> Unit,
 ) {
     Column {
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
