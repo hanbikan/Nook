@@ -42,19 +42,22 @@ class CollectibleViewModel @Inject constructor(
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val handler: CoroutineExceptionHandler =
+    private val handler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { coroutineContext, throwable ->
             // TODO: show error message
         }
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val collectibleList: StateFlow<List<Collectible>> = activeUser
+    private val collectibleList: StateFlow<List<Collectible>> = activeUser
         .flatMapLatest {
             if (it == null || collectibleSequenceIndex == null) {
                 flowOf(listOf())
             } else {
                 when (collectibleSequenceIndex) {
-                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(userId = it.id)
+                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(
+                        userId = it.id
+                    )
+
                     else -> flowOf(listOf())
                 }
             }
@@ -64,7 +67,7 @@ class CollectibleViewModel @Inject constructor(
                 _uiState.value = CollectibleScreenUiState.OverallView(it)
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+        .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
     fun onClickViewType(index: Int) {
         _uiState.value = when (index) {
@@ -73,7 +76,11 @@ class CollectibleViewModel @Inject constructor(
             }
 
             else -> {
-                CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList = collectibleList.value)
+                val month = 1 // TODO: 현재 달
+                CollectibleScreenUiState.MonthlyView.GeneralView(
+                    collectibleList = getCollectibleListForMonth(month),
+                    month = month
+                )
             }
         }
     }
@@ -89,16 +96,47 @@ class CollectibleViewModel @Inject constructor(
             }
         }
     }
+
+    fun onClickMonth(month: Int) {
+        val uiStateValue = uiState.value
+        if (uiStateValue !is CollectibleScreenUiState.MonthlyView) return
+
+        when (uiStateValue) {
+            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
+                _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
+                    collectibleList = getCollectibleListForMonth(month),
+                    month = month
+                )
+            }
+            is CollectibleScreenUiState.MonthlyView.HourView -> {
+                // TODO
+            }
+        }
+    }
+
+    private fun getCollectibleListForMonth(month: Int): List<Collectible> {
+        return collectibleList.value.filter {
+            it is MonthlyCollectible && it.belongsToMonth(month)
+        }
+    }
 }
 
 sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
     object Loading : CollectibleScreenUiState(chipIndex = null)
 
-    class OverallView(collectibleList: List<Collectible>) : CollectibleScreenUiState(chipIndex = 0)
+    class OverallView(val collectibleList: List<Collectible>) :
+        CollectibleScreenUiState(chipIndex = 0)
 
-    sealed class MonthlyView : CollectibleScreenUiState(chipIndex = 1) {
-        class GeneralView(collectibleList: List<Collectible>) : MonthlyView()
-        class HourView(hourToCollectibleList: Map<Int, List<MonthlyCollectible>>) : MonthlyView()
+    sealed class MonthlyView(val month: Int) : CollectibleScreenUiState(chipIndex = 1) {
+        class GeneralView(
+            val collectibleList: List<Collectible>,
+            month: Int
+        ) : MonthlyView(month)
+
+        class HourView(
+            val hourToCollectibleList: Map<Int, List<MonthlyCollectible>>,
+            month: Int
+        ) : MonthlyView(month)
     }
 }

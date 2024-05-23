@@ -1,9 +1,9 @@
 package com.hanbikan.nook.feature.museum
 
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -58,7 +58,6 @@ fun CollectibleScreen(
     viewModel: CollectibleViewModel = hiltViewModel(),
     // TODO: isMonthly? -> false일 경우 chip group 제거
 ) {
-    val collectibles = viewModel.collectibleList.collectAsStateWithLifecycle().value
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
 
     Box {
@@ -67,15 +66,15 @@ fun CollectibleScreen(
                 leftAppBarIcons = listOf(
                     AppBarIcon.backAppBarIcon(onClick = navigateUp)
                 ),
+                // TODO: 일반 정렬 or time 정렬
             )
 
             Column(
-                modifier = Modifier
-                    .fillMaxWidth()
-                    .padding(Dimens.SideMargin, 0.dp),
+                modifier = Modifier.fillMaxWidth()
             ) {
                 if (uiState.chipIndex != null) {
                     NkChipGroup(
+                        modifier = Modifier.padding(horizontal = Dimens.SideMargin),
                         chipGroup = ChipGroup(
                             chips = listOf(
                                 ChipItem(stringResource(id = R.string.overall)),
@@ -97,15 +96,18 @@ fun CollectibleScreen(
                             CircularProgressIndicator()
                         }
                     }
+
                     is CollectibleScreenUiState.OverallView -> {
                         OverallCollectibleContents(
-                            collectibles = collectibles,
+                            collectibles = uiState.collectibleList,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
                         )
                     }
+
                     is CollectibleScreenUiState.MonthlyView -> {
                         MonthlyCollectibleContents(
-                            collectibles = collectibles,
+                            uiState = uiState,
+                            onClickMonth = viewModel::onClickMonth,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
                         )
                     }
@@ -141,15 +143,17 @@ fun OverallCollectibleContents(
             }
             if (itemsPerRow > 0) {
                 itemsIndexed(collectibles.chunked(itemsPerRow)) { rowIndex, rowItems ->
-                    Row(
-                        modifier = Modifier.fillMaxWidth(),
-                        horizontalArrangement = Arrangement.Start,
-                    ) {
+                    Row {
                         rowItems.forEachIndexed { index, item ->
                             CollectibleItem(
                                 item = item,
                                 onClick = { onClickCollectibleItem(rowIndex * itemsPerRow + index) }
                             )
+                        }
+                        if (rowItems.count() < itemsPerRow) {
+                            repeat(itemsPerRow - rowItems.count()) {
+                                Box(modifier = Modifier.width(CollectibleItemWidth))
+                            }
                         }
                     }
                 }
@@ -162,25 +166,48 @@ fun OverallCollectibleContents(
 
 @Composable
 fun MonthlyCollectibleContents(
-    collectibles: List<Collectible>,
+    uiState: CollectibleScreenUiState.MonthlyView,
+    onClickMonth: (Int) -> Unit,
     onClickCollectibleItem: (Int) -> Unit,
 ) {
-    /*Column(
-        modifier = Modifier.fillMaxWidth(),
-        horizontalAlignment = Alignment.CenterHorizontally,
-    ) {
-        LazyRow {
-            items() {
+    Column {
+        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
 
+        NkChipGroup(
+            paddingValues = PaddingValues(horizontal = Dimens.SideMargin),
+            chipGroup = ChipGroup(
+                chips = listOf(
+                    ChipItem(stringResource(id = R.string.january)),
+                    ChipItem(stringResource(id = R.string.february)),
+                    ChipItem(stringResource(id = R.string.march)),
+                    ChipItem(stringResource(id = R.string.april)),
+                    ChipItem(stringResource(id = R.string.may)),
+                    ChipItem(stringResource(id = R.string.june)),
+                    ChipItem(stringResource(id = R.string.july)),
+                    ChipItem(stringResource(id = R.string.august)),
+                    ChipItem(stringResource(id = R.string.september)),
+                    ChipItem(stringResource(id = R.string.october)),
+                    ChipItem(stringResource(id = R.string.november)),
+                    ChipItem(stringResource(id = R.string.december)),
+                ),
+                selectedIndex = uiState.month - 1 // 0-index임에 유의
+            ),
+            onClickItem = { index -> onClickMonth(index + 1) },
+        )
+
+        when (uiState) {
+            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
+                OverallCollectibleContents(
+                    collectibles = uiState.collectibleList,
+                    onClickCollectibleItem = onClickCollectibleItem,
+                )
+            }
+
+            is CollectibleScreenUiState.MonthlyView.HourView -> {
+                // TODO: hour view
             }
         }
-        NkAnimatedCircularProgress(
-            progress = 0.6f, // TODO
-            description = stringResource(id = R.string.progress_rate)
-        )
-        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
-        // TODO: normal view or time view
-    }*/
+    }
 }
 
 @OptIn(ExperimentalGlideComposeApi::class)

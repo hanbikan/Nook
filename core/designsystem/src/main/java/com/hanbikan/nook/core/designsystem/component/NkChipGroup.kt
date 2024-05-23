@@ -6,6 +6,7 @@ import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.itemsIndexed
@@ -31,12 +32,16 @@ data class ChipItem(
 
 @Composable
 fun NkChipGroup(
+    modifier: Modifier = Modifier,
+    paddingValues: PaddingValues = PaddingValues(0.dp),
     chipGroup: ChipGroup,
     isLarge: Boolean = false,
     onClickItem: (Int) -> Unit,
 ) {
     LazyRow(
-        horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall)
+        modifier = modifier,
+        contentPadding = paddingValues,
+        horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
     ) {
         itemsIndexed(chipGroup.chips) { index, item ->
             NkChipItem(
