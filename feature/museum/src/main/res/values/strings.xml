@@ -20,4 +20,5 @@
     <string name="december">Dec</string>
     <string name="general_view">General view</string>
     <string name="hour_view">Hour view</string>
+    <string name="all_day">All day</string>
 </resources>

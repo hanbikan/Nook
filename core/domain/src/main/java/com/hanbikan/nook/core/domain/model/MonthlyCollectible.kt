@@ -4,7 +4,12 @@ interface MonthlyCollectible: Collectible {
     val timesByMonth: Map<Int, String> // 1: "NA", 3: "4 PM - 9 AM", 9: "All day"
 
     fun belongsToMonth(month: Int): Boolean {
-        return timesByMonth.containsKey(month) && timesByMonth[month] != "NA"
+        return timesByMonth.containsKey(month) && timesByMonth[month] != NOT_AVAILABLE
+    }
+
+    companion object {
+        const val NOT_AVAILABLE = "NA"
+        const val ALL_DAY = "All day"
     }
 }
 
@@ -12,32 +17,32 @@ interface MonthlyCollectible: Collectible {
  * "4 AM - 9 AM" returns [4,5,6,7,8,9]
  */
 fun String.parseTimeRange(): List<Int> {
-    if (this == "NA") {
+    if (this == MonthlyCollectible.NOT_AVAILABLE) {
         return listOf()
-    } else if(this == "All day") {
+    } else if(this == MonthlyCollectible.ALL_DAY) {
         return (0 until 24).toList()
     }
 
     val hours = mutableListOf<Int>()
 
-    // Define regex patterns to match time components
-    val pattern = Regex("""(\d{1,2})\s*(AM|PM)\s*-\s*(\d{1,2})\s*(AM|PM)""")
-    val matchResult = pattern.find(this)
+    val startHourIndex: Int = this.indexOfFirst { it.isDigit() }
+    val startHour: Int = this.slice(startHourIndex..startHourIndex + 1).trim().toInt()
+    val startPeriodIndex: Int = this.indexOfFirst { it == 'M' } - 1
+    val startPeriod: String = this.slice(startPeriodIndex..startPeriodIndex + 1)
+    val convertedStartHour = convertTo24Hour(startHour, startPeriod)
 
-    if (matchResult != null) {
-        val (startHourStr, startPeriod, endHourStr, endPeriod) = matchResult.destructured
+    val endHourIndex: Int = this.indexOfLast { it.isDigit() } - 1
+    val endHour: Int = this.slice(endHourIndex..endHourIndex + 1).trim().toInt()
+    val endPeriodIndex: Int = this.indexOfLast { it == 'M' } - 1
+    val endPeriod: String = this.slice(endPeriodIndex..startPeriodIndex + 1)
+    val convertedEndHour = convertTo24Hour(endHour, endPeriod)
 
-        val startHour = convertTo24Hour(startHourStr.toInt(), startPeriod)
-        var endHour = convertTo24Hour(endHourStr.toInt(), endPeriod)
-
-        if (endHour < startHour) {
-            endHour += 24 // Crosses over to the next day
-        }
-
-        for (hour in startHour until endHour + 1) {
-            hours.add(hour % 24)
-        }
+    var currentHour = convertedStartHour
+    while (currentHour != convertedEndHour) {
+        hours.add(currentHour)
+        currentHour = (currentHour + 1) % 24
     }
+
     return hours.toList()
 }
 

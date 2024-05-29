@@ -48,6 +48,7 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
+import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 
 
 private val CollectibleItemWidth = 90.dp
@@ -244,16 +245,21 @@ fun HourViewContents(
             item {
                 Spacer(modifier = Modifier.height(GradientHeight))
             }
-            (0 until 24).forEach { hour ->
+            (ALL_DAY_KEY until 24).forEach { hour ->
                 val collectiblesForHour = uiState.hourToCollectibleListForMonth[hour]
                 if (collectiblesForHour?.isNotEmpty() == true && itemsPerRow > 0) {
                     item {
+                        val text = if (hour == ALL_DAY_KEY) {
+                            stringResource(id = R.string.all_day)
+                        } else {
+                            formatTime(hour)
+                        }
                         NkText(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = Dimens.SideMargin),
                             style = NkTheme.typography.titleLarge,
-                            text = formatTime(hour),
+                            text = text,
                         )
                     }
                     itemsIndexed(collectiblesForHour.chunked(itemsPerRow)) { rowIndex, rowItems ->

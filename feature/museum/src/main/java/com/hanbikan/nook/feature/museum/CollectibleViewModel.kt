@@ -145,10 +145,17 @@ class CollectibleViewModel @Inject constructor(
 
         _uiState.value = when (uiStateValue) {
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
-                CollectibleScreenUiState.MonthlyView.HourView(collectibleList.value, uiStateValue.month)
+                CollectibleScreenUiState.MonthlyView.HourView(
+                    collectibleList.value,
+                    uiStateValue.month
+                )
             }
+
             is CollectibleScreenUiState.MonthlyView.HourView -> {
-                CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList.value, uiStateValue.month)
+                CollectibleScreenUiState.MonthlyView.GeneralView(
+                    collectibleList.value,
+                    uiStateValue.month
+                )
             }
         }
     }
@@ -186,7 +193,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
         }
 
         class HourView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
-            val hourToCollectibleListForMonth =
+            val hourToCollectibleListForMonth: Map<Int, List<Collectible>> =
                 getHourToCollectibleListForMonth(collectibleList, month)
 
             private fun getHourToCollectibleListForMonth(
@@ -194,6 +201,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 month: Int
             ): Map<Int, List<Collectible>> {
                 val map = buildMap<Int, MutableList<Collectible>> {
+                    put(-1, mutableListOf()) // for always available
                     repeat(24) { hour ->
                         put(hour, mutableListOf())
                     }
@@ -202,16 +210,25 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 collectibleList.forEach { item ->
                     if (item is MonthlyCollectible && item.belongsToMonth(month)) {
                         val times = item.timesByMonth[month]
-                        val hours = times?.parseTimeRange() ?: listOf()
-                        hours.forEach { hour ->
-                            map[hour]?.add(item)
+                        // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
+                        if (times == MonthlyCollectible.ALL_DAY) {
+                            map[ALL_DAY_KEY]?.add(item)
+                        } else {
+                            val hours = times?.parseTimeRange() ?: listOf()
+                            hours.forEach { hour ->
+                                map[hour]?.add(item)
+                            }
                         }
                     }
                 }
 
                 return map
-                    .mapValues { it.value.toList() }
+                    .mapValues { it.value.toList() } // MutableList to List
                     .toMap()
+            }
+
+            companion object {
+                const val ALL_DAY_KEY = -1
             }
         }
     }
