@@ -1,6 +1,7 @@
 package com.hanbikan.nook.feature.tutorial
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,8 +12,10 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.text.KeyboardActions
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
@@ -39,20 +42,34 @@ fun AddUserScreen(
 ) {
     val name = viewModel.name.collectAsStateWithLifecycle().value
     val islandName = viewModel.islandName.collectAsStateWithLifecycle().value
+    val isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
 
     Column(modifier = Modifier.fillMaxSize()) {
         NkTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
-        AddUserScreenContents(
-            name = name,
-            islandName = islandName,
-            setName = viewModel::setName,
-            setIslandName = viewModel::setIslandName,
-            onClickAddButton = {
-                viewModel.addUser {
-                    navigateToTutorial()
+        Box {
+            AddUserScreenContents(
+                name = name,
+                islandName = islandName,
+                setName = viewModel::setName,
+                setIslandName = viewModel::setIslandName,
+                onClickAddButton = {
+                    viewModel.setIsLoading(true)
+                    viewModel.addUser {
+                        navigateToTutorial()
+                    }
+                },
+                isLoading = isLoading,
+            )
+
+            if (isLoading) {
+                Box(
+                    modifier = Modifier.fillMaxSize(),
+                    contentAlignment = Alignment.Center,
+                ) {
+                    CircularProgressIndicator()
                 }
             }
-        )
+        }
     }
 }
 
@@ -63,6 +80,7 @@ fun AddUserScreenContents(
     setName: (String) -> Unit,
     setIslandName: (String) -> Unit,
     onClickAddButton: () -> Unit,
+    isLoading: Boolean,
 ) {
     val secondFocusRequester = remember { FocusRequester() }
     val scrollState = rememberScrollState()
@@ -106,6 +124,7 @@ fun AddUserScreenContents(
                     secondFocusRequester.requestFocus()
                 },
                 singleLine = true,
+                enabled = !isLoading,
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
             NkText(
@@ -122,12 +141,14 @@ fun AddUserScreenContents(
                     NkPlaceholder(text = stringResource(id = R.string.island_name_placeholder))
                 },
                 singleLine = true,
+                enabled = !isLoading,
             )
         }
         NkTextButton(
             modifier = Modifier.fillMaxWidth(),
             onClick = onClickAddButton,
             text = stringResource(id = R.string.add),
+            enabled = !isLoading,
         )
     }
 }

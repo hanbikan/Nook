@@ -16,10 +16,12 @@ fun NkTextButton(
     onClick: () -> Unit,
     text: String,
     modifier: Modifier = Modifier,
+    enabled: Boolean = true,
 ) {
     TextButton(
         onClick = onClick,
         modifier = modifier.padding(8.dp),
+        enabled = enabled,
         shape = RoundedCornerShape(Dimens.SpacingMedium),
         colors = ButtonDefaults.buttonColors(
             containerColor = NkTheme.colorScheme.tertiary,

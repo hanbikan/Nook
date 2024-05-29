@@ -23,6 +23,9 @@ class AddUserViewModel @Inject constructor(
     private val _islandName: MutableStateFlow<String> = MutableStateFlow("")
     val islandName = _islandName.asStateFlow()
 
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading = _isLoading.asStateFlow()
+
     fun setName(newName: String) {
         if (newName.length >= User.NAME_MAX_LENGTH) return
         _name.value = newName
@@ -45,5 +48,9 @@ class AddUserViewModel @Inject constructor(
                 onComplete()
             }
         }
+    }
+
+    fun setIsLoading(newIsLoading: Boolean) {
+        _isLoading.value = newIsLoading
     }
 }
