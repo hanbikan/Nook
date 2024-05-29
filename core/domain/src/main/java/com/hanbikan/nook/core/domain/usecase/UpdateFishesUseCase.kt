@@ -13,7 +13,7 @@ class UpdateFishesUseCase @Inject constructor(
             userId = userId,
             isNorth = true, // TODO: 북반구/남반구 정보 반영
         )
-        collectionRepository.deleteAllFishes()
+        collectionRepository.deleteAllFishes(userId)
         collectionRepository.insertFishes(remoteFishes)
     }
 }

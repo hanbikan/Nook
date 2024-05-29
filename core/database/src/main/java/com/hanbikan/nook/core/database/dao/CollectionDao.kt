@@ -18,6 +18,6 @@ interface CollectionDao {
     @Update
     suspend fun updateFish(fishEntity: FishEntity)
 
-    @Query("DELETE FROM fish")
-    fun deleteAllFishes()
+    @Query("DELETE FROM fish WHERE fish.user_id == :userId")
+    fun deleteAllFishes(userId: Int)
 }

@@ -10,5 +10,5 @@ interface CollectionRepository {
 
     suspend fun updateFish(fish: Fish)
 
-    suspend fun deleteAllFishes()
+    suspend fun deleteAllFishes(userId: Int)
 }
