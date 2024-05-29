@@ -193,14 +193,46 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
         }
 
         class HourView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
-            val hourToCollectibleListForMonth: Map<Int, List<Collectible>> =
-                getHourToCollectibleListForMonth(collectibleList, month)
+            val startHourToCollectibleListForMonth: Map<Int, List<Collectible>> =
+                getStartHourToCollectibleListForMonth(collectibleList, month)
 
+            fun getEndHourByStartHour(startHour: Int): Int {
+                val hours = startHourToCollectibleListForMonth.keys.sorted()
+                val nextHourIndex = hours.indexOfFirst { it == startHour } + 1
+                return hours.getOrElse(nextHourIndex) { 24 }
+            }
+
+            /**
+             * Returns {0: <Collectible List 1>, 4: <Collectible List 2>, ..., 21: <Collectible List 3>}
+             * which is merged by time range for same lists.
+             */
+            private fun getStartHourToCollectibleListForMonth(
+                collectibleList: List<Collectible>,
+                month: Int
+            ): Map<Int, List<Collectible>> {
+                val startHourToCollectibleListForMonth: MutableMap<Int, List<Collectible>> = mutableMapOf()
+
+                val hourToCollectibleListForMonth = getHourToCollectibleListForMonth(collectibleList, month)
+                hourToCollectibleListForMonth.forEach { (hour, collectibleListForHour) ->
+                    // Skip if current collectible list is the same as the previous list.
+                    if (hour - 1 >= 0 && collectibleListForHour == hourToCollectibleListForMonth[hour - 1]) {
+                        return@forEach
+                    }
+
+                    startHourToCollectibleListForMonth.put(hour, collectibleListForHour)
+                }
+
+                return startHourToCollectibleListForMonth.toMap()
+            }
+
+            /**
+             * Returns {0: <Collectible List>, 1: <Collectible List>, ..., 23: <Collectible List>}
+             */
             private fun getHourToCollectibleListForMonth(
                 collectibleList: List<Collectible>,
                 month: Int
             ): Map<Int, List<Collectible>> {
-                val map = buildMap<Int, MutableList<Collectible>> {
+                val hourToCollectibleListForMonth = buildMap<Int, MutableList<Collectible>> {
                     put(-1, mutableListOf()) // for always available
                     repeat(24) { hour ->
                         put(hour, mutableListOf())
@@ -212,17 +244,17 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                         val times = item.timesByMonth[month]
                         // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
                         if (times == MonthlyCollectible.ALL_DAY) {
-                            map[ALL_DAY_KEY]?.add(item)
+                            hourToCollectibleListForMonth[ALL_DAY_KEY]?.add(item)
                         } else {
                             val hours = times?.parseTimeRange() ?: listOf()
                             hours.forEach { hour ->
-                                map[hour]?.add(item)
+                                hourToCollectibleListForMonth[hour]?.add(item)
                             }
                         }
                     }
                 }
 
-                return map
+                return hourToCollectibleListForMonth
                     .mapValues { it.value.toList() } // MutableList to List
                     .toMap()
             }

@@ -162,7 +162,7 @@ fun OverallCollectibleContents(
                 Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
             }
             if (itemsPerRow > 0) {
-                itemsIndexed(collectibles.chunked(itemsPerRow)) { rowIndex, rowItems ->
+                itemsIndexed(collectibles.chunked(itemsPerRow)) { _, rowItems ->
                     CollectibleItemsForRow(
                         rowItems = rowItems,
                         onClickCollectibleItem = onClickCollectibleItem,
@@ -245,14 +245,13 @@ fun HourViewContents(
             item {
                 Spacer(modifier = Modifier.height(GradientHeight))
             }
-            (ALL_DAY_KEY until 24).forEach { hour ->
-                val collectiblesForHour = uiState.hourToCollectibleListForMonth[hour]
-                if (collectiblesForHour?.isNotEmpty() == true && itemsPerRow > 0) {
+            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
+                if (itemsPerRow > 0) {
                     item {
-                        val text = if (hour == ALL_DAY_KEY) {
+                        val text = if (startHour == ALL_DAY_KEY) {
                             stringResource(id = R.string.all_day)
                         } else {
-                            formatTime(hour)
+                            formatTime(startHour, uiState.getEndHourByStartHour(startHour))
                         }
                         NkText(
                             modifier = Modifier
@@ -262,7 +261,7 @@ fun HourViewContents(
                             text = text,
                         )
                     }
-                    itemsIndexed(collectiblesForHour.chunked(itemsPerRow)) { rowIndex, rowItems ->
+                    itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
                         CollectibleItemsForRow(
                             rowItems = rowItems,
                             onClickCollectibleItem = onClickCollectibleItem,
@@ -341,6 +340,7 @@ fun CollectibleItem(
     }
 }
 
-private fun formatTime(hour: Int): String {
-    return String.format("%02d:00~", hour)
+// formatTime(3, 6) returns "03:00~05:59"
+private fun formatTime(startHour: Int, endHour: Int): String {
+    return String.format("%02d:00~%02d:59", startHour, endHour - 1)
 }
