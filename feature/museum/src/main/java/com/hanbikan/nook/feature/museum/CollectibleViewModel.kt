@@ -3,6 +3,8 @@ package com.hanbikan.nook.feature.museum
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hanbikan.nook.core.common.getCurrentHour
+import com.hanbikan.nook.core.common.getCurrentMonth
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.MonthlyCollectible
@@ -24,7 +26,6 @@ import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -159,11 +160,6 @@ class CollectibleViewModel @Inject constructor(
             }
         }
     }
-
-    private fun getCurrentMonth(): Int {
-        val calendar: Calendar = Calendar.getInstance()
-        return calendar.get(Calendar.MONTH) + 1
-    }
 }
 
 sealed class CollectibleScreenUiState(val chipIndex: Int?) {
@@ -200,6 +196,18 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 val hours = startHourToCollectibleListForMonth.keys.sorted()
                 val nextHourIndex = hours.indexOfFirst { it == startHour } + 1
                 return hours.getOrElse(nextHourIndex) { 24 }
+            }
+
+            fun getKeyForCurrentHour(): Int {
+                val currentHour = getCurrentHour()
+                val hours = startHourToCollectibleListForMonth.keys.sorted()
+                hours.forEach { startHour ->
+                    val endHour = getEndHourByStartHour(startHour)
+                    if (currentHour in startHour until endHour) {
+                        return startHour
+                    }
+                }
+                return ALL_DAY_KEY
             }
 
             /**

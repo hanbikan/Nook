@@ -14,11 +14,13 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
+import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.Icon
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.remember
@@ -49,6 +51,7 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
+import kotlin.math.ceil
 
 
 private val CollectibleItemWidth = 90.dp
@@ -231,15 +234,34 @@ fun HourViewContents(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,
     onClickCollectibleItem: (Collectible) -> Unit,
 ) {
+    val lazyListState = rememberLazyListState()
     var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
     val itemsPerRow = (containerWidth / itemWidth).toInt()
+    val density = LocalDensity.current
+
+    LaunchedEffect(itemsPerRow, uiState.month) {
+        if (itemsPerRow > 0) {
+            val keyForCurrentHour: Int = uiState.getKeyForCurrentHour()
+            var scrollIndex = 1
+            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
+                if (startHour < keyForCurrentHour) {
+                    scrollIndex += 2 + ceil((collectibleList.count().toFloat() / itemsPerRow)).toInt()
+                }
+            }
+            lazyListState.animateScrollToItem(
+                index = scrollIndex,
+                scrollOffset = with(density) { -CollectibleItemHeight.toPx() }.toInt()
+            )
+        }
+    }
 
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
                 .onGloballyPositioned { containerWidth = it.size.width },
+            state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             item {
