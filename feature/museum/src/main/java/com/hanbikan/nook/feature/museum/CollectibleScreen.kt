@@ -13,8 +13,6 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyRow
-import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
@@ -164,19 +162,11 @@ fun OverallCollectibleContents(
             }
             if (itemsPerRow > 0) {
                 itemsIndexed(collectibles.chunked(itemsPerRow)) { rowIndex, rowItems ->
-                    Row {
-                        rowItems.forEach { item ->
-                            CollectibleItem(
-                                item = item,
-                                onClick = { onClickCollectibleItem(item) }
-                            )
-                        }
-                        if (rowItems.count() < itemsPerRow) {
-                            repeat(itemsPerRow - rowItems.count()) {
-                                Box(modifier = Modifier.width(CollectibleItemWidth))
-                            }
-                        }
-                    }
+                    CollectibleItemsForRow(
+                        rowItems = rowItems,
+                        onClickCollectibleItem = onClickCollectibleItem,
+                        itemsPerRow = itemsPerRow,
+                    )
                 }
             }
         }
@@ -240,33 +230,68 @@ fun HourViewContents(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,
     onClickCollectibleItem: (Collectible) -> Unit,
 ) {
+    var containerWidth by remember { mutableIntStateOf(0) }
+    val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
+    val itemsPerRow = (containerWidth / itemWidth).toInt()
+
     Box {
-        LazyColumn {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { containerWidth = it.size.width },
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
             item {
                 Spacer(modifier = Modifier.height(GradientHeight))
             }
-            items(uiState.hourToCollectibleListForMonth.keys.sorted()) { hour ->
+            (0 until 24).forEach { hour ->
                 val collectiblesForHour = uiState.hourToCollectibleListForMonth[hour]
-                if (collectiblesForHour?.isNotEmpty() == true) {
-                    NkText(
-                        modifier = Modifier.padding(horizontal = Dimens.SideMargin),
-                        style = NkTheme.typography.titleLarge,
-                        text = formatTime(hour),
-                    )
-                    LazyRow {
-                        items(collectiblesForHour) { item ->
-                            CollectibleItem(
-                                item = item,
-                                onClick = { onClickCollectibleItem(item) }
-                            )
-                        }
+                if (collectiblesForHour?.isNotEmpty() == true && itemsPerRow > 0) {
+                    item {
+                        NkText(
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(horizontal = Dimens.SideMargin),
+                            style = NkTheme.typography.titleLarge,
+                            text = formatTime(hour),
+                        )
                     }
-                    Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                    itemsIndexed(collectiblesForHour.chunked(itemsPerRow)) { rowIndex, rowItems ->
+                        CollectibleItemsForRow(
+                            rowItems = rowItems,
+                            onClickCollectibleItem = onClickCollectibleItem,
+                            itemsPerRow = itemsPerRow,
+                        )
+                    }
+                    item {
+                        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                    }
                 }
             }
         }
 
         NkTopBackgroundGradient(height = GradientHeight)
+    }
+}
+
+@Composable
+fun CollectibleItemsForRow(
+    rowItems: List<Collectible>,
+    onClickCollectibleItem: (Collectible) -> Unit,
+    itemsPerRow: Int,
+) {
+    Row {
+        rowItems.forEach { item ->
+            CollectibleItem(
+                item = item,
+                onClick = { onClickCollectibleItem(item) }
+            )
+        }
+        if (rowItems.count() < itemsPerRow) {
+            repeat(itemsPerRow - rowItems.count()) {
+                Box(modifier = Modifier.width(CollectibleItemWidth))
+            }
+        }
     }
 }
 
