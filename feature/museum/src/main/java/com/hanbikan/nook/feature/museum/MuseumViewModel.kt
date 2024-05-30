@@ -4,8 +4,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
+import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -20,7 +20,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MuseumViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
-    collectionRepository: CollectionRepository,
+    getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
 ) : ViewModel() {
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -35,7 +35,7 @@ class MuseumViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                collectionRepository.getAllFishesByUserId(it.id)
+                getAllFishesByUserIdUseCase(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())

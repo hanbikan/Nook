@@ -62,7 +62,6 @@ private val CollectibleItemWidth = 90.dp
 private val CollectibleItemHeight = 80.dp
 private val GradientHeight = Dimens.SpacingMedium
 
-@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CollectibleScreen(
     navigateUp: () -> Unit,

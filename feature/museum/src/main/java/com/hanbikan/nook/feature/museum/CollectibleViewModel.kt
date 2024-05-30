@@ -12,6 +12,7 @@ import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.parseTimeRange
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
+import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import com.hanbikan.nook.feature.museum.navigation.COLLECTIBLE_SEQUENCE_INDEX
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -34,6 +35,7 @@ class CollectibleViewModel @Inject constructor(
     savedStateHandle: SavedStateHandle,
     getActiveUserUseCase: GetActiveUserUseCase,
     private val collectionRepository: CollectionRepository,
+    private val getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
 ) : ViewModel() {
 
     private val collectibleSequenceIndex: Int? = savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX]
@@ -44,7 +46,8 @@ class CollectibleViewModel @Inject constructor(
     val uiState: StateFlow<CollectibleScreenUiState> = _uiState
 
     private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
-    val collectibleToShowInDialog: StateFlow<Collectible?> = _collectibleToShowInDialog.asStateFlow()
+    val collectibleToShowInDialog: StateFlow<Collectible?> =
+        _collectibleToShowInDialog.asStateFlow()
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -61,10 +64,7 @@ class CollectibleViewModel @Inject constructor(
                 flowOf(listOf())
             } else {
                 when (collectibleSequenceIndex) {
-                    CollectibleSequence.FISH.ordinal -> collectionRepository.getAllFishesByUserId(
-                        userId = it.id
-                    )
-
+                    CollectibleSequence.FISH.ordinal -> getAllFishesByUserIdUseCase(it.id)
                     else -> flowOf(listOf())
                 }
             }
@@ -230,9 +230,11 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 collectibleList: List<Collectible>,
                 month: Int
             ): Map<Int, List<Collectible>> {
-                val startHourToCollectibleListForMonth: MutableMap<Int, List<Collectible>> = mutableMapOf()
+                val startHourToCollectibleListForMonth: MutableMap<Int, List<Collectible>> =
+                    mutableMapOf()
 
-                val hourToCollectibleListForMonth = getHourToCollectibleListForMonth(collectibleList, month)
+                val hourToCollectibleListForMonth =
+                    getHourToCollectibleListForMonth(collectibleList, month)
                 hourToCollectibleListForMonth.forEach { (hour, collectibleListForHour) ->
                     // Skip if current collectible list is the same as the previous list.
                     if (hour - 1 >= 0 && collectibleListForHour == hourToCollectibleListForMonth[hour - 1]) {
