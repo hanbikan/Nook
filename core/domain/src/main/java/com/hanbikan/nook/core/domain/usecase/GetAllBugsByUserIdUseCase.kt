@@ -91,7 +91,32 @@ private val bugNameToKorean: Map<String, String> = mapOf(
 )
 
 private val bugLocationToKorean: Map<String, String> = mapOf(
-    // TODO
+    "Flying" to "공중",
+    "Flying near blue, purple, and black flowers" to "검점, 파랑, 보라색 꽃 주변",
+    "Flying near flowers" to "꽃 주변",
+    "Flying near light sources" to "불빛 근처",
+    "Flying near water" to "물 주변",
+    "Flying near trash or rotten turnips" to "쓰레기, 썩은 무, 분수 불꽃의 재",
+    "On the ground" to "풀밭",
+    "On trees (any kind)" to "나무",
+    "On rivers and ponds" to "물 위",
+    "On flowers" to "꽃 위",
+    "On white flowers" to "흰 꽃 위",
+    "On trees (hardwood and cedar)" to "나무(활엽수, 침엽수)",
+    "On tree stumps" to "그루터기",
+    "On palm trees" to "야자수",
+    "On beach rocks" to "해변 암반",
+    "On villagers" to "주민의 몸",
+    "On rocks and bushes" to "바위, 낮은 묘목",
+    "On spoiled turnips/candy/lollipops" to "썩은 무, 사탕",
+    "Underground" to "땅 속(울음 소리)",
+    "Pushing snowballs" to "눈덩이",
+    "From hitting rocks" to "바위 치기",
+    "Disguised under trees" to "나무 밑(가구로 위장)",
+    "Disguised on shoreline" to "해변(소라껍데기로 위장)",
+    "Shaking trees" to "나무 흔들기",
+    "Shaking trees (hardwood and cedar)" to "나무 흔들기(활엽수, 침엽수)",
+    "Shaking non-fruit hardwood trees or cedar trees" to "나무 흔들기(열매 없는 활엽수, 침엽수)",
 )
 
 class GetAllBugsByUserIdUseCase @Inject constructor(
