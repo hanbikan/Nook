@@ -40,6 +40,45 @@ fun NkDialog(
         NkTheme.typography.titleSmall
     }
 
+    NkDialogWithContents(visible, onDismissRequest) {
+        if (painter != null) {
+            Image(
+                painter = painter,
+                contentDescription = null,
+                modifier = Modifier.padding(0.dp, 0.dp, 0.dp, Dimens.SpacingSmall)
+            )
+        }
+        NkText(
+            text = description,
+            style = textStyle,
+        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth(),
+            horizontalArrangement = Arrangement.Center,
+        ) {
+            if (!hasOnlyConfirmationButton) {
+                NkTextButton(
+                    onClick = onDismissRequest,
+                    text = NkDialogDefaults.dismissText,
+                    modifier = Modifier.weight(1f)
+                )
+            }
+            NkTextButton(
+                onClick = onConfirmation,
+                text = confirmText,
+                modifier = Modifier.weight(1f)
+            )
+        }
+    }
+}
+
+@Composable
+fun NkDialogWithContents(
+    visible: Boolean,
+    onDismissRequest: () -> Unit,
+    content: @Composable (ColumnScope.() -> Unit),
+) {
     NkDialogBase(visible, onDismissRequest) {
         Column(
             modifier = Modifier
@@ -47,35 +86,7 @@ fun NkDialog(
             verticalArrangement = Arrangement.Center,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
-            if (painter != null) {
-                Image(
-                    painter = painter,
-                    contentDescription = null,
-                    modifier = Modifier.padding(0.dp, 0.dp, 0.dp, Dimens.SpacingSmall)
-                )
-            }
-            NkText(
-                text = description,
-                style = textStyle,
-            )
-            Row(
-                modifier = Modifier
-                    .fillMaxWidth(),
-                horizontalArrangement = Arrangement.Center,
-            ) {
-                if (!hasOnlyConfirmationButton) {
-                    NkTextButton(
-                        onClick = onDismissRequest,
-                        text = NkDialogDefaults.dismissText,
-                        modifier = Modifier.weight(1f)
-                    )
-                }
-                NkTextButton(
-                    onClick = onConfirmation,
-                    text = confirmText,
-                    modifier = Modifier.weight(1f)
-                )
-            }
+            content()
         }
     }
 }

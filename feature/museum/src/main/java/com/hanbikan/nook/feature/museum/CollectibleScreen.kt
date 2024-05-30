@@ -1,6 +1,7 @@
 package com.hanbikan.nook.feature.museum
 
-import androidx.compose.foundation.clickable
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.combinedClickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -43,12 +44,15 @@ import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
+import com.hanbikan.nook.core.designsystem.component.NkDialogWithContents
 import com.hanbikan.nook.core.designsystem.component.NkText
+import com.hanbikan.nook.core.designsystem.component.NkTextButton
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
+import com.hanbikan.nook.core.domain.model.MonthlyCollectible
 import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import kotlin.math.ceil
@@ -58,6 +62,7 @@ private val CollectibleItemWidth = 90.dp
 private val CollectibleItemHeight = 80.dp
 private val GradientHeight = Dimens.SpacingMedium
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun CollectibleScreen(
     navigateUp: () -> Unit,
@@ -65,6 +70,8 @@ fun CollectibleScreen(
     // TODO: isMonthly? -> false일 경우 chip group 제거
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val collectibleToShowInDialog =
+        viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -124,6 +131,7 @@ fun CollectibleScreen(
                         OverallCollectibleContents(
                             collectibles = uiState.collectibleList,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                            onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
                         )
                     }
 
@@ -132,11 +140,17 @@ fun CollectibleScreen(
                             uiState = uiState,
                             onClickMonth = viewModel::onClickMonth,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                            onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
                         )
                     }
                 }
             }
         }
+
+        CollectibleDialog(
+            collectible = collectibleToShowInDialog,
+            onDismiss = viewModel::onDismissCollectibleDialog,
+        )
     }
 }
 
@@ -144,6 +158,7 @@ fun CollectibleScreen(
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
     onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
@@ -169,6 +184,7 @@ fun OverallCollectibleContents(
                     CollectibleItemsForRow(
                         rowItems = rowItems,
                         onClickCollectibleItem = onClickCollectibleItem,
+                        onLongClickCollectibleItem = onLongClickCollectibleItem,
                         itemsPerRow = itemsPerRow,
                     )
                 }
@@ -184,6 +200,7 @@ fun MonthlyCollectibleContents(
     uiState: CollectibleScreenUiState.MonthlyView,
     onClickMonth: (Int) -> Unit,
     onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
 ) {
     Column {
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
@@ -216,6 +233,7 @@ fun MonthlyCollectibleContents(
                 OverallCollectibleContents(
                     collectibles = uiState.collectibleListForMonth,
                     onClickCollectibleItem = onClickCollectibleItem,
+                    onLongClickCollectibleItem = onLongClickCollectibleItem
                 )
             }
 
@@ -223,6 +241,7 @@ fun MonthlyCollectibleContents(
                 HourViewContents(
                     uiState = uiState,
                     onClickCollectibleItem = onClickCollectibleItem,
+                    onLongClickCollectibleItem = onLongClickCollectibleItem
                 )
             }
         }
@@ -233,6 +252,7 @@ fun MonthlyCollectibleContents(
 fun HourViewContents(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,
     onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
 ) {
     val lazyListState = rememberLazyListState()
     var containerWidth by remember { mutableIntStateOf(0) }
@@ -246,7 +266,9 @@ fun HourViewContents(
             var scrollIndex = 1
             uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
                 if (startHour < keyForCurrentHour) {
-                    scrollIndex += 2 + ceil((collectibleList.count().toFloat() / itemsPerRow)).toInt()
+                    scrollIndex += 2 + ceil(
+                        (collectibleList.count().toFloat() / itemsPerRow)
+                    ).toInt()
                 }
             }
             lazyListState.animateScrollToItem(
@@ -287,6 +309,7 @@ fun HourViewContents(
                         CollectibleItemsForRow(
                             rowItems = rowItems,
                             onClickCollectibleItem = onClickCollectibleItem,
+                            onLongClickCollectibleItem = onLongClickCollectibleItem,
                             itemsPerRow = itemsPerRow,
                         )
                     }
@@ -305,13 +328,15 @@ fun HourViewContents(
 fun CollectibleItemsForRow(
     rowItems: List<Collectible>,
     onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
     itemsPerRow: Int,
 ) {
     Row {
         rowItems.forEach { item ->
             CollectibleItem(
                 item = item,
-                onClick = { onClickCollectibleItem(item) }
+                onClick = { onClickCollectibleItem(item) },
+                onLongClick = { onLongClickCollectibleItem(item) }
             )
         }
         if (rowItems.count() < itemsPerRow) {
@@ -322,17 +347,21 @@ fun CollectibleItemsForRow(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
+@OptIn(ExperimentalGlideComposeApi::class, ExperimentalFoundationApi::class)
 @Composable
 fun CollectibleItem(
     item: Collectible,
     onClick: () -> Unit,
+    onLongClick: () -> Unit,
 ) {
     Box(
         modifier = Modifier
             .width(CollectibleItemWidth)
             .height(CollectibleItemHeight)
-            .clickable { onClick() }
+            .combinedClickable(
+                onClick = onClick,
+                onLongClick = onLongClick,
+            )
     ) {
         Column(
             modifier = Modifier.fillMaxSize(),
@@ -357,6 +386,39 @@ fun CollectibleItem(
                 imageVector = Icons.Default.Check,
                 contentDescription = null,
                 tint = NkTheme.colorScheme.secondary,
+            )
+        }
+    }
+}
+
+@OptIn(ExperimentalGlideComposeApi::class)
+@Composable
+fun CollectibleDialog(
+    collectible: Collectible?,
+    onDismiss: () -> Unit,
+) {
+    NkDialogWithContents(
+        visible = collectible != null,
+        onDismissRequest = onDismiss
+    ) {
+        collectible?.let { item ->
+            GlideImage(
+                modifier = Modifier.size(CollectibleItemHeight * 0.5f),
+                model = item.imageUrl,
+                contentDescription = item.name,
+            )
+
+            Column {
+                NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
+                if (collectible is MonthlyCollectible) {
+                    NkText(text = stringResource(id = R.string.collectible_location, collectible.location))
+                }
+            }
+
+            NkTextButton(
+                modifier = Modifier.fillMaxWidth(),
+                onClick = onDismiss,
+                text = stringResource(id = com.hanbikan.nook.core.designsystem.R.string.confirm),
             )
         }
     }

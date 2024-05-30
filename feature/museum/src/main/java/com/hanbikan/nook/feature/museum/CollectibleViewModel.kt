@@ -21,6 +21,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.onEach
@@ -41,6 +42,9 @@ class CollectibleViewModel @Inject constructor(
         CollectibleScreenUiState.Loading
     )
     val uiState: StateFlow<CollectibleScreenUiState> = _uiState
+
+    private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleToShowInDialog: StateFlow<Collectible?> = _collectibleToShowInDialog.asStateFlow()
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -159,6 +163,14 @@ class CollectibleViewModel @Inject constructor(
                 )
             }
         }
+    }
+
+    fun onLongClickCollectibleItem(item: Collectible) {
+        _collectibleToShowInDialog.value = item
+    }
+
+    fun onDismissCollectibleDialog() {
+        _collectibleToShowInDialog.value = null
     }
 }
 

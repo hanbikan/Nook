@@ -21,4 +21,6 @@
     <string name="general_view">기본 보기</string>
     <string name="hour_view">시간 단위로 보기</string>
     <string name="all_day">하루 종일</string>
+    <string name="collectible_name">이름: %s</string>
+    <string name="collectible_location">장소: %s</string>
 </resources>
