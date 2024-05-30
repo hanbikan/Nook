@@ -10,7 +10,7 @@ class AddUserUseCase @Inject constructor(
     private val appStateRepository: AppStateRepository,
     private val updateTasksIfEmptyUseCase: UpdateTasksIfEmptyUseCase,
     private val updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase,
-    private val updateFishesUseCase: UpdateFishesUseCase,
+    private val updateUserUseCase: UpdateUserUseCase,
 ) {
     suspend operator fun invoke(user: User) {
         val addedUserId = userRepository.insertUser(user)
@@ -21,6 +21,6 @@ class AddUserUseCase @Inject constructor(
         updateTasksIfEmptyUseCase(addedUserId)
         updateTutorialTasksIfEmptyUseCase(addedUserId)
 
-        updateFishesUseCase(addedUserId)
+        updateUserUseCase(addedUserId)
     }
 }
