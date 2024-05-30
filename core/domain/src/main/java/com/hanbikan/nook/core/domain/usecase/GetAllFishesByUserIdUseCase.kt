@@ -7,7 +7,7 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest
 import javax.inject.Inject
 
-private val nameToKorean: Map<String, String> = mapOf(
+private val fishNameToKorean: Map<String, String> = mapOf(
     "Bitterling" to "납줄개",
     "Pale chub" to "피라미",
     "Crucian carp" to "붕어",
@@ -90,7 +90,7 @@ private val nameToKorean: Map<String, String> = mapOf(
     "Coelacanth" to "실러캔스"
 )
 
-private val locationToKorean: Map<String, String> = mapOf(
+private val fishLocationToKorean: Map<String, String> = mapOf(
     "River" to "강",
     "Sea" to "바다",
     "Pier" to "부둣가",
@@ -109,8 +109,8 @@ class GetAllFishesByUserIdUseCase @Inject constructor(
             .mapLatest { fishList ->
                 fishList.map {
                     it.copy(
-                        name = nameToKorean.getOrElse(it.name) { it.name },
-                        location = locationToKorean.getOrElse(it.location) { it.location },
+                        name = fishNameToKorean.getOrElse(it.name) { it.name },
+                        location = fishLocationToKorean.getOrElse(it.location) { it.location },
                     )
                 }
             }
