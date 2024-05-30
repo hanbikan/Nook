@@ -1,10 +1,12 @@
 package com.hanbikan.nook.feature.museum
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.common.getCurrentMonth
+import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.MonthlyCollectible
@@ -12,6 +14,7 @@ import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.parseTimeRange
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
+import com.hanbikan.nook.core.domain.usecase.GetAllBugsByUserIdUseCase
 import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import com.hanbikan.nook.feature.museum.navigation.COLLECTIBLE_SEQUENCE_INDEX
@@ -36,6 +39,7 @@ class CollectibleViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     private val collectionRepository: CollectionRepository,
     private val getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
+    private val getAllBugsByUserIdUseCase: GetAllBugsByUserIdUseCase,
 ) : ViewModel() {
 
     private val collectibleSequenceIndex: Int? = savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX]
@@ -65,6 +69,7 @@ class CollectibleViewModel @Inject constructor(
             } else {
                 when (collectibleSequenceIndex) {
                     CollectibleSequence.FISH.ordinal -> getAllFishesByUserIdUseCase(it.id)
+                    CollectibleSequence.BUG.ordinal -> getAllBugsByUserIdUseCase(it.id)
                     else -> flowOf(listOf())
                 }
             }
@@ -72,6 +77,7 @@ class CollectibleViewModel @Inject constructor(
         .onEach {
             // 기반 데이터가 변경 또는 초기화 되었으므로 uiState를 업데이트 합니다.
             val uiStateValue = uiState.value
+            Log.e("ASD", it.toString())
             _uiState.value = when (uiStateValue) {
                 is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                     CollectibleScreenUiState.MonthlyView.GeneralView(
@@ -139,6 +145,10 @@ class CollectibleViewModel @Inject constructor(
                 CollectibleSequence.FISH.ordinal -> {
                     val fish = (item as Fish).copy(isCollected = !item.isCollected)
                     collectionRepository.updateFish(fish)
+                }
+                CollectibleSequence.BUG.ordinal -> {
+                    val bug = (item as Bug).copy(isCollected = !item.isCollected)
+                    collectionRepository.updateBug(bug)
                 }
             }
         }

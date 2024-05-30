@@ -44,6 +44,7 @@ fun MuseumScreen(
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
     val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
+    val bugs = viewModel.bugs.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
     Box {
@@ -59,11 +60,18 @@ fun MuseumScreen(
 
             Column(
                 modifier = Modifier.padding(Dimens.SideMargin),
+                verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
             ) {
                 CollectionProgress(
                     name = stringResource(id = R.string.fish_progress),
                     collectibleList = fishes,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
+                )
+
+                CollectionProgress(
+                    name = stringResource(id = R.string.bug_progress),
+                    collectibleList = bugs,
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG.ordinal) }
                 )
             }
         }
