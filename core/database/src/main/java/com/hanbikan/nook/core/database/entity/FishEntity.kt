@@ -13,4 +13,5 @@ data class FishEntity(
     @ColumnInfo(name = "image_url") val imageUrl: String,
     @ColumnInfo(name = "times_by_month") val timesByMonth: Map<Int, String>,
     val isCollected: Boolean,
+    @ColumnInfo(defaultValue = "") val location: String,
 )

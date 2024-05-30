@@ -6,6 +6,7 @@ data class Fish(
     override val name: String,
     val number: Int,
     override val imageUrl: String,
-    override val timesByMonth: Map<Int, String>,
     override val isCollected: Boolean,
+    override val timesByMonth: Map<Int, String>,
+    override val location: String,
 ) : MonthlyCollectible

@@ -12,6 +12,7 @@ fun FishEntity.toDomain(): Fish {
         imageUrl = imageUrl,
         timesByMonth = timesByMonth,
         isCollected = isCollected,
+        location = location
     )
 }
 
@@ -24,5 +25,6 @@ fun Fish.toData(): FishEntity {
         imageUrl = imageUrl,
         timesByMonth = timesByMonth,
         isCollected = isCollected,
+        location = location,
     )
 }

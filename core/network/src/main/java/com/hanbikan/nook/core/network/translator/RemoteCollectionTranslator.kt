@@ -14,6 +14,7 @@ fun FishResponse.toDomain(
         number = number,
         imageUrl = image_url,
         timesByMonth = if (isNorth) north.times_by_month.toMap() else south.times_by_month.toMap(),
-        isCollected = false
+        isCollected = false,
+        location = location,
     )
 }
