@@ -1,5 +1,6 @@
 package com.hanbikan.nook.core.network.repository
 
+import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
 import com.hanbikan.nook.core.network.service.NookipediaService
@@ -11,6 +12,12 @@ class RemoteCollectionRepositoryImpl @Inject constructor(
 ) : RemoteCollectionRepository {
     override suspend fun getAllFishes(userId: Int, isNorth: Boolean): List<Fish> {
         return nookipediaService.getAllFishes().map {
+            it.toDomain(userId, isNorth)
+        }
+    }
+
+    override suspend fun getAllBugs(userId: Int, isNorth: Boolean): List<Bug> {
+        return nookipediaService.getAllBugs().map {
             it.toDomain(userId, isNorth)
         }
     }
