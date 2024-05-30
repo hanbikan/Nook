@@ -5,4 +5,6 @@
     <string name="island_name">섬 이름</string>
     <string name="update_name_description">이름을 변경합니다.</string>
     <string name="update_island_name_description">섬 이름을 변경합니다.</string>
+    <string name="update_user_data">유저 데이터 업데이트(물고기, 벌레 등)</string>
+    <string name="user_data_updated">유저 데이터가 업데이트 되었습니다.</string>
 </resources>

@@ -1,15 +1,23 @@
 package com.hanbikan.nook.feature.profile
 
+import android.widget.Toast
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -23,6 +31,7 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.ui.UserDialog
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun ProfileScreen(
@@ -30,6 +39,8 @@ fun ProfileScreen(
     navigateToPhone: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val isUpdateNameDialogShown =
         viewModel.isUpdateNameDialogShown.collectAsStateWithLifecycle().value
@@ -37,6 +48,15 @@ fun ProfileScreen(
         viewModel.isUpdateIslandNameDialogShown.collectAsStateWithLifecycle().value
 
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collectLatest {
+            if (it != null) {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.setToastMessage(null)
+            }
+        }
+    }
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -80,6 +100,17 @@ fun ProfileScreen(
                 NkText(
                     text = activeUser?.islandName ?: "",
                     style = NkTheme.typography.headlineMedium,
+                )
+
+                // 유저 데이터 업데이트
+                Spacer(modifier = Modifier.height(Dimens.SpacingExtraLarge))
+                NkText(
+                    modifier = Modifier
+                        .fillMaxWidth()
+                        .clickable(onClick = { viewModel.onClickUpdateUser(context) }),
+                    text = stringResource(id = R.string.update_user_data),
+                    color = NkTheme.colorScheme.primaryContainer,
+                    textAlign = TextAlign.Center,
                 )
 
                 // TODO: 달성률

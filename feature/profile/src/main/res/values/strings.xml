@@ -5,4 +5,6 @@
     <string name="island_name">Island Name</string>
     <string name="update_name_description">Change your name.</string>
     <string name="update_island_name_description">Change your island name.</string>
+    <string name="update_user_data">Update user data(fish, bug, …)</string>
+    <string name="user_data_updated">Your user data has been updated.</string>
 </resources>
