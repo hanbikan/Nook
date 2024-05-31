@@ -23,4 +23,5 @@
     <string name="all_day">하루 종일</string>
     <string name="collectible_name">이름: %s</string>
     <string name="collectible_location">장소: %s</string>
+    <string name="empty">(비어 있음)</string>
 </resources>

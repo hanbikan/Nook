@@ -57,7 +57,6 @@ import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import kotlin.math.ceil
 
-
 private val CollectibleItemWidth = 90.dp
 private val CollectibleItemHeight = 80.dp
 private val GradientHeight = Dimens.SpacingMedium
@@ -304,13 +303,28 @@ fun HourViewContents(
                             text = text,
                         )
                     }
-                    itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
-                        CollectibleItemsForRow(
-                            rowItems = rowItems,
-                            onClickCollectibleItem = onClickCollectibleItem,
-                            onLongClickCollectibleItem = onLongClickCollectibleItem,
-                            itemsPerRow = itemsPerRow,
-                        )
+                    if (collectibleList.isNotEmpty()) {
+                        itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
+                            CollectibleItemsForRow(
+                                rowItems = rowItems,
+                                onClickCollectibleItem = onClickCollectibleItem,
+                                onLongClickCollectibleItem = onLongClickCollectibleItem,
+                                itemsPerRow = itemsPerRow,
+                            )
+                        }
+                    } else {
+                        // 시간대에 잡을 수 있는 아이템이 없는 경우
+                        item {
+                            Box(
+                                modifier = Modifier.height(CollectibleItemHeight),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                NkText(
+                                    text = stringResource(id = R.string.empty),
+                                    color = NkTheme.colorScheme.primaryContainer,
+                                )
+                            }
+                        }
                     }
                     item {
                         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
