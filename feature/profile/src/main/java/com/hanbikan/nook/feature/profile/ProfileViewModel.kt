@@ -80,6 +80,15 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
+    fun setIsNorth(newIsNorth: Boolean) {
+        viewModelScope.launch(Dispatchers.IO) {
+            activeUser.value?.let {
+                val newUser = it.copy(isNorth = newIsNorth)
+                userRepository.insertUser(newUser)
+            }
+        }
+    }
+
     fun setToastMessage(message: String?) {
         _toastMessage.value = message
     }

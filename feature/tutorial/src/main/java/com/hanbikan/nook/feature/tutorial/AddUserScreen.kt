@@ -160,14 +160,14 @@ fun AddUserScreenContents(
 
             // 반구
             NkText(
-                text = stringResource(id = R.string.hemisphere),
+                text = stringResource(id = com.hanbikan.nook.core.ui.R.string.hemisphere),
                 style = NkTheme.typography.titleMedium
             )
             NkChipGroup(
                 chipGroup = ChipGroup(
                     chipItems = listOf(
-                        ChipItem(stringResource(id = R.string.north_hemisphere)),
-                        ChipItem(stringResource(id = R.string.south_hemisphere)),
+                        ChipItem(stringResource(id = com.hanbikan.nook.core.ui.R.string.north_hemisphere)),
+                        ChipItem(stringResource(id = com.hanbikan.nook.core.ui.R.string.south_hemisphere)),
                     ),
                     selectedIndex = if (isNorth) 0 else 1
                 ),

@@ -22,6 +22,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.ChipGroup
+import com.hanbikan.nook.core.designsystem.component.ChipItem
+import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkDialogWithTextField
 import com.hanbikan.nook.core.designsystem.component.NkSmallButton
 import com.hanbikan.nook.core.designsystem.component.NkText
@@ -102,6 +105,21 @@ fun ProfileScreen(
                     style = NkTheme.typography.headlineMedium,
                 )
 
+                // 반구
+                TitleTextWithSpacer(title = stringResource(id = com.hanbikan.nook.core.ui.R.string.hemisphere)) {}
+                NkChipGroup(
+                    chipGroup = ChipGroup(
+                        chipItems = listOf(
+                            ChipItem(stringResource(id = com.hanbikan.nook.core.ui.R.string.north_hemisphere)),
+                            ChipItem(stringResource(id = com.hanbikan.nook.core.ui.R.string.south_hemisphere)),
+                        ),
+                        selectedIndex = if (activeUser?.isNorth == true) 0 else 1
+                    ),
+                    onClickItem = { index ->
+                        viewModel.setIsNorth(index == 0)
+                    }
+                )
+
                 // 유저 데이터 업데이트
                 Spacer(modifier = Modifier.height(Dimens.SpacingExtraLarge))
                 NkText(
@@ -112,8 +130,6 @@ fun ProfileScreen(
                     color = NkTheme.colorScheme.primaryContainer,
                     textAlign = TextAlign.Center,
                 )
-
-                // TODO: 달성률
             }
         }
 

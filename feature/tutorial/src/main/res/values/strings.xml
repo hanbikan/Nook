@@ -10,9 +10,6 @@
     <string name="name_placeholder">Lily, Tommy, …</string>
     <string name="island_name">Island Name</string>
     <string name="island_name_placeholder">Atlantis, Batcave, …</string>
-    <string name="hemisphere">Hemisphere</string>
-    <string name="north_hemisphere">North</string>
-    <string name="south_hemisphere">South</string>
     <string name="progress_by_day">Day %d Progress</string>
     <string name="today_task">Today\'s Tasks</string>
     <string name="previous">Previous</string>

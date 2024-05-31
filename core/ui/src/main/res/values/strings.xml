@@ -11,4 +11,8 @@
     <string name="task_count">%d Tasks</string>
     <string name="done_task_percent">%d%% Completed</string>
     <string name="welcome_text">Hello, %s!</string>
+
+    <string name="hemisphere">Hemisphere</string>
+    <string name="north_hemisphere">North</string>
+    <string name="south_hemisphere">South</string>
 </resources>
