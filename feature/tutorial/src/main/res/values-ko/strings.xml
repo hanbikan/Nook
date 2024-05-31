@@ -10,6 +10,9 @@
     <string name="name_placeholder">혜린, 지민, …</string>
     <string name="island_name">섬 이름</string>
     <string name="island_name_placeholder">둥둥섬, 송도, …</string>
+    <string name="hemisphere">반구</string>
+    <string name="north_hemisphere">북반구</string>
+    <string name="south_hemisphere">남반구</string>
     <string name="progress_by_day">%d일차 진행도</string>
     <string name="today_task">오늘 해야할 일</string>
     <string name="previous">이전</string>

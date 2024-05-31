@@ -16,13 +16,14 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 
 data class ChipGroup(
-    val chips: List<ChipItem>,
+    val chipItems: List<ChipItem>,
     val selectedIndex: Int = 0,
 ) {
     fun copyWithIndex(index: Int) = this.copy(selectedIndex = index)
@@ -39,6 +40,8 @@ fun NkChipGroup(
     chipGroup: ChipGroup,
     isLarge: Boolean = false,
     autoScroll: Boolean = false,
+    primaryColor: Color = NkTheme.colorScheme.primary,
+    background: Color = NkTheme.colorScheme.background,
     onClickItem: (Int) -> Unit,
 ) {
     val selectedIndex = chipGroup.selectedIndex
@@ -61,12 +64,14 @@ fun NkChipGroup(
         horizontalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
         state = listState,
     ) {
-        itemsIndexed(chipGroup.chips) { index, item ->
+        itemsIndexed(chipGroup.chipItems) { index, item ->
             NkChipItem(
                 text = item.text,
                 selected = index == selectedIndex,
                 isLarge = isLarge,
-                onClick = { onClickItem(index) }
+                primaryColor = primaryColor,
+                background = background,
+                onClick = { onClickItem(index) },
             )
         }
     }
@@ -77,6 +82,8 @@ fun NkChipItem(
     text: String,
     selected: Boolean,
     isLarge: Boolean,
+    primaryColor: Color = NkTheme.colorScheme.primary,
+    background: Color = NkTheme.colorScheme.background,
     onClick: () -> Unit,
 ) {
     val radiusShape = RoundedCornerShape(Dimens.SpacingExtraLarge)
@@ -84,11 +91,11 @@ fun NkChipItem(
     Box(
         modifier = Modifier
             .background(
-                color = if (selected) NkTheme.colorScheme.primary else NkTheme.colorScheme.background,
+                color = if (selected) primaryColor else background,
                 shape = radiusShape
             )
             .border(
-                border = BorderStroke(1.dp, NkTheme.colorScheme.primary),
+                border = BorderStroke(1.dp, primaryColor),
                 shape = radiusShape
             )
             .clickable(onClick = onClick)
@@ -100,7 +107,7 @@ fun NkChipItem(
     ) {
         NkText(
             text = text,
-            color = if (selected) NkTheme.colorScheme.background else NkTheme.colorScheme.primary
+            color = if (selected) background else primaryColor
         )
     }
 }
@@ -110,7 +117,7 @@ fun NkChipItem(
 fun NkChipGroupPreview() {
     NkChipGroup(
         chipGroup = ChipGroup(
-            chips = listOf(
+            chipItems = listOf(
                 ChipItem("Apple"),
                 ChipItem("Banana"),
                 ChipItem("Cream"),

@@ -23,6 +23,9 @@ class AddUserViewModel @Inject constructor(
     private val _islandName: MutableStateFlow<String> = MutableStateFlow("")
     val islandName = _islandName.asStateFlow()
 
+    private val _isNorth: MutableStateFlow<Boolean> = MutableStateFlow(true)
+    val isNorth = _isNorth.asStateFlow()
+
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading = _isLoading.asStateFlow()
 
@@ -34,6 +37,10 @@ class AddUserViewModel @Inject constructor(
     fun setIslandName(newIslandName: String) {
         if (newIslandName.length >= User.ISLAND_NAME_MAX_LENGTH) return
         _islandName.value = newIslandName
+    }
+
+    fun setIsNorth(newIsNorth: Boolean) {
+        _isNorth.value = newIsNorth
     }
 
     fun addUser(onComplete: () -> Unit) {

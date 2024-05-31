@@ -26,6 +26,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.ChipGroup
+import com.hanbikan.nook.core.designsystem.component.ChipItem
+import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkPlaceholder
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTextButton
@@ -42,6 +45,7 @@ fun AddUserScreen(
 ) {
     val name = viewModel.name.collectAsStateWithLifecycle().value
     val islandName = viewModel.islandName.collectAsStateWithLifecycle().value
+    val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
 
     Column(modifier = Modifier.fillMaxSize()) {
@@ -50,8 +54,10 @@ fun AddUserScreen(
             AddUserScreenContents(
                 name = name,
                 islandName = islandName,
+                isNorth = isNorth,
                 setName = viewModel::setName,
                 setIslandName = viewModel::setIslandName,
+                setIsNorth = viewModel::setIsNorth,
                 onClickAddButton = {
                     viewModel.setIsLoading(true)
                     viewModel.addUser {
@@ -77,8 +83,10 @@ fun AddUserScreen(
 fun AddUserScreenContents(
     name: String,
     islandName: String,
+    isNorth: Boolean,
     setName: (String) -> Unit,
     setIslandName: (String) -> Unit,
+    setIsNorth: (Boolean) -> Unit,
     onClickAddButton: () -> Unit,
     isLoading: Boolean,
 ) {
@@ -96,6 +104,7 @@ fun AddUserScreenContents(
                 .weight(1f),
             verticalArrangement = Arrangement.spacedBy(Dimens.SpacingSmall),
         ) {
+            // title & description
             NkText(
                 text = stringResource(id = R.string.add_user_title),
                 style = NkTheme.typography.headlineLarge,
@@ -106,6 +115,8 @@ fun AddUserScreenContents(
                 color = NkTheme.colorScheme.primaryContainer
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingLarge))
+
+            // 이름
             NkText(
                 text = stringResource(id = R.string.name),
                 style = NkTheme.typography.titleMedium
@@ -127,6 +138,8 @@ fun AddUserScreenContents(
                 enabled = !isLoading,
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
+
+            // 섬 이름
             NkText(
                 text = stringResource(id = R.string.island_name),
                 style = NkTheme.typography.titleMedium
@@ -143,6 +156,27 @@ fun AddUserScreenContents(
                 singleLine = true,
                 enabled = !isLoading,
             )
+            Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
+
+            // 반구
+            NkText(
+                text = stringResource(id = R.string.hemisphere),
+                style = NkTheme.typography.titleMedium
+            )
+            NkChipGroup(
+                chipGroup = ChipGroup(
+                    chipItems = listOf(
+                        ChipItem(stringResource(id = R.string.north_hemisphere)),
+                        ChipItem(stringResource(id = R.string.south_hemisphere)),
+                    ),
+                    selectedIndex = if (isNorth) 0 else 1
+                ),
+                primaryColor = NkTheme.colorScheme.secondary,
+                onClickItem = { index ->
+                    setIsNorth(index == 0)
+                }
+            )
+            Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
         }
         NkTextButton(
             modifier = Modifier.fillMaxWidth(),

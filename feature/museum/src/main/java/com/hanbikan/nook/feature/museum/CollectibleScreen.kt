@@ -104,7 +104,7 @@ fun CollectibleScreen(
                     NkChipGroup(
                         modifier = Modifier.padding(horizontal = Dimens.SideMargin),
                         chipGroup = ChipGroup(
-                            chips = listOf(
+                            chipItems = listOf(
                                 ChipItem(stringResource(id = R.string.overall)),
                                 ChipItem(stringResource(id = R.string.monthly))
                             ),
@@ -206,7 +206,7 @@ fun MonthlyCollectibleContents(
         NkChipGroup(
             paddingValues = PaddingValues(horizontal = Dimens.SideMargin),
             chipGroup = ChipGroup(
-                chips = listOf(
+                chipItems = listOf(
                     ChipItem(stringResource(id = R.string.january)),
                     ChipItem(stringResource(id = R.string.february)),
                     ChipItem(stringResource(id = R.string.march)),
