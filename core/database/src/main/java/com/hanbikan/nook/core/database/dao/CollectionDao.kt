@@ -6,6 +6,7 @@ import androidx.room.Query
 import androidx.room.Update
 import com.hanbikan.nook.core.database.entity.BugEntity
 import com.hanbikan.nook.core.database.entity.FishEntity
+import com.hanbikan.nook.core.database.entity.SeaCreatureEntity
 import kotlinx.coroutines.flow.Flow
 
 @Dao
@@ -21,7 +22,7 @@ interface CollectionDao {
     suspend fun updateFish(fishEntity: FishEntity)
 
     @Query("DELETE FROM fish WHERE fish.user_id == :userId")
-    fun deleteAllFishes(userId: Int)
+    fun deleteAllFishesByUserId(userId: Int)
 
     // Bug
     @Query("SELECT * FROM bug WHERE bug.user_id == :userId ORDER BY number")
@@ -34,5 +35,18 @@ interface CollectionDao {
     suspend fun updateBug(bugEntity: BugEntity)
 
     @Query("DELETE FROM bug WHERE bug.user_id == :userId")
-    fun deleteAllBugs(userId: Int)
+    fun deleteAllBugsByUserId(userId: Int)
+
+    // Sea creature
+    @Query("SELECT * FROM sea_creature WHERE sea_creature.user_id == :userId ORDER BY number")
+    fun getAllSeaCreaturesByUserId(userId: Int): Flow<List<SeaCreatureEntity>>
+
+    @Insert
+    suspend fun insertSeaCreatures(vararg seaCreatureEntities: SeaCreatureEntity)
+
+    @Update
+    suspend fun updateSeaCreature(seaCreatureEntity: SeaCreatureEntity)
+
+    @Query("DELETE FROM sea_creature WHERE sea_creature.user_id == :userId")
+    fun deleteAllSeaCreaturesByUserId(userId: Int)
 }
