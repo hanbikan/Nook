@@ -1,7 +1,7 @@
 package com.hanbikan.nook.core.domain.model
 
 data class SeaCreature(
-    override val id: Int,
+    override val id: Int = 0,
     override val userId: Int,
     override val number: Int,
     override val name: String,
