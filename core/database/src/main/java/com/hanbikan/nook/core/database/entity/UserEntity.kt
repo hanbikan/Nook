@@ -10,4 +10,5 @@ data class UserEntity(
     @ColumnInfo(name = "name") val name: String,
     @ColumnInfo(name = "island_name") val islandName: String,
     @ColumnInfo(name = "tutorial_day", defaultValue = "0") val tutorialDay: Int,
+    @ColumnInfo(name = "is_north", defaultValue = "1") val isNorth: Boolean,
 )

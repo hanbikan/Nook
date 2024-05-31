@@ -173,7 +173,9 @@ fun AddUserScreenContents(
                 ),
                 primaryColor = NkTheme.colorScheme.secondary,
                 onClickItem = { index ->
-                    setIsNorth(index == 0)
+                    if (!isLoading) {
+                        setIsNorth(index == 0)
+                    }
                 }
             )
             Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))

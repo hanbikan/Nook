@@ -47,7 +47,11 @@ class AddUserViewModel @Inject constructor(
         if (name.value.isEmpty() || islandName.value.isEmpty()) return
 
         viewModelScope.launch(Dispatchers.IO) {
-            val user = User(name = name.value, islandName = islandName.value)
+            val user = User(
+                name = name.value,
+                islandName = islandName.value,
+                isNorth = isNorth.value,
+            )
             addUserUseCase(user)
 
             // onComplete에서 navigate와 같은 동작을 수행하므로 Main Thread에서 수행되어야 합니다.
