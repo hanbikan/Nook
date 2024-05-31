@@ -104,7 +104,7 @@ class CollectibleViewModel @Inject constructor(
             }
 
             CollectibleScreenViewType.MONTHLY.chipIndex -> {
-                _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
+                _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
                     collectibleList = collectibleList.value,
                     month = getCurrentMonth()
                 )
