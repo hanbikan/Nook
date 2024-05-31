@@ -6,10 +6,8 @@ import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllBugsByUserIdUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllFishesByUserIdUseCase
-import com.hanbikan.nook.core.domain.usecase.GetAllSeaCreaturesByUserIdUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -24,9 +22,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MuseumViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
-    getAllFishesByUserIdUseCase: GetAllFishesByUserIdUseCase,
-    getAllBugsByUserIdUseCase: GetAllBugsByUserIdUseCase,
-    getAllSeaCreaturesByUserIdUseCase: GetAllSeaCreaturesByUserIdUseCase,
+    private val collectionRepository: CollectionRepository,
 ) : ViewModel() {
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
@@ -41,7 +37,7 @@ class MuseumViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getAllFishesByUserIdUseCase(it.id)
+                collectionRepository.getAllFishesByUserId(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
@@ -52,7 +48,7 @@ class MuseumViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getAllBugsByUserIdUseCase(it.id)
+                collectionRepository.getAllBugsByUserId(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
@@ -63,7 +59,7 @@ class MuseumViewModel @Inject constructor(
             if (it == null) {
                 flowOf(listOf())
             } else {
-                getAllSeaCreaturesByUserIdUseCase(it.id)
+                collectionRepository.getAllSeaCreaturesByUserId(it.id)
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())

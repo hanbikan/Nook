@@ -1,10 +1,7 @@
 package com.hanbikan.nook.core.domain.usecase
 
 import com.hanbikan.nook.core.domain.model.Fish
-import com.hanbikan.nook.core.domain.repository.CollectionRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapLatest
+import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
 import javax.inject.Inject
 
 private val fishNameToKorean: Map<String, String> = mapOf(
@@ -100,19 +97,17 @@ private val fishLocationToKorean: Map<String, String> = mapOf(
     "Sea (raining)" to "바다(비 오는 날)"
 )
 
-class GetAllFishesByUserIdUseCase @Inject constructor(
-    private val collectionRepository: CollectionRepository,
+class GetAllRemoteFishesByUserIdUseCase @Inject constructor(
+    private val remoteCollectionRepository: RemoteCollectionRepository,
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(userId: Int): Flow<List<Fish>> {
-        return collectionRepository.getAllFishesByUserId(userId)
-            .mapLatest { fishList ->
-                fishList.map {
-                    it.copy(
-                        name = fishNameToKorean.getOrElse(it.name) { it.name },
-                        location = fishLocationToKorean.getOrElse(it.location) { it.location },
-                    )
-                }
-            }
-    }
+    suspend operator fun invoke(userId: Int): List<Fish> =
+        remoteCollectionRepository.getAllFishes(
+            userId = userId,
+            isNorth = true // TODO
+        ).map {
+            it.copy(
+                name = fishNameToKorean.getOrElse(it.name) { it.name },
+                location = fishLocationToKorean.getOrElse(it.location) { it.location },
+            )
+        }
 }

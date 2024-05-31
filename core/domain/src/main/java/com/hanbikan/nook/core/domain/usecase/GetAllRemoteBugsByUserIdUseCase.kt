@@ -1,10 +1,7 @@
 package com.hanbikan.nook.core.domain.usecase
 
 import com.hanbikan.nook.core.domain.model.Bug
-import com.hanbikan.nook.core.domain.repository.CollectionRepository
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.mapLatest
+import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
 import javax.inject.Inject
 
 private val bugNameToKorean: Map<String, String> = mapOf(
@@ -119,19 +116,17 @@ private val bugLocationToKorean: Map<String, String> = mapOf(
     "Shaking non-fruit hardwood trees or cedar trees" to "나무 흔들기(열매 없는 활엽수, 침엽수)",
 )
 
-class GetAllBugsByUserIdUseCase @Inject constructor(
-    private val collectionRepository: CollectionRepository,
+class GetAllRemoteBugsByUserIdUseCase @Inject constructor(
+    private val remoteCollectionRepository: RemoteCollectionRepository,
 ) {
-    @OptIn(ExperimentalCoroutinesApi::class)
-    operator fun invoke(userId: Int): Flow<List<Bug>> {
-        return collectionRepository.getAllBugsByUserId(userId)
-            .mapLatest { bugList ->
-                bugList.map {
-                    it.copy(
-                        name = bugNameToKorean.getOrElse(it.name) { it.name },
-                        location = bugLocationToKorean.getOrElse(it.location) { it.location },
-                    )
-                }
-            }
-    }
+    suspend operator fun invoke(userId: Int): List<Bug> =
+        remoteCollectionRepository.getAllBugs(
+            userId = userId,
+            isNorth = true // TODO
+        ).map {
+            it.copy(
+                name = bugNameToKorean.getOrElse(it.name) { it.name },
+                location = bugLocationToKorean.getOrElse(it.location) { it.location },
+            )
+        }
 }
