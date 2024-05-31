@@ -2,8 +2,10 @@ package com.hanbikan.nook.core.database
 
 import androidx.room.AutoMigration
 import androidx.room.Database
+import androidx.room.DeleteColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
+import androidx.room.migration.AutoMigrationSpec
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.hanbikan.nook.core.database.dao.CollectionDao
@@ -18,7 +20,7 @@ import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 14,
+    version = 15,
     entities = [
         TaskEntity::class,
         UserEntity::class,
@@ -40,6 +42,11 @@ import com.hanbikan.nook.core.database.entity.UserEntity
         AutoMigration (from = 11, to = 12),
         AutoMigration (from = 12, to = 13),
         AutoMigration (from = 13, to = 14),
+        AutoMigration (
+            from = 14,
+            to = 15,
+            spec = NkDatabase.AutoMigration_14_15::class
+        ),
     ],
     exportSchema = true
 )
@@ -49,6 +56,9 @@ abstract class NkDatabase : RoomDatabase() {
     abstract fun tutorialTaskDao(): TutorialTaskDao
     abstract fun userDao(): UserDao
     abstract fun collectionDao(): CollectionDao
+
+    @DeleteColumn(tableName = "sea_creature", columnName = "location")
+    class AutoMigration_14_15 : AutoMigrationSpec
 }
 
 val MIGRATION_6_7 = object : Migration(6, 7) {

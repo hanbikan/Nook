@@ -49,6 +49,5 @@ fun SeaCreatureResponse.toDomain(
         imageUrl = image_url,
         isCollected = false,
         timesByMonth = if (isNorth) north.times_by_month.toMap() else south.times_by_month.toMap(),
-        location = ""
     )
 }

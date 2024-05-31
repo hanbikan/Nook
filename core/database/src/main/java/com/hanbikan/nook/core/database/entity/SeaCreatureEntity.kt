@@ -13,5 +13,4 @@ data class SeaCreatureEntity(
     @ColumnInfo(name = "image_url") val imageUrl: String,
     @ColumnInfo(name = "times_by_month") val timesByMonth: Map<Int, String>,
     val isCollected: Boolean,
-    val location: String,
 )

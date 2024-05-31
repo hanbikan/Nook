@@ -52,7 +52,7 @@ import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Collectible
-import com.hanbikan.nook.core.domain.model.MonthlyCollectible
+import com.hanbikan.nook.core.domain.model.LocationBased
 import com.hanbikan.nook.core.domain.model.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import kotlin.math.ceil
@@ -409,7 +409,7 @@ fun CollectibleDialog(
 
             Column {
                 NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
-                if (collectible is MonthlyCollectible) {
+                if (collectible is LocationBased) {
                     NkText(text = stringResource(id = R.string.collectible_location, collectible.location))
                 }
             }

@@ -68,7 +68,6 @@ fun SeaCreatureEntity.toDomain(): SeaCreature {
         imageUrl = imageUrl,
         timesByMonth = timesByMonth,
         isCollected = isCollected,
-        location = location
     )
 }
 
@@ -81,6 +80,5 @@ fun SeaCreature.toData(): SeaCreatureEntity {
         imageUrl = imageUrl,
         timesByMonth = timesByMonth,
         isCollected = isCollected,
-        location = location,
     )
 }

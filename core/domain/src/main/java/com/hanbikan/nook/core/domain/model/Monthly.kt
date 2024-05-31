@@ -1,8 +1,10 @@
 package com.hanbikan.nook.core.domain.model
 
-interface MonthlyCollectible: Collectible {
+/**
+ * An interface representing monthly collectible items.
+ */
+interface Monthly {
     val timesByMonth: Map<Int, String> // 1: "NA", 3: "4 PM - 9 AM", 9: "All day"
-    val location: String // River, Sea, Pier, Pond, River (clifftop), River (mouth)
 
     fun belongsToMonth(month: Int): Boolean {
         return timesByMonth.containsKey(month) && timesByMonth[month] != NOT_AVAILABLE
@@ -18,9 +20,9 @@ interface MonthlyCollectible: Collectible {
  * "4 AM - 9 AM" returns [4,5,6,7,8,9]
  */
 fun String.parseTimeRange(): List<Int> {
-    if (this == MonthlyCollectible.NOT_AVAILABLE) {
+    if (this == Monthly.NOT_AVAILABLE) {
         return listOf()
-    } else if(this == MonthlyCollectible.ALL_DAY) {
+    } else if(this == Monthly.ALL_DAY) {
         return (0 until 24).toList()
     }
 

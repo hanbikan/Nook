@@ -8,5 +8,4 @@ data class SeaCreature(
     override val imageUrl: String,
     override val isCollected: Boolean,
     override val timesByMonth: Map<Int, String>,
-    override val location: String,
-) : MonthlyCollectible
+) : Collectible, Monthly

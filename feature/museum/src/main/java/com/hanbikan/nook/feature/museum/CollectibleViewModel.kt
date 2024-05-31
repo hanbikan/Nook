@@ -8,7 +8,7 @@ import com.hanbikan.nook.core.common.getCurrentMonth
 import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Collectible
 import com.hanbikan.nook.core.domain.model.Fish
-import com.hanbikan.nook.core.domain.model.MonthlyCollectible
+import com.hanbikan.nook.core.domain.model.Monthly
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.parseTimeRange
@@ -205,7 +205,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 month: Int
             ): List<Collectible> {
                 return collectibleList.filter {
-                    it is MonthlyCollectible && it.belongsToMonth(month)
+                    it is Monthly && it.belongsToMonth(month)
                 }
             }
         }
@@ -251,7 +251,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                         return@forEach
                     }
 
-                    startHourToCollectibleListForMonth.put(hour, collectibleListForHour)
+                    startHourToCollectibleListForMonth[hour] = collectibleListForHour
                 }
 
                 return startHourToCollectibleListForMonth.toMap()
@@ -272,10 +272,10 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 }
 
                 collectibleList.forEach { item ->
-                    if (item is MonthlyCollectible && item.belongsToMonth(month)) {
+                    if (item is Monthly && item.belongsToMonth(month)) {
                         val times = item.timesByMonth[month]
                         // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
-                        if (times == MonthlyCollectible.ALL_DAY) {
+                        if (times == Monthly.ALL_DAY) {
                             hourToCollectibleListForMonth[ALL_DAY_KEY]?.add(item)
                         } else {
                             val hours = times?.parseTimeRange() ?: listOf()
