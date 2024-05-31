@@ -5,6 +5,7 @@ import com.hanbikan.nook.core.database.translator.toData
 import com.hanbikan.nook.core.database.translator.toDomain
 import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Fish
+import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -29,7 +30,7 @@ class CollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllFishesByUserId(userId: Int) {
-        collectionDao.deleteAllFishes(userId)
+        collectionDao.deleteAllFishesByUserId(userId)
     }
 
     // Bug
@@ -48,6 +49,25 @@ class CollectionRepositoryImpl @Inject constructor(
     }
 
     override suspend fun deleteAllBugsByUserId(userId: Int) {
-        collectionDao.deleteAllBugs(userId)
+        collectionDao.deleteAllBugsByUserId(userId)
+    }
+
+    // Sea creature
+    override fun getAllSeaCreaturesByUserId(userId: Int): Flow<List<SeaCreature>> {
+        return collectionDao.getAllSeaCreaturesByUserId(userId).map { seaCreatures ->
+            seaCreatures.map { it.toDomain() }
+        }
+    }
+
+    override suspend fun insertSeaCreatures(seaCreatureList: List<SeaCreature>) {
+        collectionDao.insertSeaCreatures(*seaCreatureList.map { it.toData() }.toTypedArray())
+    }
+
+    override suspend fun updateSeaCreature(seaCreature: SeaCreature) {
+        collectionDao.updateSeaCreature(seaCreature.toData())
+    }
+
+    override suspend fun deleteAllSeaCreaturesByUserId(userId: Int) {
+        collectionDao.deleteAllSeaCreaturesByUserId(userId)
     }
 }
