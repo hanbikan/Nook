@@ -26,6 +26,8 @@ class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        viewModel.updateUserIfLanguageHasChanged()
+
         setContent {
             NkTheme {
                 val lastVisitedRoute = viewModel.lastVisitedRoute.collectAsStateWithLifecycle().value
