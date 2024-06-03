@@ -16,11 +16,27 @@ class AppStateRepositoryImpl @Inject constructor(
         return nkDataStore.lastVisitedRouteFlow
     }
 
+    override fun getLanguage(): Flow<String?> {
+        return nkDataStore.languageFlow
+    }
+
+    override fun getVersionName(): Flow<String?> {
+        return nkDataStore.versionNameFlow
+    }
+
     override suspend fun setActiveUserId(id: Int) {
         nkDataStore.setActiveUserId(id)
     }
 
     override suspend fun setLastVisitedRoute(route: String) {
         nkDataStore.setLastVisitedRoute(route)
+    }
+
+    override suspend fun setLanguage(language: String) {
+        nkDataStore.setLanguage(language)
+    }
+
+    override suspend fun setVersionName(versionName: String) {
+        nkDataStore.setVersionName(versionName)
     }
 }
