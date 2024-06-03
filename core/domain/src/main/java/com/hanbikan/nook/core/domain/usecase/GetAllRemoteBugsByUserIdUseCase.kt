@@ -2,6 +2,8 @@ package com.hanbikan.nook.core.domain.usecase
 
 import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 private val bugNameToKorean: Map<String, String> = mapOf(
@@ -118,15 +120,19 @@ private val bugLocationToKorean: Map<String, String> = mapOf(
 
 class GetAllRemoteBugsByUserIdUseCase @Inject constructor(
     private val remoteCollectionRepository: RemoteCollectionRepository,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(userId: Int): List<Bug> =
-        remoteCollectionRepository.getAllBugs(
+    suspend operator fun invoke(userId: Int): List<Bug> {
+        val user = userRepository.getUserById(userId).first()
+
+        return remoteCollectionRepository.getAllBugs(
             userId = userId,
-            isNorth = true // TODO
+            isNorth = user?.isNorth ?: true
         ).map {
             it.copy(
                 name = bugNameToKorean.getOrElse(it.name) { it.name },
                 location = bugLocationToKorean.getOrElse(it.location) { it.location },
             )
         }
+    }
 }

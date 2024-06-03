@@ -2,6 +2,8 @@ package com.hanbikan.nook.core.domain.usecase
 
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 private val fishNameToKorean: Map<String, String> = mapOf(
@@ -99,15 +101,19 @@ private val fishLocationToKorean: Map<String, String> = mapOf(
 
 class GetAllRemoteFishesByUserIdUseCase @Inject constructor(
     private val remoteCollectionRepository: RemoteCollectionRepository,
+    private val userRepository: UserRepository,
 ) {
-    suspend operator fun invoke(userId: Int): List<Fish> =
-        remoteCollectionRepository.getAllFishes(
+    suspend operator fun invoke(userId: Int): List<Fish> {
+        val user = userRepository.getUserById(userId).first()
+
+        return remoteCollectionRepository.getAllFishes(
             userId = userId,
-            isNorth = true // TODO
+            isNorth = user?.isNorth ?: true
         ).map {
             it.copy(
                 name = fishNameToKorean.getOrElse(it.name) { it.name },
                 location = fishLocationToKorean.getOrElse(it.location) { it.location },
             )
         }
+    }
 }

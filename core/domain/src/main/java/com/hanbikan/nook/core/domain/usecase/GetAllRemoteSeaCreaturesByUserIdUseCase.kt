@@ -2,6 +2,8 @@ package com.hanbikan.nook.core.domain.usecase
 
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
+import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
 private val seaCreatureNameToKorean: Map<String, String> = mapOf(
@@ -49,11 +51,14 @@ private val seaCreatureNameToKorean: Map<String, String> = mapOf(
 
 class GetAllRemoteSeaCreaturesByUserIdUseCase @Inject constructor(
     private val remoteCollectionRepository: RemoteCollectionRepository,
+    private val userRepository: UserRepository,
 ) {
     suspend operator fun invoke(userId: Int): List<SeaCreature> {
+        val user = userRepository.getUserById(userId).first()
+
         return remoteCollectionRepository.getAllSeaCreatures(
             userId = userId,
-            isNorth = true // TODO
+            isNorth = user?.isNorth ?: true
         ).map {
             it.copy(
                 name = seaCreatureNameToKorean.getOrElse(it.name) { it.name },
