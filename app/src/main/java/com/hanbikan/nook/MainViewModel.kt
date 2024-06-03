@@ -45,10 +45,7 @@ class MainViewModel @Inject constructor(
             val previousLanguage = appStateRepository.getLanguage().first()
             val currentLanguage = context.resources.configuration.locales.get(0).language
 
-            if (previousLanguage == null) {
-                // 첫 실행
-                appStateRepository.setLanguage(currentLanguage)
-            } else if (previousLanguage != currentLanguage) {
+            if (previousLanguage != currentLanguage) {
                 // 언어 변경
                 appStateRepository.setLanguage(currentLanguage)
                 updateUserDataUseCase()
@@ -64,10 +61,7 @@ class MainViewModel @Inject constructor(
         val previousVersionName = appStateRepository.getVersionName().first()
         val currentVersionName = context.packageManager.getPackageInfo(context.packageName, 0).versionName
 
-        if (previousVersionName == null) {
-            // 첫 실행
-            appStateRepository.setVersionName(currentVersionName)
-        } else if (previousVersionName != currentVersionName) {
+        if (previousVersionName != currentVersionName) {
             // 버전 변경 후 첫 실행
             appStateRepository.setVersionName(currentVersionName)
             updateUserDataUseCase()
