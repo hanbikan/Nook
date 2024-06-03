@@ -18,6 +18,8 @@ class NkDataStore @Inject constructor(
 ) {
     val activeUserIdFlow: Flow<Int?> = context.dataStore.data.map { it[ACTIVE_USER_ID] }
     val lastVisitedRouteFlow: Flow<String?> = context.dataStore.data.map { it[LAST_VISITED_ROUTE] }
+    val languageFlow: Flow<String?> = context.dataStore.data.map { it[LANGUAGE] }
+    val versionNameFlow: Flow<String?> = context.dataStore.data.map { it[VERSION_NAME] }
 
     suspend fun setActiveUserId(id: Int) {
         context.dataStore.edit {
@@ -31,8 +33,22 @@ class NkDataStore @Inject constructor(
         }
     }
 
+    suspend fun setLanguage(language: String) {
+        context.dataStore.edit {
+            it[LANGUAGE] = language
+        }
+    }
+
+    suspend fun setVersionName(versionName: String) {
+        context.dataStore.edit {
+            it[VERSION_NAME] = versionName
+        }
+    }
+
     companion object {
         val ACTIVE_USER_ID = intPreferencesKey("active_user_id")
         val LAST_VISITED_ROUTE = stringPreferencesKey("last_visited_route")
+        val LANGUAGE = stringPreferencesKey("language")
+        val VERSION_NAME = stringPreferencesKey("version_name")
     }
 }
