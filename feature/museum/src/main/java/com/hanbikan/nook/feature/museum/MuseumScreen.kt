@@ -64,15 +64,15 @@ fun MuseumScreen(
                 verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
             ) {
                 CollectionProgress(
-                    name = stringResource(id = R.string.fish_progress),
-                    collectibleList = fishes,
-                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
-                )
-
-                CollectionProgress(
                     name = stringResource(id = R.string.bug_progress),
                     collectibleList = bugs,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG.ordinal) }
+                )
+
+                CollectionProgress(
+                    name = stringResource(id = R.string.fish_progress),
+                    collectibleList = fishes,
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
                 )
 
                 CollectionProgress(
