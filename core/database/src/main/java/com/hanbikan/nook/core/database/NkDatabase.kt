@@ -20,7 +20,7 @@ import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 16,
+    version = 17,
     entities = [
         TaskEntity::class,
         UserEntity::class,
@@ -48,6 +48,11 @@ import com.hanbikan.nook.core.database.entity.UserEntity
             spec = NkDatabase.AutoMigration_14_15::class
         ),
         AutoMigration (from = 15, to = 16),
+        AutoMigration(
+            from = 16,
+            to = 17,
+            spec = NkDatabase.AutoMigration_16_17::class
+        )
     ],
     exportSchema = true
 )
@@ -60,6 +65,11 @@ abstract class NkDatabase : RoomDatabase() {
 
     @DeleteColumn(tableName = "sea_creature", columnName = "location")
     class AutoMigration_14_15 : AutoMigrationSpec
+
+    @DeleteColumn(tableName = "bug", columnName = "id")
+    @DeleteColumn(tableName = "fish", columnName = "id")
+    @DeleteColumn(tableName = "sea_creature", columnName = "id")
+    class AutoMigration_16_17 : AutoMigrationSpec
 }
 
 val MIGRATION_6_7 = object : Migration(6, 7) {

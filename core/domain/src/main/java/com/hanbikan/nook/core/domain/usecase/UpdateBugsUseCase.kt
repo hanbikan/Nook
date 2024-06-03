@@ -13,11 +13,10 @@ class UpdateBugsUseCase @Inject constructor(
             .filter { it.isCollected }
             .map { it.number }
             .toSet()
-        collectionRepository.deleteAllBugsByUserId(userId)
 
         val remoteBugs = getAllRemoteBugsByUserIdUseCase(userId = userId).map {
             it.copy(isCollected = it.number in collectedNumber)
         }
-        collectionRepository.insertBugs(remoteBugs)
+        collectionRepository.insertOrReplaceBugs(remoteBugs)
     }
 }

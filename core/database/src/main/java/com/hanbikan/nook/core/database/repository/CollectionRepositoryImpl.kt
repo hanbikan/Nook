@@ -21,16 +21,12 @@ class CollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertFishes(fishList: List<Fish>) {
-        collectionDao.insertFishes(*fishList.map { it.toData() }.toTypedArray())
+    override suspend fun insertOrReplaceFishes(fishList: List<Fish>) {
+        collectionDao.insertOrReplaceFishes(*fishList.map { it.toData() }.toTypedArray())
     }
 
     override suspend fun updateFish(fish: Fish) {
         collectionDao.updateFish(fish.toData())
-    }
-
-    override suspend fun deleteAllFishesByUserId(userId: Int) {
-        collectionDao.deleteAllFishesByUserId(userId)
     }
 
     // Bug
@@ -40,16 +36,12 @@ class CollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertBugs(bugList: List<Bug>) {
-        collectionDao.insertBugs(*bugList.map { it.toData() }.toTypedArray())
+    override suspend fun insertOrReplaceBugs(bugList: List<Bug>) {
+        collectionDao.insertOrReplaceBugs(*bugList.map { it.toData() }.toTypedArray())
     }
 
     override suspend fun updateBug(bug: Bug) {
         collectionDao.updateBug(bug.toData())
-    }
-
-    override suspend fun deleteAllBugsByUserId(userId: Int) {
-        collectionDao.deleteAllBugsByUserId(userId)
     }
 
     // Sea creature
@@ -59,15 +51,11 @@ class CollectionRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertSeaCreatures(seaCreatureList: List<SeaCreature>) {
-        collectionDao.insertSeaCreatures(*seaCreatureList.map { it.toData() }.toTypedArray())
+    override suspend fun insertOrReplaceSeaCreatures(seaCreatureList: List<SeaCreature>) {
+        collectionDao.insertOrReplaceSeaCreatures(*seaCreatureList.map { it.toData() }.toTypedArray())
     }
 
     override suspend fun updateSeaCreature(seaCreature: SeaCreature) {
         collectionDao.updateSeaCreature(seaCreature.toData())
-    }
-
-    override suspend fun deleteAllSeaCreaturesByUserId(userId: Int) {
-        collectionDao.deleteAllSeaCreaturesByUserId(userId)
     }
 }

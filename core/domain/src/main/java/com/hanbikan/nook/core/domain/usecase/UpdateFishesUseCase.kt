@@ -13,11 +13,10 @@ class UpdateFishesUseCase @Inject constructor(
             .filter { it.isCollected }
             .map { it.number }
             .toSet()
-        collectionRepository.deleteAllFishesByUserId(userId)
 
         val remoteFishes = getAllRemoteFishesByUserIdUseCase(userId = userId).map {
             it.copy(isCollected = it.number in collectedNumber)
         }
-        collectionRepository.insertFishes(remoteFishes)
+        collectionRepository.insertOrReplaceFishes(remoteFishes)
     }
 }

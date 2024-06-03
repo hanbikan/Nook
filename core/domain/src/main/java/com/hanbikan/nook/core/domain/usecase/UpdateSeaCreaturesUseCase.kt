@@ -13,11 +13,10 @@ class UpdateSeaCreaturesUseCase @Inject constructor(
             .filter { it.isCollected }
             .map { it.number }
             .toSet()
-        collectionRepository.deleteAllSeaCreaturesByUserId(userId)
 
         val remoteSeaCreatures = getAllRemoteSeaCreaturesByUserIdUseCase(userId = userId).map {
             it.copy(isCollected = it.number in collectedNumber)
         }
-        collectionRepository.insertSeaCreatures(remoteSeaCreatures)
+        collectionRepository.insertOrReplaceSeaCreatures(remoteSeaCreatures)
     }
 }

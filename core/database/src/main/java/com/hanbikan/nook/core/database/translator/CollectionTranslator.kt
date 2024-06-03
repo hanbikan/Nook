@@ -9,7 +9,6 @@ import com.hanbikan.nook.core.domain.model.SeaCreature
 
 fun FishEntity.toDomain(): Fish {
     return Fish(
-        id = id,
         userId = userId,
         name = name,
         number = number,
@@ -22,7 +21,6 @@ fun FishEntity.toDomain(): Fish {
 
 fun Fish.toData(): FishEntity {
     return FishEntity(
-        id = id,
         userId = userId,
         name = name,
         number = number,
@@ -35,7 +33,6 @@ fun Fish.toData(): FishEntity {
 
 fun BugEntity.toDomain(): Bug {
     return Bug(
-        id = id,
         userId = userId,
         name = name,
         number = number,
@@ -48,7 +45,6 @@ fun BugEntity.toDomain(): Bug {
 
 fun Bug.toData(): BugEntity {
     return BugEntity(
-        id = id,
         userId = userId,
         name = name,
         number = number,
@@ -61,7 +57,6 @@ fun Bug.toData(): BugEntity {
 
 fun SeaCreatureEntity.toDomain(): SeaCreature {
     return SeaCreature(
-        id = id,
         userId = userId,
         name = name,
         number = number,
@@ -73,7 +68,6 @@ fun SeaCreatureEntity.toDomain(): SeaCreature {
 
 fun SeaCreature.toData(): SeaCreatureEntity {
     return SeaCreatureEntity(
-        id = id,
         userId = userId,
         name = name,
         number = number,
