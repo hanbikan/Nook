@@ -126,7 +126,7 @@ fun ProfileScreen(
                     modifier = Modifier
                         .fillMaxWidth()
                         .clickable(onClick = { viewModel.onClickUpdateUser(context) }),
-                    text = stringResource(id = R.string.update_user_data),
+                    text = stringResource(id = R.string.update_user_data_manually),
                     color = NkTheme.colorScheme.primaryContainer,
                     textAlign = TextAlign.Center,
                 )
