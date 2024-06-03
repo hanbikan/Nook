@@ -1,5 +1,3 @@
-import com.android.build.gradle.internal.cxx.configure.gradleLocalProperties
-
 @Suppress("DSL_SCOPE_VIOLATION") // TODO: Remove once KTIJ-19369 is fixed
 plugins {
     alias(libs.plugins.com.android.application)
@@ -16,8 +14,8 @@ android {
         applicationId = "com.hanbikan.nook"
         minSdk = 24
         targetSdk = 34
-        versionCode = 4
-        versionName = "1.1.1"
+        versionCode = 5
+        versionName = "1.2.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
         vectorDrawables {
