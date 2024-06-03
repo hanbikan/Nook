@@ -4,7 +4,7 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
-import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -19,7 +19,7 @@ import javax.inject.Inject
 @HiltViewModel
 class MainViewModel @Inject constructor(
     private val appStateRepository: AppStateRepository,
-    private val updateUserUseCase: UpdateUserUseCase,
+    private val updateUserDataUseCase: UpdateUserDataUseCase,
     @ApplicationContext private val context: Context,
 ): ViewModel() {
 
@@ -51,7 +51,7 @@ class MainViewModel @Inject constructor(
             } else if (previousLanguage != currentLanguage) {
                 // 언어 변경
                 appStateRepository.setLanguage(currentLanguage)
-                updateUserUseCase()
+                updateUserDataUseCase()
             }
         }
     }
@@ -70,7 +70,7 @@ class MainViewModel @Inject constructor(
         } else if (previousVersionName != currentVersionName) {
             // 버전 변경 후 첫 실행
             appStateRepository.setVersionName(currentVersionName)
-            updateUserUseCase()
+            updateUserDataUseCase()
         }
     }
 }

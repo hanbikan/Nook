@@ -16,7 +16,7 @@ interface UserDao {
     fun getUserById(id: Int): Flow<UserEntity?>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    suspend fun insertUser(userEntity: UserEntity): Long
+    suspend fun insertOrReplaceUser(userEntity: UserEntity): Long
 
     @Query("DELETE FROM user WHERE user.id == :id")
     suspend fun deleteUserById(id: Int)

@@ -4,8 +4,8 @@ import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateUserDataUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -20,8 +20,8 @@ import javax.inject.Inject
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
-    private val userRepository: UserRepository,
     private val updateUserUseCase: UpdateUserUseCase,
+    private val updateUserDataUseCase: UpdateUserDataUseCase,
 ) : ViewModel() {
     val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -55,7 +55,7 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val newUser = it.copy(name = name)
-                userRepository.insertUser(newUser)
+                updateUserUseCase(newUser)
             }
             switchUpdateNameDialog()
         }
@@ -65,18 +65,9 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val newUser = it.copy(islandName = islandName)
-                userRepository.insertUser(newUser)
+                updateUserUseCase(newUser)
             }
             switchUpdateIslandNameDialog()
-        }
-    }
-
-    fun onClickUpdateUser(context: Context) {
-        viewModelScope.launch(Dispatchers.IO) {
-            activeUser.value?.let {
-                updateUserUseCase.invoke(it.id)
-                setToastMessage(context.getString(R.string.user_data_updated))
-            }
         }
     }
 
@@ -84,7 +75,16 @@ class ProfileViewModel @Inject constructor(
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 val newUser = it.copy(isNorth = newIsNorth)
-                userRepository.insertUser(newUser)
+                updateUserUseCase(newUser)
+            }
+        }
+    }
+
+    fun onClickUpdateUser(context: Context) {
+        viewModelScope.launch(Dispatchers.IO) {
+            activeUser.value?.let {
+                updateUserDataUseCase.invoke(it.id)
+                setToastMessage(context.getString(R.string.user_data_updated))
             }
         }
     }

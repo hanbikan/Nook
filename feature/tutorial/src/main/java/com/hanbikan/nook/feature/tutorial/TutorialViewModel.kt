@@ -8,9 +8,9 @@ import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
-import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
+import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
@@ -33,7 +33,7 @@ class TutorialViewModel @Inject constructor(
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val tutorialTaskRepository: TutorialTaskRepository,
     private val appStateRepository: AppStateRepository,
-    private val userRepository: UserRepository,
+    private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
 
     // Data for UI
@@ -153,7 +153,7 @@ class TutorialViewModel @Inject constructor(
             executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
                 val nextTutorialDay = activeUser.tutorialDay + 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    userRepository.insertUser(activeUser.copy(tutorialDay = nextTutorialDay))
+                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }
@@ -164,7 +164,7 @@ class TutorialViewModel @Inject constructor(
             executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->
                 val nextTutorialDay = activeUser.tutorialDay - 1
                 if (nextTutorialDay in tutorialDayRange) {
-                    userRepository.insertUser(activeUser.copy(tutorialDay = nextTutorialDay))
+                    updateUserUseCase(activeUser.copy(tutorialDay = nextTutorialDay))
                 }
             }
         }

@@ -1,32 +1,25 @@
 package com.hanbikan.nook.core.domain.usecase
 
+import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.repository.UserRepository
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject
 
-/**
- * 언어, 반구, 앱 버전 등이 변경될 때 호출하여 사용자에 의존하는 데이터를 갱신합니다.
- */
 class UpdateUserUseCase @Inject constructor(
     private val userRepository: UserRepository,
-    private val updateFishesUseCase: UpdateFishesUseCase,
-    private val updateBugsUseCase: UpdateBugsUseCase,
-    private val updateSeaCreaturesUseCase: UpdateSeaCreaturesUseCase,
+    private val updateUserDataUseCase: UpdateUserDataUseCase,
 ) {
+    /**
+     * @param user 기존에 존재하는 [User]와 같은 [User.id]를 갖는 새로운 [User] 데이터
+     */
+    suspend operator fun invoke(user: User) {
+        val previousUser = userRepository.getAllUsers().first().find { it.id == user.id } ?: return
+        val addedUserId = userRepository.insertOrReplaceUser(user)
+        val addedUser = userRepository.getUserById(addedUserId).first()
 
-    suspend operator fun invoke() {
-        val userIds = userRepository.getAllUsers().first()
-            .map { it.id }
-        userIds.forEach { id ->
-            updateFishesUseCase(id)
-            updateBugsUseCase(id)
-            updateSeaCreaturesUseCase(id)
+        // 반구가 변경된 경우
+        if (previousUser.isNorth != addedUser?.isNorth) {
+            updateUserDataUseCase()
         }
-    }
-
-    suspend operator fun invoke(userId: Int) {
-        updateFishesUseCase(userId)
-        updateBugsUseCase(userId)
-        updateSeaCreaturesUseCase(userId)
     }
 }

@@ -24,8 +24,8 @@ class UserRepositoryImpl @Inject constructor(
         }
     }
 
-    override suspend fun insertUser(user: User): Int {
-        return userDao.insertUser(user.toData()).toInt()
+    override suspend fun insertOrReplaceUser(user: User): Int {
+        return userDao.insertOrReplaceUser(user.toData()).toInt()
     }
 
     override suspend fun deleteUserById(id: Int) {

@@ -10,10 +10,10 @@ class AddUserUseCase @Inject constructor(
     private val appStateRepository: AppStateRepository,
     private val updateTasksIfEmptyUseCase: UpdateTasksIfEmptyUseCase,
     private val updateTutorialTasksIfEmptyUseCase: UpdateTutorialTasksIfEmptyUseCase,
-    private val updateUserUseCase: UpdateUserUseCase,
+    private val updateUserDataUseCase: UpdateUserDataUseCase,
 ) {
     suspend operator fun invoke(user: User) {
-        val addedUserId = userRepository.insertUser(user)
+        val addedUserId = userRepository.insertOrReplaceUser(user)
 
         // 후속 작업
         appStateRepository.setActiveUserId(addedUserId) // 추가된 계정 활성화
@@ -21,6 +21,6 @@ class AddUserUseCase @Inject constructor(
         updateTasksIfEmptyUseCase(addedUserId)
         updateTutorialTasksIfEmptyUseCase(addedUserId)
 
-        updateUserUseCase(addedUserId)
+        updateUserDataUseCase(addedUserId)
     }
 }

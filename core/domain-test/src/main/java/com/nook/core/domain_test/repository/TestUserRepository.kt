@@ -18,7 +18,7 @@ class TestUserRepository : UserRepository {
         return flowOf(user)
     }
 
-    override suspend fun insertUser(user: User): Int {
+    override suspend fun insertOrReplaceUser(user: User): Int {
         val addedUserId = if (userTestData.isNotEmpty()) {
             userTestData.last().id + 1
         } else {
