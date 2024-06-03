@@ -175,8 +175,8 @@ class CollectibleViewModel @Inject constructor(
         }
     }
 
-    fun onLongClickCollectibleItem(item: Collectible) {
-        _collectibleToShowInDialog.value = item
+    fun onLongClickCollectibleItem(collectible: Collectible) {
+        _collectibleToShowInDialog.value = collectible
     }
 
     fun onDismissCollectibleDialog() {

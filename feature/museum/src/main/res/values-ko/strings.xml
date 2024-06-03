@@ -24,4 +24,5 @@
     <string name="collectible_name">이름: %s</string>
     <string name="collectible_location">장소: %s</string>
     <string name="empty">(비어 있음)</string>
+    <string name="now">현재</string>
 </resources>

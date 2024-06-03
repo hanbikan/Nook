@@ -39,12 +39,14 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
+import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkDialogWithContents
+import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTextButton
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
@@ -257,6 +259,7 @@ fun HourViewContents(
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
     val itemsPerRow = (containerWidth / itemWidth).toInt()
     val density = LocalDensity.current
+    val currentHour = getCurrentHour()
 
     LaunchedEffect(itemsPerRow, uiState.month) {
         if (itemsPerRow > 0) {
@@ -289,20 +292,33 @@ fun HourViewContents(
             }
             uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
                 if (itemsPerRow > 0) {
+                    // 시간
                     item {
+                        val endHour = uiState.getEndHourByStartHour(startHour)
                         val text = if (startHour == ALL_DAY_KEY) {
                             stringResource(id = R.string.all_day)
                         } else {
-                            formatTime(startHour, uiState.getEndHourByStartHour(startHour))
+                            formatTime(startHour, endHour)
                         }
-                        NkText(
+
+                        Row(
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .padding(horizontal = Dimens.SideMargin),
-                            style = NkTheme.typography.titleLarge,
-                            text = text,
-                        )
+                            verticalAlignment = Alignment.CenterVertically,
+                        ) {
+                            NkText(
+                                style = NkTheme.typography.titleLarge,
+                                text = text,
+                            )
+                            if (currentHour in startHour until endHour) {
+                                Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
+                                NkTag(text = stringResource(id = R.string.now))
+                            }
+                        }
                     }
+
+                    // 컨텐츠
                     if (collectibleList.isNotEmpty()) {
                         itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
                             CollectibleItemsForRow(
