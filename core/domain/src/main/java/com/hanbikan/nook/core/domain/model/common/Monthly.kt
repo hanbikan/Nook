@@ -1,12 +1,19 @@
-package com.hanbikan.nook.core.domain.model
+package com.hanbikan.nook.core.domain.model.common
 
 /**
  * An interface representing monthly collectible items.
  */
 interface Monthly {
-    val timesByMonth: Map<Int, String> // 1: "NA", 3: "4 PM - 9 AM", 9: "All day"
+    val isNorth: Boolean
+    val timesByMonthNorth: Map<Int, String> // 1: "NA", 3: "4 PM - 9 AM", 9: "All day"
+    val timesByMonthSouth: Map<Int, String>
+
+    fun getCurrentTimesByMonth(): Map<Int, String> {
+        return if (isNorth) timesByMonthNorth else timesByMonthSouth
+    }
 
     fun belongsToMonth(month: Int): Boolean {
+        val timesByMonth = getCurrentTimesByMonth()
         return timesByMonth.containsKey(month) && timesByMonth[month] != NOT_AVAILABLE
     }
 
@@ -22,7 +29,7 @@ interface Monthly {
 fun String.parseTimeRange(): List<Int> {
     if (this == Monthly.NOT_AVAILABLE) {
         return listOf()
-    } else if(this == Monthly.ALL_DAY) {
+    } else if (this == Monthly.ALL_DAY) {
         return (0 until 24).toList()
     }
 

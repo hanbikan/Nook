@@ -1,5 +1,9 @@
 package com.hanbikan.nook.core.domain.model
 
+import com.hanbikan.nook.core.domain.model.common.Completable
+import com.hanbikan.nook.core.domain.model.common.Detail
+import com.hanbikan.nook.core.domain.model.common.HasDetail
+
 data class TutorialTask(
     val id: Int = 0,
     val userId: Int,

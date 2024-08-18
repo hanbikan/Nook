@@ -44,7 +44,7 @@ import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.designsystem.component.SwipeAction
 import com.hanbikan.nook.core.designsystem.component.SwipeActions
 import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.ui.DetailDialog
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText

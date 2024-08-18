@@ -12,6 +12,18 @@ data class SeaCreatureEntity(
     val name: String,
     val number: Int,
     @ColumnInfo(name = "image_url") val imageUrl: String,
-    @ColumnInfo(name = "times_by_month") val timesByMonth: Map<Int, String>,
-    val isCollected: Boolean,
+    @ColumnInfo(name = "times_by_month_north", defaultValue = "") val timesByMonthNorth: Map<Int, String>,
+    @ColumnInfo(name = "is_collected", defaultValue = "0") val isCollected: Boolean,
+
+
+    @ColumnInfo(name = "render_url", defaultValue = "") val renderUrl: String,
+    @ColumnInfo(name = "rarity", defaultValue = "") val rarity: String,
+    @ColumnInfo(name = "total_catch", defaultValue = "0") val totalCatch: Int,
+    @ColumnInfo(name = "sell_nook", defaultValue = "0") val sellNook: Int,
+    @ColumnInfo(name = "tank_width", defaultValue = "0.0") val tankWidth: Float,
+    @ColumnInfo(name = "tank_length", defaultValue = "0.0") val tankLength: Float,
+    @ColumnInfo(defaultValue = "") val catchphrases: List<String>,
+
+    @ColumnInfo(name = "is_north", defaultValue = "1") val isNorth: Boolean,
+    @ColumnInfo(name = "times_by_month_south", defaultValue = "") val timesByMonthSouth: Map<Int, String>,
 )

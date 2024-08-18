@@ -3,7 +3,7 @@ package com.hanbikan.nook.core.database.entity
 import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 
 @Entity(tableName = "tutorial_task")
 data class TutorialTaskEntity(

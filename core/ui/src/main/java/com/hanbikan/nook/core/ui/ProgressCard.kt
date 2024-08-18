@@ -8,7 +8,6 @@ import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
@@ -16,7 +15,7 @@ import com.hanbikan.nook.core.designsystem.component.AnimatedLinearProgressIndic
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Completable
+import com.hanbikan.nook.core.domain.model.common.Completable
 
 @Composable
 fun ProgressCard(

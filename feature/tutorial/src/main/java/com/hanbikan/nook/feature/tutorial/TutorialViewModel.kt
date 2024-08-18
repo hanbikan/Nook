@@ -3,7 +3,7 @@ package com.hanbikan.nook.feature.tutorial
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.repository.AppStateRepository

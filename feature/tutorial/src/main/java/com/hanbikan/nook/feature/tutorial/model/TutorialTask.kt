@@ -1,7 +1,7 @@
 package com.hanbikan.nook.feature.tutorial.model
 
 import android.content.Context
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.feature.tutorial.R
 

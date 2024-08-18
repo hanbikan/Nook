@@ -1,4 +1,4 @@
-package com.hanbikan.nook.core.domain.model
+package com.hanbikan.nook.core.domain.model.common
 
 /**
  * An interface representing location-based collectible items.

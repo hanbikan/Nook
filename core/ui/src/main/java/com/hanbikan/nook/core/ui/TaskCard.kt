@@ -31,7 +31,7 @@ import com.hanbikan.nook.core.designsystem.component.NkTextWithContentAfter
 import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Completable
+import com.hanbikan.nook.core.domain.model.common.Completable
 import com.hanbikan.nook.core.domain.model.TutorialTask
 
 @Composable

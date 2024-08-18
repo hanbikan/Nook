@@ -53,9 +53,9 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Collectible
-import com.hanbikan.nook.core.domain.model.LocationBased
-import com.hanbikan.nook.core.domain.model.calculateProgress
+import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.LocationBased
+import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import kotlin.math.ceil
 

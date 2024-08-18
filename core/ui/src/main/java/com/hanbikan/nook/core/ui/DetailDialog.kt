@@ -3,7 +3,7 @@ package com.hanbikan.nook.core.ui
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.painterResource
 import com.hanbikan.nook.core.designsystem.component.NkSequentialDialog
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 
 @Composable
 fun DetailDialog(

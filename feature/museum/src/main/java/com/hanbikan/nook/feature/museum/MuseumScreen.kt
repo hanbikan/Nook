@@ -30,8 +30,8 @@ import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Collectible
-import com.hanbikan.nook.core.domain.model.calculateProgress
+import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import kotlinx.coroutines.delay

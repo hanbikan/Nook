@@ -29,7 +29,7 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.Detail
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.ui.DetailDialog

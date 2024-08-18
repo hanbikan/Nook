@@ -17,11 +17,27 @@ class TestAppStateRepository : AppStateRepository {
         return flowOf(lastVisitedRouteTestData)
     }
 
+    override fun getLanguage(): Flow<String?> {
+        return flowOf("")
+    }
+
+    override fun getVersionName(): Flow<String?> {
+        return flowOf("")
+    }
+
     override suspend fun setActiveUserId(id: Int) {
         activeUserIdTestData = id
     }
 
     override suspend fun setLastVisitedRoute(route: String) {
         lastVisitedRouteTestData = route
+    }
+
+    override suspend fun setLanguage(language: String) {
+
+    }
+
+    override suspend fun setVersionName(versionName: String) {
+
     }
 }

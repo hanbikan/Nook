@@ -14,12 +14,25 @@ fun FishResponse.toDomain(
 ): Fish {
     return Fish(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = image_url,
-        timesByMonth = if (isNorth) north.times_by_month.toMap() else south.times_by_month.toMap(),
+        renderUrl = render_url,
         isCollected = false,
+        rarity = rarity,
+        totalCatch = total_catch,
+        sellNook = sell_nook,
+        tankWidth = tank_width,
+        tankLength = tank_length,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = north.times_by_month.toMap(),
+        timesByMonthSouth = south.times_by_month.toMap(),
+
         location = location,
+
+        shadowSize = shadow_size,
     )
 }
 
@@ -32,9 +45,20 @@ fun BugResponse.toDomain(
         number = number,
         name = name,
         imageUrl = image_url,
+        renderUrl = render_url,
         isCollected = false,
-        timesByMonth = if (isNorth) north.times_by_month.toMap() else south.times_by_month.toMap(),
-        location = location
+        rarity = rarity,
+        totalCatch = total_catch,
+        sellNook = sell_nook,
+        tankWidth = tank_width,
+        tankLength = tank_length,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = north.times_by_month.toMap(),
+        timesByMonthSouth = south.times_by_month.toMap(),
+
+        location = location,
     )
 }
 
@@ -47,7 +71,17 @@ fun SeaCreatureResponse.toDomain(
         number = number,
         name = name,
         imageUrl = image_url,
+        renderUrl = render_url,
         isCollected = false,
-        timesByMonth = if (isNorth) north.times_by_month.toMap() else south.times_by_month.toMap(),
+        rarity = rarity,
+        totalCatch = total_catch,
+        sellNook = sell_nook,
+        tankWidth = tank_width,
+        tankLength = tank_length,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = north.times_by_month.toMap(),
+        timesByMonthSouth = south.times_by_month.toMap(),
     )
 }

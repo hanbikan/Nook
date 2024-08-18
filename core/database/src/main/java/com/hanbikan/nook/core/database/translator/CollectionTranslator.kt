@@ -10,47 +10,95 @@ import com.hanbikan.nook.core.domain.model.SeaCreature
 fun FishEntity.toDomain(): Fish {
     return Fish(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
-        location = location
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthSouth = timesByMonthSouth,
+        timesByMonthNorth = timesByMonthNorth,
+
+        location = location,
+
+        shadowSize = shadowSize,
     )
 }
 
 fun Fish.toData(): FishEntity {
     return FishEntity(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthSouth = timesByMonthSouth,
+        timesByMonthNorth = timesByMonthNorth,
+
         location = location,
+
+        shadowSize = shadowSize
     )
 }
 
 fun BugEntity.toDomain(): Bug {
     return Bug(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
-        location = location
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = timesByMonthNorth,
+        timesByMonthSouth = timesByMonthSouth,
+
+        location = location,
     )
 }
 
 fun Bug.toData(): BugEntity {
     return BugEntity(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = timesByMonthNorth,
+        timesByMonthSouth = timesByMonthSouth,
+
         location = location,
     )
 }
@@ -58,21 +106,41 @@ fun Bug.toData(): BugEntity {
 fun SeaCreatureEntity.toDomain(): SeaCreature {
     return SeaCreature(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = timesByMonthNorth,
+        timesByMonthSouth = timesByMonthSouth,
     )
 }
 
 fun SeaCreature.toData(): SeaCreatureEntity {
     return SeaCreatureEntity(
         userId = userId,
-        name = name,
         number = number,
+        name = name,
         imageUrl = imageUrl,
-        timesByMonth = timesByMonth,
+        renderUrl = renderUrl,
         isCollected = isCollected,
+        rarity = rarity,
+        totalCatch = totalCatch,
+        sellNook = sellNook,
+        tankWidth = tankWidth,
+        tankLength = tankLength,
+        catchphrases = catchphrases,
+
+        isNorth = isNorth,
+        timesByMonthNorth = timesByMonthNorth,
+        timesByMonthSouth = timesByMonthSouth,
     )
 }

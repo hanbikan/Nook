@@ -6,12 +6,12 @@ import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.common.getCurrentMonth
 import com.hanbikan.nook.core.domain.model.Bug
-import com.hanbikan.nook.core.domain.model.Collectible
+import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.Fish
-import com.hanbikan.nook.core.domain.model.Monthly
+import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.model.parseTimeRange
+import com.hanbikan.nook.core.domain.model.common.parseTimeRange
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
@@ -273,7 +273,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
                 collectibleList.forEach { item ->
                     if (item is Monthly && item.belongsToMonth(month)) {
-                        val times = item.timesByMonth[month]
+                        val times = item.timesByMonthSouth[month]
                         // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
                         if (times == Monthly.ALL_DAY) {
                             hourToCollectibleListForMonth[ALL_DAY_KEY]?.add(item)
