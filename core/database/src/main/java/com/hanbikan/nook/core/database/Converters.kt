@@ -8,17 +8,17 @@ import kotlinx.serialization.json.Json
 class Converters {
     // List<Detail>
     @TypeConverter
-    fun fromDetailList(details: List<Detail>): String {
-        if (details.isEmpty()) {
-            return ""
+    fun fromDetailList(details: List<Detail>?): String? {
+        if (details.isNullOrEmpty()) {
+            return null
         }
         return Json.encodeToString(details)
     }
 
     @TypeConverter
-    fun toDetailList(string: String): List<Detail> {
-        if (string.isEmpty()) {
-            return listOf()
+    fun toDetailList(string: String?): List<Detail>? {
+        if (string.isNullOrEmpty()) {
+            return null
         }
         return Json.decodeFromString(string)
     }
