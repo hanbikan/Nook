@@ -22,7 +22,6 @@ fun FishEntity.toDomain(): Fish {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesSouth = monthToTimesSouth,
         monthToTimesNorth = monthToTimesNorth,
 
@@ -47,7 +46,6 @@ fun Fish.toData(): FishEntity {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesSouth = monthToTimesSouth,
         monthToTimesNorth = monthToTimesNorth,
 
@@ -72,7 +70,6 @@ fun BugEntity.toDomain(): Bug {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = monthToTimesNorth,
         monthToTimesSouth = monthToTimesSouth,
 
@@ -95,7 +92,6 @@ fun Bug.toData(): BugEntity {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = monthToTimesNorth,
         monthToTimesSouth = monthToTimesSouth,
 
@@ -118,7 +114,6 @@ fun SeaCreatureEntity.toDomain(): SeaCreature {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = monthToTimesNorth,
         monthToTimesSouth = monthToTimesSouth,
 
@@ -142,7 +137,6 @@ fun SeaCreature.toData(): SeaCreatureEntity {
         tankLength = tankLength,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = monthToTimesNorth,
         monthToTimesSouth = monthToTimesSouth,
 

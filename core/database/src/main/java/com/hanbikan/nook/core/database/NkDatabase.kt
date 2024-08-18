@@ -21,7 +21,7 @@ import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 20,
+    version = 21,
     entities = [
         TaskEntity::class,
         UserEntity::class,
@@ -50,6 +50,7 @@ import com.hanbikan.nook.core.database.entity.UserEntity
         AutoMigration(from = 17, to = 18, spec = NkDatabase.AutoMigration_17_18::class),
         AutoMigration (from = 18, to = 19),
         AutoMigration (from = 19, to = 20),
+        AutoMigration (from = 20, to = 21, spec = NkDatabase.AutoMigration_20_21::class),
     ],
     exportSchema = true
 )
@@ -78,4 +79,9 @@ abstract class NkDatabase : RoomDatabase() {
         RenameColumn(tableName = "sea_creature", fromColumnName = "isCollected", toColumnName = "is_collected")
     )
     class AutoMigration_17_18 : AutoMigrationSpec
+
+    @DeleteColumn(tableName = "bug", columnName = "is_north")
+    @DeleteColumn(tableName = "fish", columnName = "is_north")
+    @DeleteColumn(tableName = "sea_creature", columnName = "is_north")
+    class AutoMigration_20_21 : AutoMigrationSpec
 }

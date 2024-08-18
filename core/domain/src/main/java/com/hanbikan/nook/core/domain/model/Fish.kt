@@ -20,7 +20,6 @@ data class Fish(
     override val tankLength: Float,
     override val catchphrases: List<String>,
 
-    override val isNorth: Boolean,
     override val monthToTimesNorth: MonthToTimes,
     override val monthToTimesSouth: MonthToTimes,
 

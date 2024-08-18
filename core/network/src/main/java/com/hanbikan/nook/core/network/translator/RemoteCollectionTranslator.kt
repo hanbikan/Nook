@@ -26,7 +26,6 @@ fun FishResponse.toDomain(
         tankLength = tank_length,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesSouth = south.times_by_month.toTimesByMonth(),
         monthToTimesNorth = north.times_by_month.toTimesByMonth(),
 
@@ -54,7 +53,6 @@ fun BugResponse.toDomain(
         tankLength = tank_length,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = north.times_by_month.toTimesByMonth(),
         monthToTimesSouth = south.times_by_month.toTimesByMonth(),
 
@@ -80,7 +78,6 @@ fun SeaCreatureResponse.toDomain(
         tankLength = tank_length,
         catchphrases = catchphrases,
 
-        isNorth = isNorth,
         monthToTimesNorth = north.times_by_month.toTimesByMonth(),
         monthToTimesSouth = south.times_by_month.toTimesByMonth(),
 

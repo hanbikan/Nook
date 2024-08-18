@@ -167,6 +167,7 @@ fun CollectibleScreen(
         CollectibleDialog(
             collectible = collectibleToShowInDialog,
             onDismiss = viewModel::onDismissCollectibleDialog,
+            getIsNorthForActiveUser = viewModel::getIsNorthForActiveUser,
         )
 
         NkDialog(
@@ -437,6 +438,7 @@ fun CollectibleItem(
 fun CollectibleDialog(
     collectible: Collectible?,
     onDismiss: () -> Unit,
+    getIsNorthForActiveUser: () -> Boolean,
 ) {
     NkDialogWithContents(
         visible = collectible != null,
@@ -455,7 +457,7 @@ fun CollectibleDialog(
                 if (collectible is Monthly) {
                     NkText(text = stringResource(id = R.string.collectible_time))
                     Column {
-                        collectible.getCurrentMonthToTimes()
+                        collectible.getCurrentMonthToTimes(getIsNorthForActiveUser())
                             .convertToTimeRanges()
                             .map { it.display() }
                             .forEach { display ->

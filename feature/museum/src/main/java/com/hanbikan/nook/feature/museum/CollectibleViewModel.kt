@@ -81,14 +81,16 @@ class CollectibleViewModel @Inject constructor(
                 is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                     CollectibleScreenUiState.MonthlyView.GeneralView(
                         collectibleList = it,
-                        month = uiStateValue.month
+                        month = uiStateValue.month,
+                        getIsNorthForActiveUser(),
                     )
                 }
 
                 is CollectibleScreenUiState.MonthlyView.HourView -> {
                     CollectibleScreenUiState.MonthlyView.HourView(
                         collectibleList = it,
-                        month = uiStateValue.month
+                        month = uiStateValue.month,
+                        getIsNorthForActiveUser(),
                     )
                 }
 
@@ -109,7 +111,8 @@ class CollectibleViewModel @Inject constructor(
             CollectibleScreenViewType.MONTHLY.chipIndex -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
                     collectibleList = collectibleList.value,
-                    month = getCurrentMonth()
+                    month = getCurrentMonth(),
+                    getIsNorthForActiveUser(),
                 )
             }
         }
@@ -123,14 +126,16 @@ class CollectibleViewModel @Inject constructor(
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
                     collectibleList = collectibleList.value,
-                    month = month
+                    month = month,
+                    getIsNorthForActiveUser(),
                 )
             }
 
             is CollectibleScreenUiState.MonthlyView.HourView -> {
                 _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
                     collectibleList = collectibleList.value,
-                    month = month
+                    month = month,
+                    getIsNorthForActiveUser(),
                 )
             }
         }
@@ -165,14 +170,16 @@ class CollectibleViewModel @Inject constructor(
             is CollectibleScreenUiState.MonthlyView.GeneralView -> {
                 CollectibleScreenUiState.MonthlyView.HourView(
                     collectibleList.value,
-                    uiStateValue.month
+                    uiStateValue.month,
+                    getIsNorthForActiveUser(),
                 )
             }
 
             is CollectibleScreenUiState.MonthlyView.HourView -> {
                 CollectibleScreenUiState.MonthlyView.GeneralView(
                     collectibleList.value,
-                    uiStateValue.month
+                    uiStateValue.month,
+                    getIsNorthForActiveUser(),
                 )
             }
         }
@@ -189,6 +196,10 @@ class CollectibleViewModel @Inject constructor(
     fun switchIsInfoDialogShown() {
         _isInfoDialogShown.value = !isInfoDialogShown.value
     }
+    
+    fun getIsNorthForActiveUser(): Boolean {
+        return activeUser.value?.isNorth ?: true
+    }
 }
 
 sealed class CollectibleScreenUiState(val chipIndex: Int?) {
@@ -201,9 +212,10 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
     sealed class MonthlyView(
         val month: Int,
+        val isNorth: Boolean,
     ) : CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.MONTHLY.chipIndex) {
 
-        class GeneralView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
+        class GeneralView(collectibleList: List<Collectible>, month: Int, isNorth: Boolean) : MonthlyView(month, isNorth) {
             val collectibleListForMonth: List<Collectible> =
                 getCollectibleListForMonth(collectibleList, month)
 
@@ -212,12 +224,12 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 month: Int
             ): List<Collectible> {
                 return collectibleList.filter {
-                    it is Monthly && it.belongsToMonth(month)
+                    it is Monthly && it.belongsToMonth(month, isNorth)
                 }
             }
         }
 
-        class HourView(collectibleList: List<Collectible>, month: Int) : MonthlyView(month) {
+        class HourView(collectibleList: List<Collectible>, month: Int, isNorth: Boolean) : MonthlyView(month, isNorth) {
             val startHourToCollectibleListForMonth: Map<Int, List<Collectible>> =
                 getStartHourToCollectibleListForMonth(collectibleList, month)
 
@@ -279,8 +291,8 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 }
 
                 collectibleList.forEach { item ->
-                    if (item is Monthly && item.belongsToMonth(month)) {
-                        val times = item.getCurrentMonthToTimes().getTimesOrNull(month)
+                    if (item is Monthly && item.belongsToMonth(month, isNorth)) {
+                        val times = item.getCurrentMonthToTimes(isNorth).getTimesOrNull(month)
                         // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
                         if (times == ALL_DAY) {
                             hourToCollectibleListForMonth[ALL_DAY_KEY]?.add(item)

@@ -25,7 +25,6 @@ data class SeaCreatureEntity(
     @ColumnInfo(name = "tank_length", defaultValue = "0.0") val tankLength: Float,
     @ColumnInfo(defaultValue = "") val catchphrases: List<String>,
 
-    @ColumnInfo(name = "is_north", defaultValue = "1") val isNorth: Boolean,
     @ColumnInfo(name = "times_by_month_south", defaultValue = "") val monthToTimesSouth: MonthToTimes,
 
     @ColumnInfo(name = "shadow_size", defaultValue = "") val shadowSize: String,
