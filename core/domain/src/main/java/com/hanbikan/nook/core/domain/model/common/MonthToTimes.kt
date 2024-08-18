@@ -20,7 +20,9 @@ data class MonthToTimes (
 }
 
 /**
- * "4 AM - 9 AM" returns [4,5,6,7,8,9]
+ * "4 AM - 9 AM" returns [4,5,6,7,8]
+ * "10 PM - 2 AM" returns [22,23,0,1]
+ * "11 AM - 2 AM" returns [11,12,13]
  */
 fun String.parseTimeRange(): List<Int> {
     if (this == NOT_AVAILABLE) {
@@ -32,15 +34,15 @@ fun String.parseTimeRange(): List<Int> {
     val hours = mutableListOf<Int>()
 
     val startHourIndex: Int = this.indexOfFirst { it.isDigit() }
-    val startHour: Int = this.slice(startHourIndex..startHourIndex + 1).trim().toInt()
+    val startHour: Int = this.slice(startHourIndex..startHourIndex + 1).trim().toInt() // 4
     val startPeriodIndex: Int = this.indexOfFirst { it == 'M' } - 1
-    val startPeriod: String = this.slice(startPeriodIndex..startPeriodIndex + 1)
+    val startPeriod: String = this.slice(startPeriodIndex..startPeriodIndex + 1) // "AM"
     val convertedStartHour = convertTo24Hour(startHour, startPeriod)
 
     val endHourIndex: Int = this.indexOfLast { it.isDigit() } - 1
-    val endHour: Int = this.slice(endHourIndex..endHourIndex + 1).trim().toInt()
+    val endHour: Int = this.slice(endHourIndex..endHourIndex + 1).trim().toInt() // 9
     val endPeriodIndex: Int = this.indexOfLast { it == 'M' } - 1
-    val endPeriod: String = this.slice(endPeriodIndex..startPeriodIndex + 1)
+    val endPeriod: String = this.slice(endPeriodIndex..endPeriodIndex + 1) // "AM"
     val convertedEndHour = convertTo24Hour(endHour, endPeriod)
 
     var currentHour = convertedStartHour
