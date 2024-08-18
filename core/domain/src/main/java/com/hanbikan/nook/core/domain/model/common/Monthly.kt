@@ -10,12 +10,12 @@ interface Monthly {
     val monthToTimesNorth: MonthToTimes
     val monthToTimesSouth: MonthToTimes
 
-    fun getCurrentTimesByMonth(): MonthToTimes {
+    fun getCurrentMonthToTimes(): MonthToTimes {
         return if (isNorth) monthToTimesNorth else monthToTimesSouth
     }
 
     fun belongsToMonth(month: Int): Boolean {
-        val timesByMonth = getCurrentTimesByMonth()
+        val timesByMonth = getCurrentMonthToTimes()
         return timesByMonth.value.containsKey(month) && timesByMonth.getTimesOrNull(month) != NOT_AVAILABLE
     }
 }

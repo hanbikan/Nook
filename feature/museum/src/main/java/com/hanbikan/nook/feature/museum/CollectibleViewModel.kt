@@ -280,7 +280,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
                 collectibleList.forEach { item ->
                     if (item is Monthly && item.belongsToMonth(month)) {
-                        val times = item.getCurrentTimesByMonth().getTimesOrNull(month)
+                        val times = item.getCurrentMonthToTimes().getTimesOrNull(month)
                         // 항상 잡을 수 있는 생물은 ALL_DAY_KEY에 추가합니다.
                         if (times == ALL_DAY) {
                             hourToCollectibleListForMonth[ALL_DAY_KEY]?.add(item)

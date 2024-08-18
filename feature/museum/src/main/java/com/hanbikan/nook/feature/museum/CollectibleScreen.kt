@@ -330,7 +330,7 @@ fun HourViewContents(
                         }
                     }
 
-                    // 컨텐츠
+                    // 아이템 리스트
                     if (collectibleList.isNotEmpty()) {
                         itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
                             CollectibleItemsForRow(
@@ -455,7 +455,7 @@ fun CollectibleDialog(
                 if (collectible is Monthly) {
                     NkText(text = stringResource(id = R.string.collectible_time))
                     Column {
-                        collectible.getCurrentTimesByMonth()
+                        collectible.getCurrentMonthToTimes()
                             .convertToTimeRanges()
                             .map { it.display() }
                             .forEach { display ->
