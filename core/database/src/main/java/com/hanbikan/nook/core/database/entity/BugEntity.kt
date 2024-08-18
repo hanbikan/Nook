@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.database.entity
 
 import androidx.room.ColumnInfo
 import androidx.room.Entity
+import com.hanbikan.nook.core.domain.model.common.MonthToTimes
 
 @Entity(
     tableName = "bug",
@@ -12,7 +13,7 @@ data class BugEntity(
     val name: String,
     val number: Int,
     @ColumnInfo(name = "image_url") val imageUrl: String,
-    @ColumnInfo(name = "times_by_month_north", defaultValue = "") val timesByMonthNorth: Map<Int, String>,
+    @ColumnInfo(name = "times_by_month_north", defaultValue = "") val monthToTimesNorth: MonthToTimes,
     @ColumnInfo(name = "is_collected", defaultValue = "0") val isCollected: Boolean,
     @ColumnInfo(defaultValue = "") val location: String,
 
@@ -26,5 +27,5 @@ data class BugEntity(
     @ColumnInfo(defaultValue = "") val catchphrases: List<String>,
 
     @ColumnInfo(name = "is_north", defaultValue = "1") val isNorth: Boolean,
-    @ColumnInfo(name = "times_by_month_south", defaultValue = "") val timesByMonthSouth: Map<Int, String>,
+    @ColumnInfo(name = "times_by_month_south", defaultValue = "") val monthToTimesSouth: MonthToTimes,
 )

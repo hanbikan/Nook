@@ -3,6 +3,7 @@ package com.hanbikan.nook.core.domain.model
 import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.Monthly
+import com.hanbikan.nook.core.domain.model.common.MonthToTimes
 
 data class Bug(
     override val userId: Int,
@@ -19,8 +20,8 @@ data class Bug(
     override val catchphrases: List<String>,
 
     override val isNorth: Boolean,
-    override val timesByMonthNorth: Map<Int, String>,
-    override val timesByMonthSouth: Map<Int, String>,
+    override val monthToTimesNorth: MonthToTimes,
+    override val monthToTimesSouth: MonthToTimes,
 
     override val location: String,
 ) : Collectible, Monthly, LocationBased

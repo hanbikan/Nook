@@ -23,8 +23,8 @@ fun FishEntity.toDomain(): Fish {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthSouth = timesByMonthSouth,
-        timesByMonthNorth = timesByMonthNorth,
+        monthToTimesSouth = monthToTimesSouth,
+        monthToTimesNorth = monthToTimesNorth,
 
         location = location,
 
@@ -48,8 +48,8 @@ fun Fish.toData(): FishEntity {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthSouth = timesByMonthSouth,
-        timesByMonthNorth = timesByMonthNorth,
+        monthToTimesSouth = monthToTimesSouth,
+        monthToTimesNorth = monthToTimesNorth,
 
         location = location,
 
@@ -73,8 +73,8 @@ fun BugEntity.toDomain(): Bug {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = timesByMonthNorth,
-        timesByMonthSouth = timesByMonthSouth,
+        monthToTimesNorth = monthToTimesNorth,
+        monthToTimesSouth = monthToTimesSouth,
 
         location = location,
     )
@@ -96,8 +96,8 @@ fun Bug.toData(): BugEntity {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = timesByMonthNorth,
-        timesByMonthSouth = timesByMonthSouth,
+        monthToTimesNorth = monthToTimesNorth,
+        monthToTimesSouth = monthToTimesSouth,
 
         location = location,
     )
@@ -119,8 +119,8 @@ fun SeaCreatureEntity.toDomain(): SeaCreature {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = timesByMonthNorth,
-        timesByMonthSouth = timesByMonthSouth,
+        monthToTimesNorth = monthToTimesNorth,
+        monthToTimesSouth = monthToTimesSouth,
 
         shadowSize = shadowSize,
         shadowMovement = shadowMovement,
@@ -143,8 +143,8 @@ fun SeaCreature.toData(): SeaCreatureEntity {
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = timesByMonthNorth,
-        timesByMonthSouth = timesByMonthSouth,
+        monthToTimesNorth = monthToTimesNorth,
+        monthToTimesSouth = monthToTimesSouth,
 
         shadowSize = shadowSize,
         shadowMovement = shadowMovement,

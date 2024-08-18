@@ -21,7 +21,7 @@ import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 19,
+    version = 20,
     entities = [
         TaskEntity::class,
         UserEntity::class,
@@ -49,6 +49,7 @@ import com.hanbikan.nook.core.database.entity.UserEntity
         AutoMigration(from = 16, to = 17, spec = NkDatabase.AutoMigration_16_17::class),
         AutoMigration(from = 17, to = 18, spec = NkDatabase.AutoMigration_17_18::class),
         AutoMigration (from = 18, to = 19),
+        AutoMigration (from = 19, to = 20),
     ],
     exportSchema = true
 )

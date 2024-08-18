@@ -6,7 +6,7 @@ import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.response.BugResponse
 import com.hanbikan.nook.core.domain.response.FishResponse
 import com.hanbikan.nook.core.domain.response.SeaCreatureResponse
-import com.hanbikan.nook.core.domain.response.toMap
+import com.hanbikan.nook.core.domain.response.toTimesByMonth
 
 fun FishResponse.toDomain(
     userId: Int,
@@ -27,8 +27,8 @@ fun FishResponse.toDomain(
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = north.times_by_month.toMap(),
-        timesByMonthSouth = south.times_by_month.toMap(),
+        monthToTimesSouth = south.times_by_month.toTimesByMonth(),
+        monthToTimesNorth = north.times_by_month.toTimesByMonth(),
 
         location = location,
 
@@ -55,8 +55,8 @@ fun BugResponse.toDomain(
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = north.times_by_month.toMap(),
-        timesByMonthSouth = south.times_by_month.toMap(),
+        monthToTimesNorth = north.times_by_month.toTimesByMonth(),
+        monthToTimesSouth = south.times_by_month.toTimesByMonth(),
 
         location = location,
     )
@@ -81,8 +81,8 @@ fun SeaCreatureResponse.toDomain(
         catchphrases = catchphrases,
 
         isNorth = isNorth,
-        timesByMonthNorth = north.times_by_month.toMap(),
-        timesByMonthSouth = south.times_by_month.toMap(),
+        monthToTimesNorth = north.times_by_month.toTimesByMonth(),
+        monthToTimesSouth = south.times_by_month.toTimesByMonth(),
 
         shadowSize = shadow_size,
         shadowMovement = shadow_movement

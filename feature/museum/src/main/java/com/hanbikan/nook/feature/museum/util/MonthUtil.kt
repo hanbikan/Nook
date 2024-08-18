@@ -2,9 +2,8 @@ package com.hanbikan.nook.feature.museum.util
 
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.res.stringResource
-import com.hanbikan.nook.core.designsystem.component.ChipItem
-import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.TimeRange
+import com.hanbikan.nook.core.domain.model.common.MonthToTimes.Companion.ALL_DAY
 import com.hanbikan.nook.feature.museum.R
 
 @Composable
@@ -30,7 +29,7 @@ fun TimeRange.display(): String {
     val monthList = getMonthList()
     val startMonthDisplay = monthList.getOrElse(startMonth - 1) { "" }
     val endMonthDisplay = monthList.getOrElse(endMonth - 1) { "" }
-    val hourRangeDisplay = if (hourRange == Monthly.ALL_DAY) {
+    val hourRangeDisplay = if (hourRange == ALL_DAY) {
         stringResource(id = R.string.all_day)
     } else {
         hourRange

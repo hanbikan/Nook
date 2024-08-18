@@ -2,6 +2,7 @@ package com.hanbikan.nook.core.database
 
 import androidx.room.TypeConverter
 import com.hanbikan.nook.core.domain.model.common.Detail
+import com.hanbikan.nook.core.domain.model.common.MonthToTimes
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 
@@ -24,22 +25,22 @@ class Converters {
     }
 
 
-    // Map<Int, String>
+    // TimesByMonth
     @TypeConverter
-    fun fromMapIntString(map: Map<Int, String>): String {
-        if (map.isEmpty()) {
+    fun fromTimesByMonth(map: MonthToTimes): String {
+        if (map.value.isEmpty()) {
             return ""
         }
-        return Json.encodeToString(map.mapKeys { it.key.toString() })
+        return Json.encodeToString(map.value.mapKeys { it.key.toString() })
     }
 
     @TypeConverter
-    fun toMapIntString(string: String): Map<Int, String> {
+    fun toTimesByMonth(string: String): MonthToTimes {
         if (string.isEmpty()) {
-            return mapOf()
+            return MonthToTimes(mapOf())
         }
-        return Json.decodeFromString<Map<String, String>>(string)
-            .mapKeys { it.key.toInt() }
+        val decodeFromString = Json.decodeFromString<Map<Int, String>>(string)
+        return MonthToTimes(decodeFromString)
     }
 
     // List<String>

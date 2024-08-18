@@ -1,5 +1,6 @@
 package com.hanbikan.nook.core.domain.response
 
+import com.hanbikan.nook.core.domain.model.common.MonthToTimes
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -18,8 +19,8 @@ data class TimesByMonth(
     val `12`: String
 )
 
-fun TimesByMonth.toMap(): Map<Int, String> {
-    return mapOf(
+fun TimesByMonth.toTimesByMonth(): MonthToTimes {
+    return MonthToTimes(mapOf(
         1 to `1`,
         2 to `2`,
         3 to `3`,
@@ -32,5 +33,5 @@ fun TimesByMonth.toMap(): Map<Int, String> {
         10 to `10`,
         11 to `11`,
         12 to `12`,
-    )
+    ))
 }
