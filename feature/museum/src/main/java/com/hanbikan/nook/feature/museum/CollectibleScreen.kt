@@ -432,12 +432,13 @@ fun CollectibleDialog(
     ) {
         collectible?.let { item ->
             GlideImage(
-                modifier = Modifier.size(CollectibleItemHeight * 0.5f),
-                model = item.imageUrl,
+                modifier = Modifier.size(CollectibleItemHeight * 0.75f),
+                model = item.renderUrl,
                 contentDescription = item.name,
             )
 
             Column {
+                Spacer(modifier = Modifier.height(4.dp))
                 NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
                 if (collectible is LocationBased) {
                     NkText(text = stringResource(id = R.string.collectible_location, collectible.location))
