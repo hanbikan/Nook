@@ -22,6 +22,7 @@
     <string name="hour_view">시간 단위로 보기</string>
     <string name="all_day">하루 종일</string>
     <string name="collectible_name">이름: %s</string>
+    <string name="collectible_time">시간: </string>
     <string name="collectible_location">장소: %s</string>
     <string name="empty">(비어 있음)</string>
     <string name="now">현재</string>

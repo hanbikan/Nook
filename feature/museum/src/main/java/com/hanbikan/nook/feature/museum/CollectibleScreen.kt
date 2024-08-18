@@ -55,8 +55,12 @@ import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.LocationBased
+import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
+import com.hanbikan.nook.core.domain.model.common.convertToTimeRanges
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
+import com.hanbikan.nook.feature.museum.util.display
+import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlin.math.ceil
 
 private val CollectibleItemWidth = 90.dp
@@ -208,20 +212,7 @@ fun MonthlyCollectibleContents(
         NkChipGroup(
             paddingValues = PaddingValues(horizontal = Dimens.SideMargin),
             chipGroup = ChipGroup(
-                chipItems = listOf(
-                    ChipItem(stringResource(id = R.string.january)),
-                    ChipItem(stringResource(id = R.string.february)),
-                    ChipItem(stringResource(id = R.string.march)),
-                    ChipItem(stringResource(id = R.string.april)),
-                    ChipItem(stringResource(id = R.string.may)),
-                    ChipItem(stringResource(id = R.string.june)),
-                    ChipItem(stringResource(id = R.string.july)),
-                    ChipItem(stringResource(id = R.string.august)),
-                    ChipItem(stringResource(id = R.string.september)),
-                    ChipItem(stringResource(id = R.string.october)),
-                    ChipItem(stringResource(id = R.string.november)),
-                    ChipItem(stringResource(id = R.string.december)),
-                ),
+                chipItems = getMonthList().map { ChipItem(it) },
                 selectedIndex = uiState.month - 1 // 0-index임에 유의
             ),
             autoScroll = true,
@@ -440,6 +431,17 @@ fun CollectibleDialog(
             Column {
                 Spacer(modifier = Modifier.height(4.dp))
                 NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
+                if (collectible is Monthly) {
+                    NkText(text = stringResource(id = R.string.collectible_time))
+                    Column {
+                        collectible.getCurrentTimesByMonth()
+                            .convertToTimeRanges()
+                            .map { it.display() }
+                            .forEach { display ->
+                                NkText(text = display, style = NkTheme.typography.bodySmall)
+                            }
+                    }
+                }
                 if (collectible is LocationBased) {
                     NkText(text = stringResource(id = R.string.collectible_location, collectible.location))
                 }
