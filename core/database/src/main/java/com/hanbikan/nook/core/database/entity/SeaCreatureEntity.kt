@@ -26,4 +26,7 @@ data class SeaCreatureEntity(
 
     @ColumnInfo(name = "is_north", defaultValue = "1") val isNorth: Boolean,
     @ColumnInfo(name = "times_by_month_south", defaultValue = "") val timesByMonthSouth: Map<Int, String>,
+
+    @ColumnInfo(name = "shadow_size", defaultValue = "") val shadowSize: String,
+    @ColumnInfo(name = "shadow_movement", defaultValue = "") val shadowMovement: String,
 )

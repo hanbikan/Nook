@@ -121,6 +121,9 @@ fun SeaCreatureEntity.toDomain(): SeaCreature {
         isNorth = isNorth,
         timesByMonthNorth = timesByMonthNorth,
         timesByMonthSouth = timesByMonthSouth,
+
+        shadowSize = shadowSize,
+        shadowMovement = shadowMovement,
     )
 }
 
@@ -142,5 +145,8 @@ fun SeaCreature.toData(): SeaCreatureEntity {
         isNorth = isNorth,
         timesByMonthNorth = timesByMonthNorth,
         timesByMonthSouth = timesByMonthSouth,
+
+        shadowSize = shadowSize,
+        shadowMovement = shadowMovement,
     )
 }

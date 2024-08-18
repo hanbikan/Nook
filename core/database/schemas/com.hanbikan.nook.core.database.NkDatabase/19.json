@@ -1,0 +1,555 @@
+{
+  "formatVersion": 1,
+  "database": {
+    "version": 19,
+    "identityHash": "5860a341f7249c59f2c8e4ffb4d461c3",
+    "entities": [
+      {
+        "tableName": "task",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL DEFAULT -1, `name` TEXT NOT NULL, `is_done` INTEGER NOT NULL, `is_daily` INTEGER NOT NULL DEFAULT 1, `is_visible` INTEGER NOT NULL DEFAULT 1, `details` TEXT DEFAULT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDone",
+            "columnName": "is_done",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDaily",
+            "columnName": "is_daily",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "isVisible",
+            "columnName": "is_visible",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "details",
+            "columnName": "details",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "user",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `name` TEXT NOT NULL, `island_name` TEXT NOT NULL, `tutorial_day` INTEGER NOT NULL DEFAULT 0, `is_north` INTEGER NOT NULL DEFAULT 1)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "islandName",
+            "columnName": "island_name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "tutorialDay",
+            "columnName": "tutorial_day",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "isNorth",
+            "columnName": "is_north",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "tutorial_task",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL, `user_id` INTEGER NOT NULL DEFAULT -1, `name` TEXT NOT NULL, `is_done` INTEGER NOT NULL, `details` TEXT DEFAULT NULL, `day` INTEGER NOT NULL)",
+        "fields": [
+          {
+            "fieldPath": "id",
+            "columnName": "id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "-1"
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "isDone",
+            "columnName": "is_done",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "details",
+            "columnName": "details",
+            "affinity": "TEXT",
+            "notNull": false,
+            "defaultValue": "NULL"
+          },
+          {
+            "fieldPath": "day",
+            "columnName": "day",
+            "affinity": "INTEGER",
+            "notNull": true
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": true,
+          "columnNames": [
+            "id"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "fish",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `number` INTEGER NOT NULL, `image_url` TEXT NOT NULL, `times_by_month_north` TEXT NOT NULL DEFAULT '', `is_collected` INTEGER NOT NULL DEFAULT 0, `location` TEXT NOT NULL DEFAULT '', `render_url` TEXT NOT NULL DEFAULT '', `rarity` TEXT NOT NULL DEFAULT '', `total_catch` INTEGER NOT NULL DEFAULT 0, `sell_nook` INTEGER NOT NULL DEFAULT 0, `tank_width` REAL NOT NULL DEFAULT 0.0, `tank_length` REAL NOT NULL DEFAULT 0.0, `catchphrases` TEXT NOT NULL DEFAULT '', `is_north` INTEGER NOT NULL DEFAULT 1, `times_by_month_south` TEXT NOT NULL DEFAULT '', `shadow_size` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`user_id`, `number`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "number",
+            "columnName": "number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timesByMonthNorth",
+            "columnName": "times_by_month_north",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isCollected",
+            "columnName": "is_collected",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "renderUrl",
+            "columnName": "render_url",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "rarity",
+            "columnName": "rarity",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "totalCatch",
+            "columnName": "total_catch",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "sellNook",
+            "columnName": "sell_nook",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "tankWidth",
+            "columnName": "tank_width",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "tankLength",
+            "columnName": "tank_length",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "catchphrases",
+            "columnName": "catchphrases",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isNorth",
+            "columnName": "is_north",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "timesByMonthSouth",
+            "columnName": "times_by_month_south",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shadowSize",
+            "columnName": "shadow_size",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "user_id",
+            "number"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "bug",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `number` INTEGER NOT NULL, `image_url` TEXT NOT NULL, `times_by_month_north` TEXT NOT NULL DEFAULT '', `is_collected` INTEGER NOT NULL DEFAULT 0, `location` TEXT NOT NULL DEFAULT '', `render_url` TEXT NOT NULL DEFAULT '', `rarity` TEXT NOT NULL DEFAULT '', `total_catch` INTEGER NOT NULL DEFAULT 0, `sell_nook` INTEGER NOT NULL DEFAULT 0, `tank_width` REAL NOT NULL DEFAULT 0.0, `tank_length` REAL NOT NULL DEFAULT 0.0, `catchphrases` TEXT NOT NULL DEFAULT '', `is_north` INTEGER NOT NULL DEFAULT 1, `times_by_month_south` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`user_id`, `number`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "number",
+            "columnName": "number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timesByMonthNorth",
+            "columnName": "times_by_month_north",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isCollected",
+            "columnName": "is_collected",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "location",
+            "columnName": "location",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "renderUrl",
+            "columnName": "render_url",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "rarity",
+            "columnName": "rarity",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "totalCatch",
+            "columnName": "total_catch",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "sellNook",
+            "columnName": "sell_nook",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "tankWidth",
+            "columnName": "tank_width",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "tankLength",
+            "columnName": "tank_length",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "catchphrases",
+            "columnName": "catchphrases",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isNorth",
+            "columnName": "is_north",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "timesByMonthSouth",
+            "columnName": "times_by_month_south",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "user_id",
+            "number"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      },
+      {
+        "tableName": "sea_creature",
+        "createSql": "CREATE TABLE IF NOT EXISTS `${TABLE_NAME}` (`user_id` INTEGER NOT NULL, `name` TEXT NOT NULL, `number` INTEGER NOT NULL, `image_url` TEXT NOT NULL, `times_by_month_north` TEXT NOT NULL DEFAULT '', `is_collected` INTEGER NOT NULL DEFAULT 0, `render_url` TEXT NOT NULL DEFAULT '', `rarity` TEXT NOT NULL DEFAULT '', `total_catch` INTEGER NOT NULL DEFAULT 0, `sell_nook` INTEGER NOT NULL DEFAULT 0, `tank_width` REAL NOT NULL DEFAULT 0.0, `tank_length` REAL NOT NULL DEFAULT 0.0, `catchphrases` TEXT NOT NULL DEFAULT '', `is_north` INTEGER NOT NULL DEFAULT 1, `times_by_month_south` TEXT NOT NULL DEFAULT '', `shadow_size` TEXT NOT NULL DEFAULT '', `shadow_movement` TEXT NOT NULL DEFAULT '', PRIMARY KEY(`user_id`, `number`))",
+        "fields": [
+          {
+            "fieldPath": "userId",
+            "columnName": "user_id",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "name",
+            "columnName": "name",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "number",
+            "columnName": "number",
+            "affinity": "INTEGER",
+            "notNull": true
+          },
+          {
+            "fieldPath": "imageUrl",
+            "columnName": "image_url",
+            "affinity": "TEXT",
+            "notNull": true
+          },
+          {
+            "fieldPath": "timesByMonthNorth",
+            "columnName": "times_by_month_north",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isCollected",
+            "columnName": "is_collected",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "renderUrl",
+            "columnName": "render_url",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "rarity",
+            "columnName": "rarity",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "totalCatch",
+            "columnName": "total_catch",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "sellNook",
+            "columnName": "sell_nook",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "0"
+          },
+          {
+            "fieldPath": "tankWidth",
+            "columnName": "tank_width",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "tankLength",
+            "columnName": "tank_length",
+            "affinity": "REAL",
+            "notNull": true,
+            "defaultValue": "0.0"
+          },
+          {
+            "fieldPath": "catchphrases",
+            "columnName": "catchphrases",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "isNorth",
+            "columnName": "is_north",
+            "affinity": "INTEGER",
+            "notNull": true,
+            "defaultValue": "1"
+          },
+          {
+            "fieldPath": "timesByMonthSouth",
+            "columnName": "times_by_month_south",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shadowSize",
+            "columnName": "shadow_size",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          },
+          {
+            "fieldPath": "shadowMovement",
+            "columnName": "shadow_movement",
+            "affinity": "TEXT",
+            "notNull": true,
+            "defaultValue": "''"
+          }
+        ],
+        "primaryKey": {
+          "autoGenerate": false,
+          "columnNames": [
+            "user_id",
+            "number"
+          ]
+        },
+        "indices": [],
+        "foreignKeys": []
+      }
+    ],
+    "views": [],
+    "setupQueries": [
+      "CREATE TABLE IF NOT EXISTS room_master_table (id INTEGER PRIMARY KEY,identity_hash TEXT)",
+      "INSERT OR REPLACE INTO room_master_table (id,identity_hash) VALUES(42, '5860a341f7249c59f2c8e4ffb4d461c3')"
+    ]
+  }
+}

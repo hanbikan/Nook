@@ -1,6 +1,7 @@
 package com.hanbikan.nook.core.domain.model
 
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.HasShadowSize
 import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.Monthly
 
@@ -24,5 +25,5 @@ data class Fish(
 
     override val location: String,
 
-    val shadowSize: String,
-) : Collectible, Monthly, LocationBased
+    override val shadowSize: String,
+) : Collectible, Monthly, LocationBased, HasShadowSize

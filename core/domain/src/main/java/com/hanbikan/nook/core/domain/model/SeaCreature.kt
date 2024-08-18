@@ -1,6 +1,8 @@
 package com.hanbikan.nook.core.domain.model
 
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.HasShadowMovement
+import com.hanbikan.nook.core.domain.model.common.HasShadowSize
 import com.hanbikan.nook.core.domain.model.common.Monthly
 
 data class SeaCreature(
@@ -20,4 +22,7 @@ data class SeaCreature(
     override val isNorth: Boolean,
     override val timesByMonthNorth: Map<Int, String>,
     override val timesByMonthSouth: Map<Int, String>,
-) : Collectible, Monthly
+
+    override val shadowSize: String,
+    override val shadowMovement: String,
+) : Collectible, Monthly, HasShadowSize, HasShadowMovement

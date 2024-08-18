@@ -83,5 +83,8 @@ fun SeaCreatureResponse.toDomain(
         isNorth = isNorth,
         timesByMonthNorth = north.times_by_month.toMap(),
         timesByMonthSouth = south.times_by_month.toMap(),
+
+        shadowSize = shadow_size,
+        shadowMovement = shadow_movement
     )
 }
