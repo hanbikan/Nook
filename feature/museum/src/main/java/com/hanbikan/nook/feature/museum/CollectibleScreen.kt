@@ -64,6 +64,7 @@ import com.hanbikan.nook.core.domain.model.common.convertToTimeRanges
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import com.hanbikan.nook.feature.museum.util.display
 import com.hanbikan.nook.feature.museum.util.getMonthList
+import kotlinx.coroutines.delay
 import kotlin.math.ceil
 
 private val CollectibleItemWidth = 90.dp
@@ -285,6 +286,7 @@ fun HourViewContents(
                     ).toInt()
                 }
             }
+            delay(150)
             lazyListState.animateScrollToItem(
                 index = scrollIndex,
                 scrollOffset = with(density) { -CollectibleItemHeight.toPx() }.toInt()
