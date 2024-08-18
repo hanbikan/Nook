@@ -5,6 +5,7 @@ import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.RemoteCollectionRepository
 import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.util.seaCreatureNameToKorean
+import com.hanbikan.nook.core.domain.util.shadowSizeToKorean
 import kotlinx.coroutines.flow.first
 import java.util.Locale
 import javax.inject.Inject
@@ -25,7 +26,7 @@ class GetAllRemoteSeaCreaturesByUserIdUseCase @Inject constructor(
             if (language == Locale.KOREAN.language) {
                 it.copy(
                     name = seaCreatureNameToKorean.getOrElse(it.name) { it.name },
-                    shadowSize = seaCreatureNameToKorean.getOrElse(it.shadowSize) { it.shadowSize },
+                    shadowSize = shadowSizeToKorean.getOrElse(it.shadowSize) { it.shadowSize },
                 )
             } else {
                 it

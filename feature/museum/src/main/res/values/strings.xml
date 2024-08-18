@@ -24,6 +24,7 @@
     <string name="collectible_name">Name: %s</string>
     <string name="collectible_time">Time: </string>
     <string name="collectible_location">Location: %s</string>
+    <string name="collectible_shadow_size">Shadow size: %s</string>
     <string name="empty">(Empty)</string>
     <string name="now">Now</string>
 </resources>
