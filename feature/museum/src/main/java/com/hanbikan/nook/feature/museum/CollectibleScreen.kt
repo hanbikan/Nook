@@ -54,6 +54,7 @@ import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.HasShadowMovement
 import com.hanbikan.nook.core.domain.model.common.HasShadowSize
 import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.Monthly
@@ -448,6 +449,9 @@ fun CollectibleDialog(
                 }
                 if (collectible is HasShadowSize) {
                     NkText(text = stringResource(id = R.string.collectible_shadow_size, collectible.shadowSize))
+                }
+                if (collectible is HasShadowMovement) {
+                    NkText(text = stringResource(id = R.string.collectible_shadow_size, collectible.shadowMovement))
                 }
             }
 

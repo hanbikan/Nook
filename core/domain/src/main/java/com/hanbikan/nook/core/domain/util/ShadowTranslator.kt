@@ -15,3 +15,12 @@ val shadowSizeToKorean: Map<String, String> = mapOf(
     "Huge" to "매우 큼",
     "Long" to "길음",
 )
+
+val shadowMovementToKorean: Map<String, String> = mapOf(
+    "Stationary" to "정지",
+    "Very slow" to "매우 느림",
+    "Slow" to "느림",
+    "Medium" to "중간",
+    "Fast" to "빠름",
+    "Very fast" to "매우 빠름",
+)
