@@ -28,4 +28,6 @@
     <string name="collectible_shadow_movement">Movement: %s</string>
     <string name="empty">(Empty)</string>
     <string name="now">Now</string>
+    <string name="info">Info</string>
+    <string name="collectible_screen_info">Touch collection item: Mark as collected/uncollected\nLong press collection item: View details</string>
 </resources>

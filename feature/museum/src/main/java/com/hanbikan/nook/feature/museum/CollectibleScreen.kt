@@ -45,6 +45,7 @@ import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
+import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkDialogWithContents
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkText
@@ -73,11 +74,38 @@ private val GradientHeight = Dimens.SpacingMedium
 fun CollectibleScreen(
     navigateUp: () -> Unit,
     viewModel: CollectibleViewModel = hiltViewModel(),
-    // TODO: isMonthly? -> false일 경우 chip group 제거
+    // TODO: isMonthly -> false일 경우 chip group 제거(화석 등으로 확장 시)
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val collectibleToShowInDialog =
         viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
+    val isInfoDialogShown = viewModel.isInfoDialogShown.collectAsStateWithLifecycle().value
+
+    val rightAppBarIcons: ArrayList<AppBarIcon> = arrayListOf()
+    if (uiState is CollectibleScreenUiState.MonthlyView) {
+        rightAppBarIcons.add(
+            if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
+                    contentDescription = stringResource(id = R.string.general_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            } else {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.time),
+                    contentDescription = stringResource(id = R.string.hour_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            }
+        )
+    }
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
+            contentDescription = stringResource(id = R.string.info),
+            onClick = viewModel::switchIsInfoDialogShown
+        )
+    )
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -85,24 +113,7 @@ fun CollectibleScreen(
                 leftAppBarIcons = listOf(
                     AppBarIcon.backAppBarIcon(onClick = navigateUp)
                 ),
-                rightAppBarIcons = if (uiState is CollectibleScreenUiState.MonthlyView) {
-                    val icon = if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
-                        AppBarIcon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
-                            contentDescription = stringResource(id = R.string.general_view),
-                            onClick = viewModel::onClickMonthlyViewType
-                        )
-                    } else {
-                        AppBarIcon(
-                            imageVector = ImageVector.vectorResource(id = R.drawable.time),
-                            contentDescription = stringResource(id = R.string.hour_view),
-                            onClick = viewModel::onClickMonthlyViewType
-                        )
-                    }
-                    listOf(icon)
-                } else {
-                    listOf()
-                }
+                rightAppBarIcons = rightAppBarIcons
             )
 
             Column(
@@ -156,6 +167,14 @@ fun CollectibleScreen(
         CollectibleDialog(
             collectible = collectibleToShowInDialog,
             onDismiss = viewModel::onDismissCollectibleDialog,
+        )
+
+        NkDialog(
+            visible = isInfoDialogShown,
+            description = stringResource(id = R.string.collectible_screen_info),
+            onDismissRequest = viewModel::switchIsInfoDialogShown,
+            onConfirmation = viewModel::switchIsInfoDialogShown,
+            hasOnlyConfirmationButton = true
         )
     }
 }

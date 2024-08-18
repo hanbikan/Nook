@@ -47,8 +47,10 @@ class CollectibleViewModel @Inject constructor(
     val uiState: StateFlow<CollectibleScreenUiState> = _uiState
 
     private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
-    val collectibleToShowInDialog: StateFlow<Collectible?> =
-        _collectibleToShowInDialog.asStateFlow()
+    val collectibleToShowInDialog = _collectibleToShowInDialog.asStateFlow()
+
+    private val _isInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isInfoDialogShown = _isInfoDialogShown
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -182,6 +184,10 @@ class CollectibleViewModel @Inject constructor(
 
     fun onDismissCollectibleDialog() {
         _collectibleToShowInDialog.value = null
+    }
+
+    fun switchIsInfoDialogShown() {
+        _isInfoDialogShown.value = !isInfoDialogShown.value
     }
 }
 

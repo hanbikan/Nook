@@ -28,4 +28,6 @@
     <string name="collectible_shadow_movement">속도: %s</string>
     <string name="empty">(비어 있음)</string>
     <string name="now">현재</string>
+    <string name="info">정보</string>
+    <string name="collectible_screen_info">수집품 터치: 수집 완료/취소\n수집품 길게 터치: 자세히 보기</string>
 </resources>
