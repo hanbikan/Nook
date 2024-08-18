@@ -9,6 +9,8 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
 import androidx.compose.runtime.Composable
@@ -52,6 +54,8 @@ fun ProfileScreen(
 
     val activeUser = viewModel.activeUser.collectAsStateWithLifecycle().value
 
+    val scrollState = rememberScrollState()
+
     LaunchedEffect(Unit) {
         viewModel.toastMessage.collectLatest {
             if (it != null) {
@@ -73,7 +77,13 @@ fun ProfileScreen(
             )
 
             Column(
-                modifier = Modifier.padding(Dimens.SideMargin),
+                modifier = Modifier
+                    .padding(
+                        start = Dimens.SideMargin,
+                        top = Dimens.SideMargin,
+                        end = Dimens.SideMargin
+                    )
+                    .verticalScroll(scrollState),
             ) {
                 NkText(
                     text = stringResource(id = R.string.profile),
@@ -130,6 +140,8 @@ fun ProfileScreen(
                     color = NkTheme.colorScheme.primaryContainer,
                     textAlign = TextAlign.Center,
                 )
+                
+                Spacer(modifier = Modifier.height(Dimens.SideMargin))
             }
         }
 
