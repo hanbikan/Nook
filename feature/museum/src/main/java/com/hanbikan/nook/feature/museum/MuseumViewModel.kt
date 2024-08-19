@@ -9,6 +9,7 @@ import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.filterForMonth
+import com.hanbikan.nook.core.domain.model.common.updateOnLocal
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -23,8 +24,8 @@ import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -35,6 +36,10 @@ class MuseumViewModel @Inject constructor(
     // Dialog
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
+
+    private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleToShowInDialog = _collectibleToShowInDialog.asStateFlow()
+
 
     val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -94,5 +99,17 @@ class MuseumViewModel @Inject constructor(
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
+    }
+
+    fun onLongClickCollectibleItem(collectible: Collectible) {
+        _collectibleToShowInDialog.value = collectible
+    }
+
+    fun onDismissCollectibleDialog() {
+        _collectibleToShowInDialog.value = null
+    }
+
+    fun getIsNorthForActiveUser(): Boolean {
+        return activeUser.value?.isNorth ?: true
     }
 }

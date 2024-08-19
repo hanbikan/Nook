@@ -64,6 +64,8 @@ fun MuseumScreen(
     val uncollectedForMonth = viewModel.notCollectedForMonth.collectAsStateWithLifecycle().value
 
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val collectibleToShowInDialog =
+        viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
 
     var bugProgress by remember { mutableFloatStateOf(0.0f) }
     var fishProgress by remember { mutableFloatStateOf(0.0f) }
@@ -167,7 +169,11 @@ fun MuseumScreen(
                         .padding(Dimens.SpacingSmall)
                 ) {
                     items(uncollectedForMonth) {
-                        CollectibleItem(it, false, {}, {})
+                        CollectibleItem(
+                            item = it, isHuntingMode = false,
+                            onClick = {},
+                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        )
                     }
                 }
             }
@@ -177,6 +183,12 @@ fun MuseumScreen(
             visible = isUserDialogShown,
             navigateToAddUser = navigateToAddUser,
             onDismissRequest = viewModel::switchUserDialog
+        )
+
+        DetailCollectibleDialog(
+            collectible = collectibleToShowInDialog,
+            onDismiss = viewModel::onDismissCollectibleDialog,
+            isNorth = viewModel.getIsNorthForActiveUser(),
         )
     }
 }
