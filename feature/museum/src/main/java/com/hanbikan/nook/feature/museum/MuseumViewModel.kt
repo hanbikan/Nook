@@ -8,6 +8,7 @@ import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.filterForMonth
 import com.hanbikan.nook.core.domain.model.common.updateOnLocal
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
@@ -77,28 +78,60 @@ class MuseumViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
-    val collectiblesForMonth: StateFlow<List<Collectible>> = combine(fishes, bugs, seaCreatures) { fishes, bugs, seaCreatures ->
-        val activeUser = activeUser.value
-        if (fishes.isNotEmpty() && bugs.isNotEmpty() && seaCreatures.isNotEmpty() && activeUser != null) {
-            withContext(Dispatchers.IO) {
-                val fishesForMonth = fishes.filterForMonth(getCurrentMonth(), activeUser.isNorth)
-                val bugsForMonth = bugs.filterForMonth(getCurrentMonth(), activeUser.isNorth)
-                val seaCreaturesForMonth = seaCreatures.filterForMonth(getCurrentMonth(), activeUser.isNorth)
-                fishesForMonth + bugsForMonth + seaCreaturesForMonth
-            }
+    val collectiblesForMonth: StateFlow<List<Collectible>> =
+        combine(fishes, bugs, seaCreatures) { fishes, bugs, seaCreatures ->
+            val activeUser = activeUser.value
+            if (fishes.isNotEmpty() && bugs.isNotEmpty() && seaCreatures.isNotEmpty() && activeUser != null) {
+                withContext(Dispatchers.IO) {
+                    val fishesForMonth =
+                        fishes.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                    val bugsForMonth = bugs.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                    val seaCreaturesForMonth =
+                        seaCreatures.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                    fishesForMonth + bugsForMonth + seaCreaturesForMonth
+                }
 
-        } else {
-            listOf()
-        }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+            } else {
+                listOf()
+            }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val notCollectedForMonth: StateFlow<List<Collectible>> = collectiblesForMonth.mapLatest {collectiblesForMonth ->
-        collectiblesForMonth.filter { !it.isCollected }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+    val notCollectedForMonth: StateFlow<List<Collectible>> =
+        collectiblesForMonth.mapLatest { collectiblesForMonth ->
+            collectiblesForMonth.filter { !it.isCollected }
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentlyCollectibleBugs: StateFlow<List<Collectible>> = bugs
+        .mapLatest { withContext(Dispatchers.IO) {
+            filterCurrentlyCollectible(it).sortedBy { it.isCollected }
+        } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentlyCollectibleFishes: StateFlow<List<Collectible>> = fishes
+        .mapLatest { withContext(Dispatchers.IO) {
+            filterCurrentlyCollectible(it).sortedBy { it.isCollected }
+        } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val currentlyCollectibleSeaCreature: StateFlow<List<Collectible>> = seaCreatures
+        .mapLatest { withContext(Dispatchers.IO) {
+            filterCurrentlyCollectible(it).sortedBy { it.isCollected }
+        } }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
+    }
+
+    fun onClickCollectibleItem(collectible: Collectible) {
+        viewModelScope.launch(Dispatchers.IO) {
+            collectible.updateOnLocal(collectionRepository)
+        }
     }
 
     fun onLongClickCollectibleItem(collectible: Collectible) {
@@ -111,5 +144,14 @@ class MuseumViewModel @Inject constructor(
 
     fun getIsNorthForActiveUser(): Boolean {
         return activeUser.value?.isNorth ?: true
+    }
+
+    private fun filterCurrentlyCollectible(collectibles: List<Collectible>): List<Collectible> {
+        val activeUser = activeUser.value
+        return if (activeUser != null) {
+            collectibles.filter { if (it is Monthly) it.isCurrentlyCollectible(activeUser.isNorth) else false }
+        } else {
+            listOf()
+        }
     }
 }

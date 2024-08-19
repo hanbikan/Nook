@@ -7,6 +7,7 @@ import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -18,7 +19,9 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyRow
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -29,14 +32,17 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AnimatedLinearProgressIndicator
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
+import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
@@ -62,10 +68,18 @@ fun MuseumScreen(
     val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
     val collectiblesForMonth = viewModel.collectiblesForMonth.collectAsStateWithLifecycle().value
     val uncollectedForMonth = viewModel.notCollectedForMonth.collectAsStateWithLifecycle().value
+    val currentlyCollectibleBugs =
+        viewModel.currentlyCollectibleBugs.collectAsStateWithLifecycle().value
+    val currentlyCollectibleFishes =
+        viewModel.currentlyCollectibleFishes.collectAsStateWithLifecycle().value
+    val currentlyCollectibleSeaCreature =
+        viewModel.currentlyCollectibleSeaCreature.collectAsStateWithLifecycle().value
 
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val collectibleToShowInDialog =
         viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
+
+    val scrollState = rememberScrollState()
 
     var bugProgress by remember { mutableFloatStateOf(0.0f) }
     var fishProgress by remember { mutableFloatStateOf(0.0f) }
@@ -128,14 +142,25 @@ fun MuseumScreen(
             )
 
             Column(
-                modifier = Modifier.padding(Dimens.SideMargin),
+                modifier = Modifier
+                    .padding(Dimens.SideMargin, Dimens.SideMargin, Dimens.SideMargin, 0.dp)
+                    .verticalScroll(scrollState),
                 verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
             ) {
                 // 전체 수집률
                 NkText(
-                    text = stringResource(id = R.string.overall_progress_title, (animatedOverallProgress * 100).toInt()),
+                    text = stringResource(
+                        id = R.string.overall_progress_title,
+                        (animatedOverallProgress * 100).toInt()
+                    ),
                     style = NkTheme.typography.titleLarge,
-                    modifier = Modifier.clickable { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
+                    modifier = Modifier.clickable {
+                        Toast.makeText(
+                            context,
+                            getCollectionRateToastMessage(overallProgress, context),
+                            Toast.LENGTH_SHORT
+                        ).show()
+                    }
                 )
                 CollectionProgress(
                     name = stringResource(id = R.string.bug_progress),
@@ -152,28 +177,74 @@ fun MuseumScreen(
                     progress = seaCreaturesProgress,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE.ordinal) }
                 )
-                Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+                Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+
+                // 현재 잡을 수 있는 것
+                Column(
+                    verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
+                ) {
+                    NkText(
+                        text = stringResource(id = R.string.currently_collectibles),
+                        style = NkTheme.typography.titleLarge,
+                        modifier = Modifier.clickable {
+                            Toast.makeText(
+                                context,
+                                getCollectionRateToastMessage(overallProgress, context),
+                                Toast.LENGTH_SHORT
+                            ).show()
+                        }
+                    )
+                    if (currentlyCollectibleBugs.isNotEmpty()) {
+                        CollectiblesRow(
+                            collectibles = currentlyCollectibleBugs,
+                            isHuntingMode = true,
+                            onClick = { viewModel.onClickCollectibleItem(it) },
+                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        )
+                    }
+                    if (currentlyCollectibleFishes.isNotEmpty()) {
+                        CollectiblesRow(
+                            collectibles = currentlyCollectibleFishes,
+                            isHuntingMode = true,
+                            onClick = { viewModel.onClickCollectibleItem(it) },
+                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        )
+                    }
+                    if (currentlyCollectibleSeaCreature.isNotEmpty()) {
+                        CollectiblesRow(
+                            collectibles = currentlyCollectibleSeaCreature,
+                            isHuntingMode = true,
+                            onClick = { viewModel.onClickCollectibleItem(it) },
+                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        )
+                    }
+                    Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                }
 
                 // 이번 달 잡지 않은 아이템
-                NkText(
-                    text = stringResource(id = R.string.uncollected_for_month_title, animatedUncollectedCountForMonth),
-                    style = NkTheme.typography.titleLarge,
-                    modifier = Modifier.clickable { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
-                )
-                LazyRow(
-                    modifier = Modifier
-                        .background(
-                            NkTheme.colorScheme.onBackground,
-                            RoundedCornerShape(Dimens.SpacingMedium)
+                FadeAnimatedVisibility(visible = uncollectedForMonth.isNotEmpty()) {
+                    Column(verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)) {
+                        NkText(
+                            text = stringResource(
+                                id = R.string.uncollected_for_month_title,
+                                animatedUncollectedCountForMonth
+                            ),
+                            style = NkTheme.typography.titleLarge,
+                            modifier = Modifier.clickable {
+                                Toast.makeText(
+                                    context,
+                                    getCollectionRateToastMessage(overallProgress, context),
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
                         )
-                        .padding(Dimens.SpacingSmall)
-                ) {
-                    items(uncollectedForMonth) {
-                        CollectibleItem(
-                            item = it, isHuntingMode = false,
+                        CollectiblesRow(
+                            collectibles = uncollectedForMonth,
+                            isHuntingMode = false,
                             onClick = {},
                             onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                         )
+                        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
                     }
                 }
             }
@@ -236,6 +307,32 @@ fun CollectionProgress(
             progress = animatedProgress,
             color = NkTheme.colorScheme.tertiary,
         )
+    }
+}
+
+@Composable
+fun CollectiblesRow(
+    collectibles: List<Collectible>,
+    isHuntingMode: Boolean,
+    onClick: (Collectible) -> Unit,
+    onLongClick: (Collectible) -> Unit,
+) {
+    LazyRow(
+        modifier = Modifier
+            .background(
+                NkTheme.colorScheme.onBackground,
+                RoundedCornerShape(Dimens.SpacingMedium)
+            )
+            .fillMaxWidth()
+            .padding(Dimens.SpacingSmall)
+    ) {
+        items(collectibles) {
+            CollectibleItem(
+                item = it, isHuntingMode = isHuntingMode,
+                onClick = { onClick(it) },
+                onLongClick = { onLongClick(it) }
+            )
+        }
     }
 }
 

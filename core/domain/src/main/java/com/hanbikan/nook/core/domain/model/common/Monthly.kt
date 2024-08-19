@@ -1,5 +1,7 @@
 package com.hanbikan.nook.core.domain.model.common
 
+import com.hanbikan.nook.core.common.getCurrentHour
+import com.hanbikan.nook.core.common.getCurrentMonth
 import com.hanbikan.nook.core.domain.model.common.MonthToTimes.Companion.NOT_AVAILABLE
 
 /**
@@ -14,7 +16,15 @@ interface Monthly {
     }
 
     fun belongsToMonth(month: Int, isNorth: Boolean): Boolean {
-        val timesByMonth = getCurrentMonthToTimes(isNorth)
-        return timesByMonth.value.containsKey(month) && timesByMonth.getTimesOrNull(month) != NOT_AVAILABLE
+        val monthToTimes = getCurrentMonthToTimes(isNorth)
+        return monthToTimes.value.containsKey(month) && monthToTimes.getTimesOrNull(month) != NOT_AVAILABLE
+    }
+
+    fun isCurrentlyCollectible(isNorth: Boolean): Boolean {
+        val currentMonth = getCurrentMonth()
+        val currentHour = getCurrentHour()
+        val monthToTimes = getCurrentMonthToTimes(isNorth)
+        val times = monthToTimes.getTimesOrNull(currentMonth) ?: return false
+        return currentHour in times.parseTimeRange()
     }
 }

@@ -2,6 +2,7 @@
 <resources>
     <string name="overall_progress_title">Overall collection rates: %d%%</string>
     <string name="uncollected_for_month_title">Uncollected This Month: %d</string>
+    <string name="currently_collectibles">Currently collectible</string>
     <string name="fish_progress">🐟 Fish collection rate</string>
     <string name="bug_progress">🐞 Bug collection rate</string>
     <string name="sea_creature_progress">🐚 Sea creature collection rate</string>
