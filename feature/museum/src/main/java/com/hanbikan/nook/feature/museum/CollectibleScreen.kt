@@ -14,6 +14,8 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.LazyItemScope
+import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
 import androidx.compose.material.icons.Icons
@@ -34,6 +36,7 @@ import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.Density
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -46,29 +49,21 @@ import com.hanbikan.nook.core.designsystem.component.ChipItem
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkDialog
-import com.hanbikan.nook.core.designsystem.component.NkDialogWithContents
 import com.hanbikan.nook.core.designsystem.component.NkTag
 import com.hanbikan.nook.core.designsystem.component.NkText
-import com.hanbikan.nook.core.designsystem.component.NkTextButton
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
-import com.hanbikan.nook.core.domain.model.common.HasShadowMovement
-import com.hanbikan.nook.core.domain.model.common.HasShadowSize
-import com.hanbikan.nook.core.domain.model.common.LocationBased
-import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
-import com.hanbikan.nook.core.domain.model.common.convertToTimeRanges
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
-import com.hanbikan.nook.feature.museum.util.display
 import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlinx.coroutines.delay
 import kotlin.math.ceil
 
 private val CollectibleItemWidth = 90.dp
-private val CollectibleItemHeight = 80.dp
+val CollectibleItemHeight = 80.dp
 private val GradientHeight = Dimens.SpacingMedium
 
 @Composable
@@ -110,6 +105,7 @@ fun CollectibleScreen(
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
+            // Top app bar
             NkTopAppBar(
                 leftAppBarIcons = listOf(
                     AppBarIcon.backAppBarIcon(onClick = navigateUp)
@@ -117,6 +113,7 @@ fun CollectibleScreen(
                 rightAppBarIcons = rightAppBarIcons
             )
 
+            // Contents
             Column(
                 modifier = Modifier.fillMaxWidth()
             ) {
@@ -165,7 +162,8 @@ fun CollectibleScreen(
             }
         }
 
-        CollectibleDialog(
+        // Dialog
+        DetailCollectibleDialog(
             collectible = collectibleToShowInDialog,
             onDismiss = viewModel::onDismissCollectibleDialog,
             getIsNorthForActiveUser = viewModel::getIsNorthForActiveUser,
@@ -181,6 +179,10 @@ fun CollectibleScreen(
     }
 }
 
+
+/**
+ * 전체
+ */
 @Composable
 fun OverallCollectibleContents(
     collectibles: List<Collectible>,
@@ -214,152 +216,6 @@ fun OverallCollectibleContents(
                         onLongClickCollectibleItem = onLongClickCollectibleItem,
                         itemsPerRow = itemsPerRow,
                     )
-                }
-            }
-        }
-
-        NkTopBackgroundGradient(height = GradientHeight)
-    }
-}
-
-@Composable
-fun MonthlyCollectibleContents(
-    uiState: CollectibleScreenUiState.MonthlyView,
-    onClickMonth: (Int) -> Unit,
-    onClickCollectibleItem: (Collectible) -> Unit,
-    onLongClickCollectibleItem: (Collectible) -> Unit,
-) {
-    Column {
-        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-
-        NkChipGroup(
-            paddingValues = PaddingValues(horizontal = Dimens.SideMargin),
-            chipGroup = ChipGroup(
-                chipItems = getMonthList().map { ChipItem(it) },
-                selectedIndex = uiState.month - 1 // 0-index임에 유의
-            ),
-            autoScroll = true,
-            onClickItem = { index -> onClickMonth(index + 1) },
-        )
-
-        when (uiState) {
-            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
-                OverallCollectibleContents(
-                    collectibles = uiState.collectibleListForMonth,
-                    onClickCollectibleItem = onClickCollectibleItem,
-                    onLongClickCollectibleItem = onLongClickCollectibleItem
-                )
-            }
-
-            is CollectibleScreenUiState.MonthlyView.HourView -> {
-                HourViewContents(
-                    uiState = uiState,
-                    onClickCollectibleItem = onClickCollectibleItem,
-                    onLongClickCollectibleItem = onLongClickCollectibleItem
-                )
-            }
-        }
-    }
-}
-
-@Composable
-fun HourViewContents(
-    uiState: CollectibleScreenUiState.MonthlyView.HourView,
-    onClickCollectibleItem: (Collectible) -> Unit,
-    onLongClickCollectibleItem: (Collectible) -> Unit,
-) {
-    val lazyListState = rememberLazyListState()
-    var containerWidth by remember { mutableIntStateOf(0) }
-    val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
-    val itemsPerRow = (containerWidth / itemWidth).toInt()
-    val density = LocalDensity.current
-    val currentHour = getCurrentHour()
-
-    LaunchedEffect(itemsPerRow, uiState.month) {
-        if (itemsPerRow > 0) {
-            val keyForCurrentHour: Int = uiState.getKeyForCurrentHour()
-            var scrollIndex = 1
-            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
-                if (startHour < keyForCurrentHour) {
-                    scrollIndex += 2 + ceil(
-                        (collectibleList.count().toFloat() / itemsPerRow)
-                    ).toInt()
-                }
-            }
-            delay(150)
-            lazyListState.animateScrollToItem(
-                index = scrollIndex,
-                scrollOffset = with(density) { -CollectibleItemHeight.toPx() }.toInt()
-            )
-        }
-    }
-
-    Box {
-        LazyColumn(
-            modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { containerWidth = it.size.width },
-            state = lazyListState,
-            horizontalAlignment = Alignment.CenterHorizontally,
-        ) {
-            item {
-                Spacer(modifier = Modifier.height(GradientHeight))
-            }
-            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
-                if (itemsPerRow > 0) {
-                    // 시간
-                    item {
-                        val endHour = uiState.getEndHourByStartHour(startHour)
-                        val text = if (startHour == ALL_DAY_KEY) {
-                            stringResource(id = R.string.all_day)
-                        } else {
-                            formatTime(startHour, endHour)
-                        }
-
-                        Row(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(horizontal = Dimens.SideMargin),
-                            verticalAlignment = Alignment.CenterVertically,
-                        ) {
-                            NkText(
-                                style = NkTheme.typography.titleLarge,
-                                text = text,
-                            )
-                            if (currentHour in startHour until endHour) {
-                                Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
-                                NkTag(text = stringResource(id = R.string.now))
-                            }
-                        }
-                    }
-
-                    // 아이템 리스트
-                    if (collectibleList.isNotEmpty()) {
-                        itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
-                            CollectibleItemsForRow(
-                                rowItems = rowItems,
-                                onClickCollectibleItem = onClickCollectibleItem,
-                                onLongClickCollectibleItem = onLongClickCollectibleItem,
-                                itemsPerRow = itemsPerRow,
-                            )
-                        }
-                    } else {
-                        // 시간대에 잡을 수 있는 아이템이 없는 경우
-                        item {
-                            Box(
-                                modifier = Modifier.height(CollectibleItemHeight),
-                                contentAlignment = Alignment.Center,
-                            ) {
-                                NkText(
-                                    text = stringResource(id = R.string.empty),
-                                    color = NkTheme.colorScheme.primaryContainer,
-                                )
-                            }
-                        }
-                    }
-                    item {
-                        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-                    }
                 }
             }
         }
@@ -435,55 +291,175 @@ fun CollectibleItem(
     }
 }
 
-@OptIn(ExperimentalGlideComposeApi::class)
-@Composable
-fun CollectibleDialog(
-    collectible: Collectible?,
-    onDismiss: () -> Unit,
-    getIsNorthForActiveUser: () -> Boolean,
-) {
-    NkDialogWithContents(
-        visible = collectible != null,
-        onDismissRequest = onDismiss
-    ) {
-        collectible?.let { item ->
-            GlideImage(
-                modifier = Modifier.size(CollectibleItemHeight * 0.75f),
-                model = item.renderUrl,
-                contentDescription = item.name,
-            )
 
-            Column {
-                Spacer(modifier = Modifier.height(4.dp))
-                NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
-                if (collectible is Monthly) {
-                    NkText(text = stringResource(id = R.string.collectible_time))
-                    Column {
-                        collectible.getCurrentMonthToTimes(getIsNorthForActiveUser())
-                            .convertToTimeRanges()
-                            .map { it.display() }
-                            .forEach { display ->
-                                NkText(text = display, style = NkTheme.typography.bodySmall)
-                            }
-                    }
-                }
-                if (collectible is LocationBased) {
-                    NkText(text = stringResource(id = R.string.collectible_location, collectible.location))
-                }
-                if (collectible is HasShadowSize) {
-                    NkText(text = stringResource(id = R.string.collectible_shadow_size, collectible.shadowSize))
-                }
-                if (collectible is HasShadowMovement) {
-                    NkText(text = stringResource(id = R.string.collectible_shadow_size, collectible.shadowMovement))
-                }
+/**
+ * 월별
+ */
+@Composable
+fun MonthlyCollectibleContents(
+    uiState: CollectibleScreenUiState.MonthlyView,
+    onClickMonth: (Int) -> Unit,
+    onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
+) {
+    Column {
+        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+
+        NkChipGroup(
+            paddingValues = PaddingValues(horizontal = Dimens.SideMargin),
+            chipGroup = ChipGroup(
+                chipItems = getMonthList().map { ChipItem(it) },
+                selectedIndex = uiState.month - 1 // 0-index임에 유의
+            ),
+            autoScroll = true,
+            onClickItem = { index -> onClickMonth(index + 1) },
+        )
+
+        when (uiState) {
+            // 일반 뷰
+            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
+                OverallCollectibleContents(
+                    collectibles = uiState.collectibleListForMonth,
+                    onClickCollectibleItem = onClickCollectibleItem,
+                    onLongClickCollectibleItem = onLongClickCollectibleItem
+                )
             }
 
-            NkTextButton(
-                modifier = Modifier.fillMaxWidth(),
-                onClick = onDismiss,
-                text = stringResource(id = com.hanbikan.nook.core.designsystem.R.string.confirm),
+            // 시간 뷰
+            is CollectibleScreenUiState.MonthlyView.HourView -> {
+                HourViewContents(
+                    uiState = uiState,
+                    onClickCollectibleItem = onClickCollectibleItem,
+                    onLongClickCollectibleItem = onLongClickCollectibleItem
+                )
+            }
+        }
+    }
+}
+
+@Composable
+fun HourViewContents(
+    uiState: CollectibleScreenUiState.MonthlyView.HourView,
+    onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
+) {
+    val lazyListState = rememberLazyListState()
+    var containerWidth by remember { mutableIntStateOf(0) }
+    val itemWidth: Float = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
+    val itemsPerRow: Int = (containerWidth / itemWidth).toInt()
+    val density: Density = LocalDensity.current
+
+    LaunchedEffect(itemsPerRow, uiState.month) {
+        if (itemsPerRow > 0) {
+            val keyForCurrentHour: Int = uiState.getKeyForCurrentHour()
+            var scrollIndex = 1
+            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
+                if (startHour < keyForCurrentHour) {
+                    scrollIndex += 2 + ceil(
+                        (collectibleList.count().toFloat() / itemsPerRow)
+                    ).toInt()
+                }
+            }
+            delay(150)
+            lazyListState.animateScrollToItem(
+                index = scrollIndex,
+                scrollOffset = with(density) { -CollectibleItemHeight.toPx() }.toInt()
             )
         }
+    }
+
+    Box {
+        LazyColumn(
+            modifier = Modifier
+                .fillMaxWidth()
+                .onGloballyPositioned { containerWidth = it.size.width },
+            state = lazyListState,
+            horizontalAlignment = Alignment.CenterHorizontally,
+        ) {
+            item {
+                Spacer(modifier = Modifier.height(GradientHeight))
+            }
+            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
+                if (itemsPerRow > 0) {
+                    TimeAndCollectibleItems(
+                        uiState = uiState,
+                        startHour = startHour,
+                        collectibleList = collectibleList,
+                        itemsPerRow = itemsPerRow,
+                        onClickCollectibleItem = onClickCollectibleItem,
+                        onLongClickCollectibleItem = onLongClickCollectibleItem,
+                    )
+                }
+            }
+        }
+
+        NkTopBackgroundGradient(height = GradientHeight)
+    }
+}
+
+fun LazyListScope.TimeAndCollectibleItems(
+    uiState: CollectibleScreenUiState.MonthlyView.HourView,
+    startHour: Int,
+    collectibleList: List<Collectible>,
+    itemsPerRow: Int,
+    onClickCollectibleItem: (Collectible) -> Unit,
+    onLongClickCollectibleItem: (Collectible) -> Unit,
+) {
+    val currentHour: Int = getCurrentHour()
+
+    // 시간
+    item {
+        val endHour = uiState.getEndHourByStartHour(startHour)
+        val text = if (startHour == ALL_DAY_KEY) {
+            stringResource(id = R.string.all_day)
+        } else {
+            formatTime(startHour, endHour)
+        }
+
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = Dimens.SideMargin),
+            verticalAlignment = Alignment.CenterVertically,
+        ) {
+            NkText(
+                style = NkTheme.typography.titleLarge,
+                text = text,
+            )
+            if (currentHour in startHour until endHour) {
+                Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
+                NkTag(text = stringResource(id = R.string.now))
+            }
+        }
+    }
+
+    // 아이템 리스트
+    if (collectibleList.isNotEmpty()) {
+        itemsIndexed(collectibleList.chunked(itemsPerRow)) { _, rowItems ->
+            CollectibleItemsForRow(
+                rowItems = rowItems,
+                onClickCollectibleItem = onClickCollectibleItem,
+                onLongClickCollectibleItem = onLongClickCollectibleItem,
+                itemsPerRow = itemsPerRow,
+            )
+        }
+    } else {
+        // 시간대에 잡을 수 있는 아이템이 없는 경우
+        item {
+            Box(
+                modifier = Modifier.height(CollectibleItemHeight),
+                contentAlignment = Alignment.Center,
+            ) {
+                NkText(
+                    text = stringResource(id = R.string.empty),
+                    color = NkTheme.colorScheme.primaryContainer,
+                )
+            }
+        }
+    }
+
+    item {
+        Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
     }
 }
 
