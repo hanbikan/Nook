@@ -74,10 +74,11 @@ fun MuseumScreen(
                 modifier = Modifier.padding(Dimens.SideMargin),
                 verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
             ) {
-                CollectionProgress(
-                    name = stringResource(id = R.string.overall_progress),
-                    progress = overallProgress,
-                    onClick = { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
+                // 전체 수집률
+                NkText(
+                    text = stringResource(id = R.string.overall_progress_title, (overallProgress * 100).toInt()),
+                    style = NkTheme.typography.titleLarge,
+                    modifier = Modifier.clickable { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
                 )
 
                 CollectionProgress(
@@ -97,6 +98,9 @@ fun MuseumScreen(
                     progress = seaCreaturesProgress,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE.ordinal) }
                 )
+
+                // 이번 달 수집률 & 잡지 않은 아이템
+
             }
         }
 
