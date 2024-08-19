@@ -32,4 +32,9 @@
     <string name="info">Info</string>
     <string name="collectible_screen_info">Touch collection item: Mark as collected/uncollected\nLong press collection item: View details</string>
     <string name="hunting_mode">Hunting Mode</string>
+    <string name="collection_rate_0_to_25_message">You\'re off to a start! Keep going :)</string>
+    <string name="collection_rate_25_to_50_message">You\'re making good progress!</string>
+    <string name="collection_rate_50_to_75_message">You\'re almost there! Just a little more effort :)</string>
+    <string name="collection_rate_75_to_99_message">Awesome! You\'re nearly complete :)</string>
+    <string name="collection_rate_100_message">Congratulations! You\'ve collected everything! :)</string>
 </resources>

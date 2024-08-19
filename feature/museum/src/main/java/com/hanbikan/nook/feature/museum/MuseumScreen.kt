@@ -1,5 +1,8 @@
 package com.hanbikan.nook.feature.museum
 
+import android.content.Context
+import android.widget.Toast
+import androidx.annotation.FloatRange
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -21,6 +24,7 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -43,10 +47,17 @@ fun MuseumScreen(
     navigateToMonthlyCollectible: (Int) -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
-    val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val bugs = viewModel.bugs.collectAsStateWithLifecycle().value
+    val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+
+    val bugProgress = bugs.calculateProgress()
+    val fishProgress = fishes.calculateProgress()
+    val seaCreaturesProgress = seaCreatures.calculateProgress()
+    val overallProgress: Float = (bugProgress + fishProgress + seaCreaturesProgress) / 3.0f
+
+    val context = LocalContext.current
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -65,25 +76,25 @@ fun MuseumScreen(
             ) {
                 CollectionProgress(
                     name = stringResource(id = R.string.overall_progress),
-                    collectibleList = fishes + bugs + seaCreatures,
-                    onClick = {}
+                    progress = overallProgress,
+                    onClick = { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
                 )
 
                 CollectionProgress(
                     name = stringResource(id = R.string.bug_progress),
-                    collectibleList = bugs,
+                    progress = bugProgress,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG.ordinal) }
                 )
 
                 CollectionProgress(
                     name = stringResource(id = R.string.fish_progress),
-                    collectibleList = fishes,
+                    progress = fishProgress,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
                 )
 
                 CollectionProgress(
                     name = stringResource(id = R.string.sea_creature_progress),
-                    collectibleList = seaCreatures,
+                    progress = seaCreaturesProgress,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE.ordinal) }
                 )
             }
@@ -100,12 +111,11 @@ fun MuseumScreen(
 @Composable
 fun CollectionProgress(
     name: String,
-    collectibleList: List<Collectible>,
+    progress: Float,
     onClick: () -> Unit,
     animationDurationMillis: Int = 750,
     animationDelayMillis: Long = 150L,
 ) {
-    val progress: Float = collectibleList.calculateProgress()
     var progressToShow by remember { mutableFloatStateOf(0f) }
     val animatedProgress by animateFloatAsState(
         targetValue = progressToShow,
@@ -145,3 +155,11 @@ fun CollectionProgress(
         )
     }
 }
+
+private fun getCollectionRateToastMessage(overallProgress: Float, context: Context): String =
+    if (.00f <= overallProgress && overallProgress < .25f) context.getString(R.string.collection_rate_0_to_25_message)
+    else if (.25f <= overallProgress && overallProgress < .50f) context.getString(R.string.collection_rate_25_to_50_message)
+    else if (.50f <= overallProgress && overallProgress < .75f) context.getString(R.string.collection_rate_50_to_75_message)
+    else if (.75f <= overallProgress && overallProgress < 1.00f) context.getString(R.string.collection_rate_75_to_99_message)
+    else if (overallProgress <= 1.00f) context.getString(R.string.collection_rate_100_message)
+    else ""
