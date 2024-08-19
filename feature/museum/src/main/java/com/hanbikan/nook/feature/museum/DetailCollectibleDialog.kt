@@ -28,7 +28,7 @@ import com.hanbikan.nook.feature.museum.util.display
 fun DetailCollectibleDialog(
     collectible: Collectible?,
     onDismiss: () -> Unit,
-    getIsNorthForActiveUser: () -> Boolean,
+    isNorth: Boolean,
 ) {
     NkDialogWithContents(
         visible = collectible != null,
@@ -47,7 +47,7 @@ fun DetailCollectibleDialog(
                 if (collectible is Monthly) {
                     NkText(text = stringResource(id = R.string.collectible_time))
                     Column {
-                        collectible.getCurrentMonthToTimes(getIsNorthForActiveUser())
+                        collectible.getCurrentMonthToTimes(isNorth)
                             .convertToTimeRanges()
                             .map { it.display() }
                             .forEach { display ->

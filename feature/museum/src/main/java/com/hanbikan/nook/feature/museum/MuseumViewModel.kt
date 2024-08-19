@@ -2,21 +2,29 @@ package com.hanbikan.nook.feature.museum
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hanbikan.nook.core.common.getCurrentMonth
 import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.filterForMonth
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.mapLatest
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.withContext
+import java.util.Calendar
 import javax.inject.Inject
 
 @HiltViewModel
@@ -63,6 +71,26 @@ class MuseumViewModel @Inject constructor(
             }
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    val collectiblesForMonth: StateFlow<List<Collectible>> = combine(fishes, bugs, seaCreatures) { fishes, bugs, seaCreatures ->
+        val activeUser = activeUser.value
+        if (fishes.isNotEmpty() && bugs.isNotEmpty() && seaCreatures.isNotEmpty() && activeUser != null) {
+            withContext(Dispatchers.IO) {
+                val fishesForMonth = fishes.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                val bugsForMonth = bugs.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                val seaCreaturesForMonth = seaCreatures.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                fishesForMonth + bugsForMonth + seaCreaturesForMonth
+            }
+
+        } else {
+            listOf()
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val notCollectedForMonth: StateFlow<List<Collectible>> = collectiblesForMonth.mapLatest {collectiblesForMonth ->
+        collectiblesForMonth.filter { !it.isCollected }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value

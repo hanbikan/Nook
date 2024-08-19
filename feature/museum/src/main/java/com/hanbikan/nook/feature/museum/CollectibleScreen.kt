@@ -1,7 +1,9 @@
 package com.hanbikan.nook.feature.museum
 
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -18,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
@@ -180,7 +183,7 @@ fun CollectibleScreen(
         DetailCollectibleDialog(
             collectible = collectibleToShowInDialog,
             onDismiss = viewModel::onDismissCollectibleDialog,
-            getIsNorthForActiveUser = viewModel::getIsNorthForActiveUser,
+            isNorth = viewModel.getIsNorthForActiveUser(),
         )
 
         NkDialog(
@@ -287,6 +290,7 @@ fun CollectibleItem(
         Column(
             modifier = Modifier.fillMaxSize(),
             horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.Center
         ) {
             GlideImage(
                 modifier = Modifier.size(CollectibleItemHeight * 0.5f),
