@@ -37,6 +37,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -56,6 +57,9 @@ import com.hanbikan.nook.core.designsystem.component.NkTopBackgroundGradient
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.domain.model.common.HasShadowMovement
+import com.hanbikan.nook.core.domain.model.common.HasShadowSize
+import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import com.hanbikan.nook.feature.museum.util.getMonthList
@@ -73,6 +77,7 @@ fun CollectibleScreen(
     // TODO: isMonthly -> false일 경우 chip group 제거(화석 등으로 확장 시)
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
+    val isHuntingMode = viewModel.isHuntingMode.collectAsStateWithLifecycle().value
     val collectibleToShowInDialog =
         viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
     val isInfoDialogShown = viewModel.isInfoDialogShown.collectAsStateWithLifecycle().value
@@ -95,6 +100,13 @@ fun CollectibleScreen(
             }
         )
     }
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = if (!isHuntingMode) R.drawable.baseline_explore_off_24 else R.drawable.baseline_explore_24),
+            contentDescription = stringResource(id = R.string.hunting_mode),
+            onClick = viewModel::switchIsHuntingMode
+        )
+    )
     rightAppBarIcons.add(
         AppBarIcon(
             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
@@ -147,6 +159,7 @@ fun CollectibleScreen(
                             collectibles = uiState.collectibleList,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
                             onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
+                            isHuntingMode = isHuntingMode,
                         )
                     }
 
@@ -156,6 +169,7 @@ fun CollectibleScreen(
                             onClickMonth = viewModel::onClickMonth,
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
                             onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
+                            isHuntingMode = isHuntingMode,
                         )
                     }
                 }
@@ -188,6 +202,7 @@ fun OverallCollectibleContents(
     collectibles: List<Collectible>,
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
+    isHuntingMode: Boolean,
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
@@ -215,6 +230,7 @@ fun OverallCollectibleContents(
                         onClickCollectibleItem = onClickCollectibleItem,
                         onLongClickCollectibleItem = onLongClickCollectibleItem,
                         itemsPerRow = itemsPerRow,
+                        isHuntingMode = isHuntingMode,
                     )
                 }
             }
@@ -230,13 +246,15 @@ fun CollectibleItemsForRow(
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
     itemsPerRow: Int,
+    isHuntingMode: Boolean,
 ) {
     Row {
         rowItems.forEach { item ->
             CollectibleItem(
                 item = item,
                 onClick = { onClickCollectibleItem(item) },
-                onLongClick = { onLongClickCollectibleItem(item) }
+                onLongClick = { onLongClickCollectibleItem(item) },
+                isHuntingMode = isHuntingMode,
             )
         }
         if (rowItems.count() < itemsPerRow) {
@@ -251,13 +269,16 @@ fun CollectibleItemsForRow(
 @Composable
 fun CollectibleItem(
     item: Collectible,
+    isHuntingMode: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
+    val imageUrl = if (!isHuntingMode) item.imageUrl else item.renderUrl
+
     Box(
         modifier = Modifier
             .width(CollectibleItemWidth)
-            .height(CollectibleItemHeight)
+            .height(if (!isHuntingMode) CollectibleItemHeight else Dp.Unspecified)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,
@@ -269,7 +290,7 @@ fun CollectibleItem(
         ) {
             GlideImage(
                 modifier = Modifier.size(CollectibleItemHeight * 0.5f),
-                model = item.imageUrl,
+                model = imageUrl,
                 contentDescription = item.name,
             )
             NkText(
@@ -278,6 +299,32 @@ fun CollectibleItem(
                 maxLines = 1,
                 fontWeight = if (item.isCollected) FontWeight.Bold else FontWeight.Normal
             )
+            if (isHuntingMode) {
+                if (item is LocationBased) {
+                    NkText(
+                        text = item.location,
+                        style = NkTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Normal,
+                        maxLines = 1,
+                    )
+                }
+                if (item is HasShadowSize) {
+                    NkText(
+                        text = item.shadowSize,
+                        style = NkTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Normal,
+                        maxLines = 1,
+                    )
+                }
+                if (item is HasShadowMovement) {
+                    NkText(
+                        text = item.shadowMovement,
+                        style = NkTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Normal,
+                        maxLines = 1,
+                    )
+                }
+            }
         }
 
         if (item.isCollected) {
@@ -301,6 +348,7 @@ fun MonthlyCollectibleContents(
     onClickMonth: (Int) -> Unit,
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
+    isHuntingMode: Boolean,
 ) {
     Column {
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
@@ -321,7 +369,8 @@ fun MonthlyCollectibleContents(
                 OverallCollectibleContents(
                     collectibles = uiState.collectibleListForMonth,
                     onClickCollectibleItem = onClickCollectibleItem,
-                    onLongClickCollectibleItem = onLongClickCollectibleItem
+                    onLongClickCollectibleItem = onLongClickCollectibleItem,
+                    isHuntingMode = isHuntingMode,
                 )
             }
 
@@ -330,7 +379,8 @@ fun MonthlyCollectibleContents(
                 HourViewContents(
                     uiState = uiState,
                     onClickCollectibleItem = onClickCollectibleItem,
-                    onLongClickCollectibleItem = onLongClickCollectibleItem
+                    onLongClickCollectibleItem = onLongClickCollectibleItem,
+                    isHuntingMode = isHuntingMode,
                 )
             }
         }
@@ -342,6 +392,7 @@ fun HourViewContents(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
+    isHuntingMode: Boolean,
 ) {
     val lazyListState = rememberLazyListState()
     var containerWidth by remember { mutableIntStateOf(0) }
@@ -388,6 +439,7 @@ fun HourViewContents(
                         itemsPerRow = itemsPerRow,
                         onClickCollectibleItem = onClickCollectibleItem,
                         onLongClickCollectibleItem = onLongClickCollectibleItem,
+                        isHuntingMode = isHuntingMode,
                     )
                 }
             }
@@ -404,6 +456,7 @@ fun LazyListScope.TimeAndCollectibleItems(
     itemsPerRow: Int,
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
+    isHuntingMode: Boolean,
 ) {
     val currentHour: Int = getCurrentHour()
 
@@ -441,6 +494,7 @@ fun LazyListScope.TimeAndCollectibleItems(
                 onClickCollectibleItem = onClickCollectibleItem,
                 onLongClickCollectibleItem = onLongClickCollectibleItem,
                 itemsPerRow = itemsPerRow,
+                isHuntingMode = isHuntingMode,
             )
         }
     } else {

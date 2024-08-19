@@ -39,18 +39,26 @@ class CollectibleViewModel @Inject constructor(
     private val collectionRepository: CollectionRepository,
 ) : ViewModel() {
 
+    // COLLECTIBLE_SEQUENCE_INDEX를 읽어서 bug, fish, sea creature 등을 구분합니다.
     private val collectibleSequenceIndex: Int? = savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX]
 
+    // UI
     private val _uiState: MutableStateFlow<CollectibleScreenUiState> = MutableStateFlow(
         CollectibleScreenUiState.Loading
     )
     val uiState: StateFlow<CollectibleScreenUiState> = _uiState
 
+    private val _isHuntingMode: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isHuntingMode = _isHuntingMode.asStateFlow()
+
+
+    // Dialogs
     private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
     val collectibleToShowInDialog = _collectibleToShowInDialog.asStateFlow()
 
     private val _isInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isInfoDialogShown = _isInfoDialogShown
+
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
@@ -199,6 +207,10 @@ class CollectibleViewModel @Inject constructor(
     
     fun getIsNorthForActiveUser(): Boolean {
         return activeUser.value?.isNorth ?: true
+    }
+
+    fun switchIsHuntingMode() {
+        _isHuntingMode.value = !isHuntingMode.value
     }
 }
 

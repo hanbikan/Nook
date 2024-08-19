@@ -30,4 +30,5 @@
     <string name="now">현재</string>
     <string name="info">정보</string>
     <string name="collectible_screen_info">수집품 터치: 수집 완료/취소\n수집품 길게 터치: 자세히 보기</string>
+    <string name="hunting_mode">사냥 모드</string>
 </resources>

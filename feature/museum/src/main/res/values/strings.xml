@@ -30,4 +30,5 @@
     <string name="now">Now</string>
     <string name="info">Info</string>
     <string name="collectible_screen_info">Touch collection item: Mark as collected/uncollected\nLong press collection item: View details</string>
+    <string name="hunting_mode">Hunting Mode</string>
 </resources>
