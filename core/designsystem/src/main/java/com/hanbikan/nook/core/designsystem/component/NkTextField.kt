@@ -70,7 +70,7 @@ fun NkTextField(
 fun NkPlaceholder(text: String) {
     NkText(
         text = text,
-        color = NkTheme.colorScheme.primaryContainer,
+        color = NkTheme.colorScheme.secondary,
     )
 }
 
