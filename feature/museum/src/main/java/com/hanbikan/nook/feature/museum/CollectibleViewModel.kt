@@ -5,14 +5,12 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.common.getCurrentMonth
-import com.hanbikan.nook.core.domain.model.Bug
 import com.hanbikan.nook.core.domain.model.common.Collectible
-import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.common.Monthly
-import com.hanbikan.nook.core.domain.model.SeaCreature
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.common.MonthToTimes.Companion.ALL_DAY
 import com.hanbikan.nook.core.domain.model.common.parseTimeRange
+import com.hanbikan.nook.core.domain.model.common.updateOnLocal
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
@@ -151,22 +149,7 @@ class CollectibleViewModel @Inject constructor(
 
     fun onClickCollectibleItem(collectible: Collectible) {
         viewModelScope.launch(Dispatchers.IO + handler) {
-            val item: Collectible =
-                collectibleList.value.find { it == collectible } ?: return@launch
-            when (collectibleSequenceIndex) {
-                CollectibleSequence.FISH.ordinal -> {
-                    val fish = (item as Fish).copy(isCollected = !item.isCollected)
-                    collectionRepository.updateFish(fish)
-                }
-                CollectibleSequence.BUG.ordinal -> {
-                    val bug = (item as Bug).copy(isCollected = !item.isCollected)
-                    collectionRepository.updateBug(bug)
-                }
-                CollectibleSequence.SEA_CREATURE.ordinal -> {
-                    val seaCreature = (item as SeaCreature).copy(isCollected = !item.isCollected)
-                    collectionRepository.updateSeaCreature(seaCreature)
-                }
-            }
+            collectible.updateOnLocal(collectionRepository)
         }
     }
 

@@ -1,6 +1,9 @@
 package com.hanbikan.nook.core.domain.model.common
 
-import java.time.Month
+import com.hanbikan.nook.core.domain.model.Bug
+import com.hanbikan.nook.core.domain.model.Fish
+import com.hanbikan.nook.core.domain.model.SeaCreature
+import com.hanbikan.nook.core.domain.repository.CollectionRepository
 
 interface Collectible {
     val userId: Int
@@ -30,4 +33,21 @@ fun <T> List<T>.filterForMonth(
     isNorth: Boolean
 ): List<T> where T : Collectible, T : Monthly {
     return filter { it.belongsToMonth(month, isNorth) }
+}
+
+suspend fun Collectible.updateOnLocal(collectionRepository: CollectionRepository) {
+    when (this) {
+        is Fish -> {
+            val fish = copy(isCollected = !isCollected)
+            collectionRepository.updateFish(fish)
+        }
+        is Bug -> {
+            val bug = copy(isCollected = !isCollected)
+            collectionRepository.updateBug(bug)
+        }
+        is SeaCreature -> {
+            val seaCreature = copy(isCollected = !isCollected)
+            collectionRepository.updateSeaCreature(seaCreature)
+        }
+    }
 }
