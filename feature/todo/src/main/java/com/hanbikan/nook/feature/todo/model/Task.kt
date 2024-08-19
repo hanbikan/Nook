@@ -26,7 +26,7 @@ fun Task.Companion.createInitialTasks(
         details = listOf(
             Detail(
                 description = context.getString(R.string.task_detail_description3_1),
-                imageId = R.drawable.shine_spot
+                imageUrl = "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/shine_spot.png?alt=media&token=af8e36c8-db35-4654-b834-f4a94e3374bf"
             ),
             Detail(description = context.getString(R.string.task_detail_description3_2))
         )

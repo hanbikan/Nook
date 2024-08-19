@@ -65,7 +65,7 @@ fun TutorialTask.Companion.createInitialTutorialTasks(
         name = context.getString(R.string.tutorial_task_name7),
         details = listOf(
             Detail(description = context.getString(R.string.tutorial_task_detail_description7_1)),
-            Detail(description = context.getString(R.string.tutorial_task_detail_description7_2), imageId = R.drawable.eight_rocks),
+            Detail(description = context.getString(R.string.tutorial_task_detail_description7_2), imageUrl = "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/eight_rocks.png?alt=media&token=5fa0f8d2-159c-4d86-8a83-8c7ef43c46b6"),
             Detail(description = context.getString(R.string.tutorial_task_detail_description7_3)),
             Detail(description = context.getString(R.string.tutorial_task_detail_description7_4)),
         ),
