@@ -1,8 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="fish_progress">Fish collection rate</string>
-    <string name="bug_progress">Bug collection rate</string>
-    <string name="sea_creature_progress">Sea creature collection rate</string>
+    <string name="overall_progress">📊 Overall collection rate</string>
+    <string name="fish_progress">🐟 Fish collection rate</string>
+    <string name="bug_progress">🐞 Bug collection rate</string>
+    <string name="sea_creature_progress">🐚 Sea creature collection rate</string>
     <string name="overall">Overall</string>
     <string name="monthly">Monthly</string>
     <string name="progress_rate">Progress</string>

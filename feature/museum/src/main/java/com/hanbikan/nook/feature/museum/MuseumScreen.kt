@@ -64,6 +64,12 @@ fun MuseumScreen(
                 verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
             ) {
                 CollectionProgress(
+                    name = stringResource(id = R.string.overall_progress),
+                    collectibleList = fishes + bugs + seaCreatures,
+                    onClick = {}
+                )
+
+                CollectionProgress(
                     name = stringResource(id = R.string.bug_progress),
                     collectibleList = bugs,
                     onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG.ordinal) }
