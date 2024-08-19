@@ -1,8 +1,8 @@
 package com.hanbikan.nook.feature.museum
 
 import android.content.Context
+import android.util.Log
 import android.widget.Toast
-import androidx.annotation.FloatRange
 import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
@@ -34,11 +34,17 @@ import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+
+
+private const val ANIMATION_DURATION_MILLIS: Int = 750
+private const val ANIMATION_DELAY_MILLIS: Long = 0L
 
 @Composable
 fun MuseumScreen(
@@ -47,17 +53,40 @@ fun MuseumScreen(
     navigateToMonthlyCollectible: (Int) -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val bugs = viewModel.bugs.collectAsStateWithLifecycle().value
     val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
 
-    val bugProgress = bugs.calculateProgress()
-    val fishProgress = fishes.calculateProgress()
-    val seaCreaturesProgress = seaCreatures.calculateProgress()
-    val overallProgress: Float = (bugProgress + fishProgress + seaCreaturesProgress) / 3.0f
+    var bugProgress by remember { mutableFloatStateOf(0.0f) }
+    var fishProgress by remember { mutableFloatStateOf(0.0f) }
+    var seaCreaturesProgress by remember { mutableFloatStateOf(0.0f) }
+    var overallProgress by remember { mutableFloatStateOf(0.0f) }
 
-    val context = LocalContext.current
+    var overallProgressToShow by remember { mutableFloatStateOf(0f) }
+    val animatedProgress by animateFloatAsState(
+        targetValue = overallProgressToShow,
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_MILLIS),
+        label = "CollectionProgress"
+    )
+
+    LaunchedEffect(bugs, fishes, seaCreatures) {
+        if (bugs.isNotEmpty() && fishes.isNotEmpty() && seaCreatures.isNotEmpty()) {
+            withContext(Dispatchers.IO) {
+                bugProgress = bugs.calculateProgress()
+                fishProgress = fishes.calculateProgress()
+                seaCreaturesProgress = seaCreatures.calculateProgress()
+                overallProgress = (bugProgress + fishProgress + seaCreaturesProgress) / 3.0f
+            }
+        }
+    }
+
+    LaunchedEffect(overallProgress) {
+        delay(ANIMATION_DELAY_MILLIS)
+        overallProgressToShow = overallProgress
+    }
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -76,7 +105,7 @@ fun MuseumScreen(
             ) {
                 // 전체 수집률
                 NkText(
-                    text = stringResource(id = R.string.overall_progress_title, (overallProgress * 100).toInt()),
+                    text = stringResource(id = R.string.overall_progress_title, (animatedProgress * 100).toInt()),
                     style = NkTheme.typography.titleLarge,
                     modifier = Modifier.clickable { Toast.makeText(context, getCollectionRateToastMessage(overallProgress, context), Toast.LENGTH_SHORT).show() }
                 )
@@ -117,19 +146,17 @@ fun CollectionProgress(
     name: String,
     progress: Float,
     onClick: () -> Unit,
-    animationDurationMillis: Int = 750,
-    animationDelayMillis: Long = 150L,
 ) {
     var progressToShow by remember { mutableFloatStateOf(0f) }
     val animatedProgress by animateFloatAsState(
         targetValue = progressToShow,
-        animationSpec = tween(durationMillis = animationDurationMillis),
+        animationSpec = tween(durationMillis = ANIMATION_DURATION_MILLIS),
         label = "CollectionProgress"
     )
     val progressAsPercent = "${(animatedProgress * 100).toInt()}%"
 
     LaunchedEffect(progress) {
-        delay(animationDelayMillis)
+        delay(ANIMATION_DELAY_MILLIS)
         progressToShow = progress
     }
 
