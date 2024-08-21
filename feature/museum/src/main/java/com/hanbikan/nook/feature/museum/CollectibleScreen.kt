@@ -2,8 +2,8 @@ package com.hanbikan.nook.feature.museum
 
 import android.view.MotionEvent
 import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
-import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -20,6 +20,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
@@ -35,8 +36,8 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.layout.positionInParent
@@ -51,7 +52,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
 import com.bumptech.glide.integration.compose.GlideImage
-import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
@@ -492,23 +492,22 @@ fun HourViewIndexScrollBar(
     setVisible: (Boolean) -> Unit,
     scrollByHourKey: (Int) -> Unit,
 ) {
-    val hourKeys = uiState.startHourToCollectibleListForMonth.keys.sorted()
+    val startHours = uiState.startHourToCollectibleListForMonth.keys.sorted()
     val endYListForIndex = MutableList(uiState.startHourToCollectibleListForMonth.keys.count()) { 0.0f }
 
     FadeAnimatedVisibility(visible = visible) {
         Column(
             modifier = Modifier
                 .padding(Dimens.SpacingSmall)
-                .width(Dimens.SpacingLarge)
                 .pointerInteropFilter {
                     // 터치 Y 좌표와 비교하여 해당 hourKey 찾기
                     if (it.action == MotionEvent.ACTION_MOVE) {
                         val matchingIndex = endYListForIndex.indexOfFirst { endY -> it.y <= endY }
                         if (matchingIndex != -1) {
-                            val matchingHourKey = hourKeys[matchingIndex]
+                            val matchingHourKey = startHours[matchingIndex]
                             scrollByHourKey(matchingHourKey)
                         } else {
-                            scrollByHourKey(hourKeys.last())
+                            scrollByHourKey(startHours.last())
                         }
                     }
 
@@ -519,12 +518,17 @@ fun HourViewIndexScrollBar(
             horizontalAlignment = Alignment.CenterHorizontally,
             verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium),
         ) {
-            hourKeys.forEachIndexed { index, hourKey ->
+            startHours.forEachIndexed { index, startHour ->
                 NkText(
-                    text = if (hourKey == -1) "@" else "$hourKey",
-                    color = NkTheme.colorScheme.primaryContainer,
+                    text = if (startHour == ALL_DAY_KEY) "@" else "$startHour",
+                    color = if (!uiState.isStartHourCurrentHourRange(startHour)) NkTheme.colorScheme.primaryContainer else NkTheme.colorScheme.background,
                     style = NkTheme.typography.bodySmall,
                     modifier = Modifier
+                        .background(
+                            color = if (!uiState.isStartHourCurrentHourRange(startHour)) Color.Transparent else NkTheme.colorScheme.primary,
+                            shape = RoundedCornerShape(Dimens.SpacingSmall),
+                        )
+                        .padding(Dimens.SpacingExtraSmall)
                         .onGloballyPositioned { coordinates ->
                             // Text end Y 좌표 저장
                             val centerY: Float = coordinates.positionInParent().y + coordinates.size.height
