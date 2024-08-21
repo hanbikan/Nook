@@ -1,8 +1,9 @@
 package com.hanbikan.nook.feature.museum
 
+import android.view.MotionEvent
 import androidx.compose.foundation.ExperimentalFoundationApi
-import androidx.compose.foundation.background
 import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -16,11 +17,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.LazyItemScope
 import androidx.compose.foundation.lazy.LazyListScope
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.lazy.rememberLazyListState
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
@@ -29,12 +28,18 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.ExperimentalComposeUiApi
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.input.pointer.pointerInteropFilter
 import androidx.compose.ui.layout.onGloballyPositioned
+import androidx.compose.ui.layout.positionInParent
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
@@ -50,6 +55,7 @@ import com.hanbikan.nook.core.common.getCurrentHour
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
+import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkAnimatedCircularProgress
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkDialog
@@ -67,7 +73,7 @@ import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlinx.coroutines.delay
-import kotlin.math.ceil
+import kotlinx.coroutines.launch
 
 private val CollectibleItemWidth = 90.dp
 val CollectibleItemHeight = 80.dp
@@ -391,6 +397,7 @@ fun MonthlyCollectibleContents(
     }
 }
 
+@OptIn(ExperimentalComposeUiApi::class)
 @Composable
 fun HourViewContents(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,
@@ -403,18 +410,13 @@ fun HourViewContents(
     val itemWidth: Float = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
     val itemsPerRow: Int = (containerWidth / itemWidth).toInt()
     val density: Density = LocalDensity.current
+    val coroutineScope = rememberCoroutineScope()
+    var isIndexScrollBarShown by remember { mutableStateOf(false) }
 
     LaunchedEffect(itemsPerRow, uiState.month) {
         if (itemsPerRow > 0) {
-            val keyForCurrentHour: Int = uiState.getKeyForCurrentHour()
-            var scrollIndex = 1
-            uiState.startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
-                if (startHour < keyForCurrentHour) {
-                    scrollIndex += 2 + ceil(
-                        (collectibleList.count().toFloat() / itemsPerRow)
-                    ).toInt()
-                }
-            }
+            val currentHourKey: Int = uiState.getCurrentHourKey()
+            val scrollIndex = uiState.getScrollIndexForKey(currentHourKey, itemsPerRow)
             delay(150)
             lazyListState.animateScrollToItem(
                 index = scrollIndex,
@@ -423,11 +425,23 @@ fun HourViewContents(
         }
     }
 
+    // 일정 시간 동안 스크롤이 없거나 스크롤바를 조작하지 않을 경우 스크롤바를 숨김
+    LaunchedEffect(isIndexScrollBarShown) {
+        if (isIndexScrollBarShown) {
+            delay(800)
+            isIndexScrollBarShown = false
+        }
+    }
+
     Box {
         LazyColumn(
             modifier = Modifier
                 .fillMaxWidth()
-                .onGloballyPositioned { containerWidth = it.size.width },
+                .onGloballyPositioned { containerWidth = it.size.width }
+                .pointerInteropFilter {
+                    isIndexScrollBarShown = it.action == MotionEvent.ACTION_DOWN || it.action == MotionEvent.ACTION_MOVE
+                    false
+                },
             state = lazyListState,
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
@@ -449,9 +463,83 @@ fun HourViewContents(
             }
         }
 
+        Box(
+            modifier = Modifier.fillMaxSize(),
+            contentAlignment = Alignment.CenterEnd,
+        ) {
+            HourViewIndexScrollBar(
+                uiState = uiState,
+                visible = isIndexScrollBarShown,
+                setVisible = { isIndexScrollBarShown = it },
+                scrollByHourKey = {
+                    coroutineScope.launch {
+                        val index = uiState.getScrollIndexForKey(it, itemsPerRow)
+                        lazyListState.scrollToItem(index, 0)
+                    }
+                }
+            )
+        }
         NkTopBackgroundGradient(height = GradientHeight)
     }
 }
+
+
+@OptIn(ExperimentalComposeUiApi::class)
+@Composable
+fun HourViewIndexScrollBar(
+    uiState: CollectibleScreenUiState.MonthlyView.HourView,
+    visible: Boolean = true,
+    setVisible: (Boolean) -> Unit,
+    scrollByHourKey: (Int) -> Unit,
+) {
+    val hourKeys = uiState.startHourToCollectibleListForMonth.keys.sorted()
+    val endYListForIndex = MutableList(uiState.startHourToCollectibleListForMonth.keys.count()) { 0.0f }
+
+    FadeAnimatedVisibility(visible = visible) {
+        Column(
+            modifier = Modifier
+                .padding(Dimens.SpacingSmall)
+                .width(Dimens.SpacingLarge)
+                .pointerInteropFilter {
+                    // 터치 Y 좌표와 비교하여 해당 hourKey 찾기
+                    if (it.action == MotionEvent.ACTION_MOVE) {
+                        val matchingIndex = endYListForIndex.indexOfFirst { endY -> it.y <= endY }
+                        if (matchingIndex != -1) {
+                            val matchingHourKey = hourKeys[matchingIndex]
+                            scrollByHourKey(matchingHourKey)
+                        } else {
+                            scrollByHourKey(hourKeys.last())
+                        }
+                    }
+
+                    setVisible(it.action == MotionEvent.ACTION_DOWN || it.action == MotionEvent.ACTION_MOVE)
+
+                    true
+                },
+            horizontalAlignment = Alignment.CenterHorizontally,
+            verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium),
+        ) {
+            hourKeys.forEachIndexed { index, hourKey ->
+                NkText(
+                    text = if (hourKey == -1) "@" else "$hourKey",
+                    color = NkTheme.colorScheme.primaryContainer,
+                    style = NkTheme.typography.bodySmall,
+                    modifier = Modifier
+                        .onGloballyPositioned { coordinates ->
+                            // Text end Y 좌표 저장
+                            val centerY: Float = coordinates.positionInParent().y + coordinates.size.height
+                            if (index < endYListForIndex.size) {
+                                endYListForIndex[index] = centerY
+                            } else {
+                                // Exception
+                            }
+                        }
+                )
+            }
+        }
+    }
+}
+
 
 fun LazyListScope.TimeAndCollectibleItems(
     uiState: CollectibleScreenUiState.MonthlyView.HourView,

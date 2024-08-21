@@ -29,6 +29,7 @@ import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
+import kotlin.math.ceil
 
 @HiltViewModel
 class CollectibleViewModel @Inject constructor(
@@ -234,7 +235,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                 return hours.getOrElse(nextHourIndex) { 24 }
             }
 
-            fun getKeyForCurrentHour(): Int {
+            fun getCurrentHourKey(): Int {
                 val currentHour = getCurrentHour()
                 val hours = startHourToCollectibleListForMonth.keys.sorted()
                 hours.forEach { startHour ->
@@ -244,6 +245,21 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
                     }
                 }
                 return ALL_DAY_KEY
+            }
+
+            fun getScrollIndexForKey(
+                hourKey: Int,
+                itemsPerRow: Int
+            ): Int {
+                var scrollIndex = 1
+                startHourToCollectibleListForMonth.forEach { (startHour, collectibleList) ->
+                    if (startHour < hourKey) {
+                        scrollIndex += 2 + ceil(
+                            (collectibleList.count().toFloat() / itemsPerRow)
+                        ).toInt()
+                    }
+                }
+                return scrollIndex
             }
 
             /**
