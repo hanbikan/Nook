@@ -550,8 +550,6 @@ fun LazyListScope.TimeAndCollectibleItems(
     onLongClickCollectibleItem: (Collectible) -> Unit,
     isHuntingMode: Boolean,
 ) {
-    val currentHour: Int = getCurrentHour()
-
     // 시간
     item {
         val endHour = uiState.getEndHourByStartHour(startHour)
@@ -571,7 +569,8 @@ fun LazyListScope.TimeAndCollectibleItems(
                 style = NkTheme.typography.titleLarge,
                 text = text,
             )
-            if (currentHour in startHour until endHour) {
+            // 현재 시간 범위일 경우 '현재' 박스 표시
+            if (uiState.isStartHourCurrentHourRange(startHour)) {
                 Spacer(modifier = Modifier.width(Dimens.SpacingSmall))
                 NkTag(text = stringResource(id = R.string.now))
             }

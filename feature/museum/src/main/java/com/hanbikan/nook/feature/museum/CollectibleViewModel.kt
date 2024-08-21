@@ -229,18 +229,28 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
             val startHourToCollectibleListForMonth: Map<Int, List<Collectible>> =
                 getStartHourToCollectibleListForMonth(collectibleList, month)
 
+            /**
+             * startHour에 대응하는 endHour를 반환합니다.
+             */
             fun getEndHourByStartHour(startHour: Int): Int {
                 val hours = startHourToCollectibleListForMonth.keys.sorted()
                 val nextHourIndex = hours.indexOfFirst { it == startHour } + 1
                 return hours.getOrElse(nextHourIndex) { 24 }
             }
 
-            fun getCurrentHourKey(): Int {
+            fun isStartHourCurrentHourRange(startHour: Int): Boolean {
+                val endHour = getEndHourByStartHour(startHour)
                 val currentHour = getCurrentHour()
+                return currentHour in startHour until endHour
+            }
+
+            /**
+             * 현재 시간에 해당하는 startHour key를 반환합니다.
+             */
+            fun getCurrentHourKey(): Int {
                 val hours = startHourToCollectibleListForMonth.keys.sorted()
                 hours.forEach { startHour ->
-                    val endHour = getEndHourByStartHour(startHour)
-                    if (currentHour in startHour until endHour) {
+                    if (isStartHourCurrentHourRange(startHour)) {
                         return startHour
                     }
                 }
