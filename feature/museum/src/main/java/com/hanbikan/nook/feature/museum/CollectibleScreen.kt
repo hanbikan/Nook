@@ -77,6 +77,7 @@ import kotlinx.coroutines.launch
 
 private val CollectibleItemWidth = 90.dp
 val CollectibleItemHeight = 80.dp
+val CollectibleItemHeightForHuntingMode = 90.dp
 private val GradientHeight = Dimens.SpacingMedium
 
 @Composable
@@ -287,7 +288,7 @@ fun CollectibleItem(
     Box(
         modifier = Modifier
             .width(CollectibleItemWidth)
-            .height(if (!isHuntingMode) CollectibleItemHeight else Dp.Unspecified)
+            .height(if (!isHuntingMode) CollectibleItemHeight else CollectibleItemHeightForHuntingMode)
             .combinedClickable(
                 onClick = onClick,
                 onLongClick = onLongClick,

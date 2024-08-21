@@ -179,7 +179,7 @@ fun MuseumScreen(
                 )
                 Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
 
-                // 현재 잡을 수 있는 것
+                // 현재 수집 가능
                 Column(
                     verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
                 ) {
@@ -194,30 +194,24 @@ fun MuseumScreen(
                             ).show()
                         }
                     )
-                    if (currentlyCollectibleBugs.isNotEmpty()) {
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleBugs,
-                            isHuntingMode = true,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
-                        )
-                    }
-                    if (currentlyCollectibleFishes.isNotEmpty()) {
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleFishes,
-                            isHuntingMode = true,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
-                        )
-                    }
-                    if (currentlyCollectibleSeaCreature.isNotEmpty()) {
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleSeaCreature,
-                            isHuntingMode = true,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
-                        )
-                    }
+                    CollectiblesRow(
+                        collectibles = currentlyCollectibleBugs,
+                        isHuntingMode = true,
+                        onClick = { viewModel.onClickCollectibleItem(it) },
+                        onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                    )
+                    CollectiblesRow(
+                        collectibles = currentlyCollectibleFishes,
+                        isHuntingMode = true,
+                        onClick = { viewModel.onClickCollectibleItem(it) },
+                        onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                    )
+                    CollectiblesRow(
+                        collectibles = currentlyCollectibleSeaCreature,
+                        isHuntingMode = true,
+                        onClick = { viewModel.onClickCollectibleItem(it) },
+                        onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                    )
                     Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
                 }
 
@@ -317,6 +311,9 @@ fun CollectiblesRow(
     onClick: (Collectible) -> Unit,
     onLongClick: (Collectible) -> Unit,
 ) {
+    val padding = Dimens.SpacingSmall
+    val height = padding * 2 + if (!isHuntingMode) CollectibleItemHeight else CollectibleItemHeightForHuntingMode
+
     LazyRow(
         modifier = Modifier
             .background(
@@ -324,7 +321,8 @@ fun CollectiblesRow(
                 RoundedCornerShape(Dimens.SpacingMedium)
             )
             .fillMaxWidth()
-            .padding(Dimens.SpacingSmall)
+            .height(height)
+            .padding(padding)
     ) {
         items(collectibles) {
             CollectibleItem(
