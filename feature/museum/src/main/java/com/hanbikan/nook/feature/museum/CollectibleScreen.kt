@@ -428,7 +428,7 @@ fun HourViewContents(
     // 일정 시간 동안 스크롤이 없거나 스크롤바를 조작하지 않을 경우 스크롤바를 숨김
     LaunchedEffect(isIndexScrollBarShown) {
         if (isIndexScrollBarShown) {
-            delay(800)
+            delay(2000)
             isIndexScrollBarShown = false
         }
     }
