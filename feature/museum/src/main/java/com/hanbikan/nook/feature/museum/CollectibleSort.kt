@@ -35,7 +35,7 @@ data class CollectibleSort(
         }
 
         /**
-         * [collectibles]의 타입을 확인하여 가능한 [CollectibleSort] 리스트를 반환합니다.
+         * [collectibleSequence]를 확인하여 가능한 [CollectibleSort] 리스트를 반환합니다.
          */
         fun getCollectibleSorts(collectibleSequence: CollectibleSequence): List<CollectibleSort> {
             val sorts: MutableList<CollectibleSort> = mutableListOf(SORT_BY_DEFAULT, SORT_BY_IS_COLLECTED)

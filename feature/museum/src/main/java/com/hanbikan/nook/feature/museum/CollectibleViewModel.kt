@@ -1,6 +1,5 @@
 package com.hanbikan.nook.feature.museum
 
-import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -21,7 +20,6 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -47,15 +45,15 @@ class CollectibleViewModel @Inject constructor(
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    val collectibleSorts: List<CollectibleSort> =
-        CollectibleSort.getCollectibleSorts(collectibleSequence)
+    val collectibleSorts: List<CollectibleSort> = CollectibleSort.getCollectibleSorts(collectibleSequence)
+    private val sort: MutableStateFlow<CollectibleSort> = MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
 
-    private val sort: MutableStateFlow<CollectibleSort> =
-        MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
+    val collectibleFilters: List<CollectibleFilter> = CollectibleFilter.getCollectibleFilters()
+    private val filter: MutableStateFlow<CollectibleFilter> = MutableStateFlow(CollectibleFilter.FILTER_BY_DEFAULT)
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val collectibleList: StateFlow<List<Collectible>> =
-        combine(activeUser, sort) { activeUser, _ ->
+        combine(activeUser, sort, filter) { activeUser, _, _ ->
             if (activeUser == null) {
                 flowOf(listOf())
             } else {
@@ -67,6 +65,7 @@ class CollectibleViewModel @Inject constructor(
             }
         }
             .flatMapLatest { it }
+            .mapLatest { filter.value.filter(it) }
             .mapLatest { sort.value.sort(it) }
             .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
@@ -157,7 +156,11 @@ class CollectibleViewModel @Inject constructor(
         _isHuntingMode.value = !isHuntingMode.value
     }
 
-    fun setCurrentSort(collectibleSort: CollectibleSort) {
+    fun setSort(collectibleSort: CollectibleSort) {
         sort.value = collectibleSort
+    }
+
+    fun setFilter(collectibleFilter: CollectibleFilter) {
+        filter.value = collectibleFilter
     }
 }

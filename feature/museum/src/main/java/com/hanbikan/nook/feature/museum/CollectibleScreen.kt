@@ -177,6 +177,7 @@ private fun CollectibleScreenTopAppBar(
     uiState: CollectibleScreenUiState
 ) {
     var isSortMenuExpanded by remember { mutableStateOf(false) }
+    var isFilterMenuExpanded by remember { mutableStateOf(false) }
 
     val rightAppBarIcons: ArrayList<AppBarIcon> = arrayListOf()
     rightAppBarIcons.add(
@@ -203,8 +204,34 @@ private fun CollectibleScreenTopAppBar(
                                 Text(text = stringResource(id = it.nameResourceId))
                             },
                             onClick = {
-                                viewModel.setCurrentSort(it)
+                                viewModel.setSort(it)
                                 isSortMenuExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        )
+    )
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_filter_alt_24),
+            contentDescription = stringResource(id = R.string.filter_by),
+            onClick = { isFilterMenuExpanded = true },
+            DropDownMenu = {
+                DropdownMenu(
+                    expanded = isFilterMenuExpanded,
+                    onDismissRequest = { isFilterMenuExpanded = false },
+                    modifier = Modifier,
+                ) {
+                    viewModel.collectibleFilters.forEach {
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(id = it.nameResourceId))
+                            },
+                            onClick = {
+                                viewModel.setFilter(it)
+                                isFilterMenuExpanded = false
                             }
                         )
                     }

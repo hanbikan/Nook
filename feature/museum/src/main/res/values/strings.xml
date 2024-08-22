@@ -40,8 +40,12 @@
     <string name="collection_rate_75_to_99_message">Awesome! You\'re nearly complete :)</string>
     <string name="collection_rate_100_message">Congratulations! You\'ve collected everything! :)</string>
     <string name="sort_by">Sort by</string>
-    <string name="sort_by_default">Default</string>
+    <string name="sort_by_default">Sort by default</string>
     <string name="sort_by_is_collected">Collection status</string>
     <string name="sort_by_location">Location</string>
     <string name="sort_by_shadow_size">Shadow size</string>
+    <string name="filter_by">Filter</string>
+    <string name="filter_by_default">No filter</string>
+    <string name="filter_by_is_collected">Collected</string>
+    <string name="filter_by_is_not_collected">Not collected</string>
 </resources>
