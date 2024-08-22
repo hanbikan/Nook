@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.museum
 
+import android.util.Log
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -24,7 +25,6 @@ import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
-import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -37,66 +37,69 @@ class CollectibleViewModel @Inject constructor(
 ) : ViewModel() {
 
     // COLLECTIBLE_SEQUENCE_INDEX를 읽어서 bug, fish, sea creature 등을 구분합니다.
-    private val collectibleSequence: CollectibleSequence = CollectibleSequence.values()[savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX] ?: 0]
-
-    private val _uiState: MutableStateFlow<CollectibleScreenUiState> = MutableStateFlow(
-        CollectibleScreenUiState.Loading
-    )
-    val uiState: StateFlow<CollectibleScreenUiState> = _uiState
+    private val collectibleSequence: CollectibleSequence =
+        CollectibleSequence.values()[savedStateHandle[COLLECTIBLE_SEQUENCE_INDEX] ?: 0]
 
     private val _isHuntingMode: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isHuntingMode = _isHuntingMode.asStateFlow()
-
-    val collectibleSorts: List<CollectibleSort> = CollectibleSort.getCollectibleSorts(collectibleSequence)
-
-    private val _currentSort: MutableStateFlow<CollectibleSort> = MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
-    val currentSort = _currentSort.asStateFlow()
 
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+    val collectibleSorts: List<CollectibleSort> =
+        CollectibleSort.getCollectibleSorts(collectibleSequence)
+
+    private val sort: MutableStateFlow<CollectibleSort> =
+        MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
+
     @OptIn(ExperimentalCoroutinesApi::class)
-    private val collectibleList: StateFlow<List<Collectible>> = combine(activeUser, currentSort) { activeUser, currentSort ->
-        if (activeUser == null) {
-            listOf()
-        } else {
-            when (collectibleSequence) {
-                CollectibleSequence.FISH -> collectionRepository.getAllFishesByUserId(activeUser.id).first()
-                CollectibleSequence.BUG -> collectionRepository.getAllBugsByUserId(activeUser.id).first()
-                CollectibleSequence.SEA_CREATURE -> collectionRepository.getAllSeaCreaturesByUserId(activeUser.id).first()
-            }
-        }
-    }
-        .mapLatest {
-            currentSort.value.sort(it)
-        }
-        .onEach {
-            // 기반 데이터가 변경 또는 초기화 되었으므로 uiState를 업데이트 합니다.
-            val uiStateValue = uiState.value
-            _uiState.value = when (uiStateValue) {
-                is CollectibleScreenUiState.MonthlyView.GeneralView -> {
-                    CollectibleScreenUiState.MonthlyView.GeneralView(
-                        collectibleList = it,
-                        month = uiStateValue.month,
-                        getIsNorthForActiveUser(),
-                    )
-                }
-
-                is CollectibleScreenUiState.MonthlyView.HourView -> {
-                    CollectibleScreenUiState.MonthlyView.HourView(
-                        collectibleList = it,
-                        month = uiStateValue.month,
-                        getIsNorthForActiveUser(),
-                    )
-                }
-
-                else -> { // Loading or OverallView
-                    CollectibleScreenUiState.OverallView(it)
+    private val collectibleList: StateFlow<List<Collectible>> =
+        combine(activeUser, sort) { activeUser, _ ->
+            if (activeUser == null) {
+                flowOf(listOf())
+            } else {
+                when (collectibleSequence) {
+                    CollectibleSequence.FISH -> collectionRepository.getAllFishesByUserId(activeUser.id)
+                    CollectibleSequence.BUG -> collectionRepository.getAllBugsByUserId(activeUser.id)
+                    CollectibleSequence.SEA_CREATURE -> collectionRepository.getAllSeaCreaturesByUserId(activeUser.id)
                 }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
+            .flatMapLatest { it }
+            .mapLatest { sort.value.sort(it) }
+            .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    val isNorth: StateFlow<Boolean> = activeUser.mapLatest { it?.isNorth ?: true }
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
+
+    private val month: MutableStateFlow<Int> = MutableStateFlow(getCurrentMonth())
+
+    private val viewType: MutableStateFlow<CollectibleScreenViewType> =
+        MutableStateFlow(CollectibleScreenViewType.OVERALL)
+
+    val uiState: StateFlow<CollectibleScreenUiState> = combine(
+        collectibleList,
+        viewType,
+        month,
+        isNorth
+    ) { collectibleList, viewType, month, isNorth ->
+        when (viewType) {
+            CollectibleScreenViewType.LOADING -> {
+                CollectibleScreenUiState.Loading
+            }
+            CollectibleScreenViewType.OVERALL -> {
+                CollectibleScreenUiState.OverallView(collectibleList)
+            }
+            CollectibleScreenViewType.MONTHLY_GENERAL -> {
+                CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList, month, isNorth)
+            }
+            CollectibleScreenViewType.MONTHLY_HOUR -> {
+                CollectibleScreenUiState.MonthlyView.HourView(collectibleList, month, isNorth)
+            }
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), CollectibleScreenUiState.Loading)
 
 
     // Dialogs
@@ -112,72 +115,29 @@ class CollectibleViewModel @Inject constructor(
             // TODO: show error message
         }
 
-    fun onClickViewType(index: Int) {
-        when (index) {
-            CollectibleScreenViewType.OVERALL.chipIndex -> {
-                _uiState.value =
-                    CollectibleScreenUiState.OverallView(collectibleList = collectibleList.value)
-            }
+    fun onClickViewTypeChip(chipIndex: Int) {
+        viewType.value = if (chipIndex == 0) {
+            CollectibleScreenViewType.OVERALL
+        } else {
+            CollectibleScreenViewType.MONTHLY_HOUR
+        }
+    }
 
-            CollectibleScreenViewType.MONTHLY.chipIndex -> {
-                _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
-                    collectibleList = collectibleList.value,
-                    month = getCurrentMonth(),
-                    getIsNorthForActiveUser(),
-                )
-            }
+    fun onClickMonthlyViewType() {
+        viewType.value = if (viewType.value == CollectibleScreenViewType.MONTHLY_GENERAL) {
+            CollectibleScreenViewType.MONTHLY_HOUR
+        } else {
+            CollectibleScreenViewType.MONTHLY_GENERAL
         }
     }
 
     fun onClickMonth(month: Int) {
-        val uiStateValue = uiState.value
-        if (uiStateValue !is CollectibleScreenUiState.MonthlyView) return
-
-        when (uiStateValue) {
-            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
-                _uiState.value = CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList = collectibleList.value,
-                    month = month,
-                    getIsNorthForActiveUser(),
-                )
-            }
-
-            is CollectibleScreenUiState.MonthlyView.HourView -> {
-                _uiState.value = CollectibleScreenUiState.MonthlyView.HourView(
-                    collectibleList = collectibleList.value,
-                    month = month,
-                    getIsNorthForActiveUser(),
-                )
-            }
-        }
+        this.month.value = month
     }
 
     fun onClickCollectibleItem(collectible: Collectible) {
         viewModelScope.launch(Dispatchers.IO + handler) {
             collectible.updateOnLocal(collectionRepository)
-        }
-    }
-
-    fun onClickMonthlyViewType() {
-        val uiStateValue = uiState.value
-        if (uiStateValue !is CollectibleScreenUiState.MonthlyView) return
-
-        _uiState.value = when (uiStateValue) {
-            is CollectibleScreenUiState.MonthlyView.GeneralView -> {
-                CollectibleScreenUiState.MonthlyView.HourView(
-                    collectibleList.value,
-                    uiStateValue.month,
-                    getIsNorthForActiveUser(),
-                )
-            }
-
-            is CollectibleScreenUiState.MonthlyView.HourView -> {
-                CollectibleScreenUiState.MonthlyView.GeneralView(
-                    collectibleList.value,
-                    uiStateValue.month,
-                    getIsNorthForActiveUser(),
-                )
-            }
         }
     }
 
@@ -192,20 +152,12 @@ class CollectibleViewModel @Inject constructor(
     fun switchIsInfoDialogShown() {
         _isInfoDialogShown.value = !isInfoDialogShown.value
     }
-    
-    fun getIsNorthForActiveUser(): Boolean {
-        return activeUser.value?.isNorth ?: true
-    }
 
     fun switchIsHuntingMode() {
         _isHuntingMode.value = !isHuntingMode.value
     }
 
     fun setCurrentSort(collectibleSort: CollectibleSort) {
-        _currentSort.value = collectibleSort
+        sort.value = collectibleSort
     }
-}
-
-enum class CollectibleScreenViewType(val chipIndex: Int?) {
-    LOADING(null), OVERALL(0), MONTHLY(1)
 }

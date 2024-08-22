@@ -49,7 +49,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.Density
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -92,6 +91,7 @@ fun CollectibleScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val isHuntingMode = viewModel.isHuntingMode.collectAsStateWithLifecycle().value
+    val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
 
     val collectibleToShowInDialog =
         viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
@@ -116,7 +116,7 @@ fun CollectibleScreen(
                             selectedIndex = uiState.chipIndex
                         ),
                         isLarge = true,
-                        onClickItem = viewModel::onClickViewType,
+                        onClickItem = viewModel::onClickViewTypeChip,
                     )
                 }
 
@@ -156,7 +156,7 @@ fun CollectibleScreen(
         DetailCollectibleDialog(
             collectible = collectibleToShowInDialog,
             onDismiss = viewModel::onDismissCollectibleDialog,
-            isNorth = viewModel.getIsNorthForActiveUser(),
+            isNorth = isNorth,
         )
 
         NkDialog(

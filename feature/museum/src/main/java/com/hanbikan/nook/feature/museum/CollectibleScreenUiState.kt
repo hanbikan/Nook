@@ -7,18 +7,20 @@ import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.parseTimeRange
 import kotlin.math.ceil
 
+enum class CollectibleScreenViewType {
+    LOADING, OVERALL, MONTHLY_GENERAL, MONTHLY_HOUR,
+}
+
 sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
-    object Loading :
-        CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.LOADING.chipIndex)
+    object Loading : CollectibleScreenUiState(chipIndex = null)
 
-    class OverallView(val collectibleList: List<Collectible>) :
-        CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.OVERALL.chipIndex)
+    class OverallView(val collectibleList: List<Collectible>) : CollectibleScreenUiState(chipIndex = 0)
 
     sealed class MonthlyView(
         val month: Int,
         val isNorth: Boolean,
-    ) : CollectibleScreenUiState(chipIndex = CollectibleScreenViewType.MONTHLY.chipIndex) {
+    ) : CollectibleScreenUiState(chipIndex = 1) {
 
         class GeneralView(collectibleList: List<Collectible>, month: Int, isNorth: Boolean) : MonthlyView(month, isNorth) {
             val collectibleListForMonth: List<Collectible> =
