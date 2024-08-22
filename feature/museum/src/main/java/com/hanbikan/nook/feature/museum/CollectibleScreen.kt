@@ -180,6 +180,23 @@ private fun CollectibleScreenTopAppBar(
     var isFilterMenuExpanded by remember { mutableStateOf(false) }
 
     val rightAppBarIcons: ArrayList<AppBarIcon> = arrayListOf()
+    if (uiState is CollectibleScreenUiState.MonthlyView) {
+        rightAppBarIcons.add(
+            if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
+                    contentDescription = stringResource(id = R.string.general_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            } else {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.time),
+                    contentDescription = stringResource(id = R.string.hour_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            }
+        )
+    }
     rightAppBarIcons.add(
         AppBarIcon(
             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
@@ -239,23 +256,6 @@ private fun CollectibleScreenTopAppBar(
             }
         )
     )
-    if (uiState is CollectibleScreenUiState.MonthlyView) {
-        rightAppBarIcons.add(
-            if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
-                AppBarIcon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
-                    contentDescription = stringResource(id = R.string.general_view),
-                    onClick = viewModel::onClickMonthlyViewType
-                )
-            } else {
-                AppBarIcon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.time),
-                    contentDescription = stringResource(id = R.string.hour_view),
-                    onClick = viewModel::onClickMonthlyViewType
-                )
-            }
-        )
-    }
     rightAppBarIcons.add(
         AppBarIcon(
             imageVector = ImageVector.vectorResource(id = if (!isHuntingMode) R.drawable.baseline_explore_off_24 else R.drawable.baseline_explore_24),
