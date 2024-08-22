@@ -1,7 +1,6 @@
 package com.hanbikan.nook.core.designsystem.component
 
 import androidx.annotation.StringRes
-import androidx.compose.foundation.layout.Row
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
@@ -13,7 +12,14 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -23,7 +29,8 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 data class AppBarIcon(
     val imageVector: ImageVector,
     val contentDescription: String? = null,
-    val onClick: () -> Unit
+    val onClick: () -> Unit,
+    val DropDownMenu: @Composable () -> Unit = {},
 ) {
     companion object {
         @Composable
@@ -58,16 +65,16 @@ fun NkTopAppBar(
 ) {
     CenterAlignedTopAppBar(
         navigationIcon = {
-            Row {
-                leftAppBarIcons.forEach {
-                    IconButton(onClick = it.onClick) {
-                        Icon(
-                            imageVector = it.imageVector,
-                            contentDescription = it.contentDescription,
-                            tint = NkTheme.colorScheme.primary,
-                        )
-                    }
+            leftAppBarIcons.forEach {
+                IconButton(onClick = it.onClick) {
+                    Icon(
+                        imageVector = it.imageVector,
+                        contentDescription = it.contentDescription,
+                        tint = NkTheme.colorScheme.primary,
+                    )
                 }
+
+                it.DropDownMenu()
             }
         },
         title = {
@@ -80,16 +87,23 @@ fun NkTopAppBar(
             }
         },
         actions = {
-            Row {
-                rightAppBarIcons.forEach {
-                    IconButton(onClick = it.onClick) {
-                        Icon(
-                            imageVector = it.imageVector,
-                            contentDescription = it.contentDescription,
-                            tint = NkTheme.colorScheme.primary,
-                        )
+            rightAppBarIcons.forEach {
+                var buttonOffset by remember { mutableStateOf(Offset.Zero) }
+
+                IconButton(
+                    onClick = it.onClick,
+                    modifier = Modifier.onGloballyPositioned { coordinates ->
+                        buttonOffset = coordinates.localToWindow(Offset.Zero)
                     }
+                ) {
+                    Icon(
+                        imageVector = it.imageVector,
+                        contentDescription = it.contentDescription,
+                        tint = NkTheme.colorScheme.primary,
+                    )
                 }
+
+                it.DropDownMenu()
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

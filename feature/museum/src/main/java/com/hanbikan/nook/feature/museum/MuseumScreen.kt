@@ -58,7 +58,7 @@ private const val ANIMATION_DELAY_MILLIS: Long = 0L
 fun MuseumScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
-    navigateToMonthlyCollectible: (Int) -> Unit,
+    navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -165,17 +165,17 @@ fun MuseumScreen(
                 CollectionProgress(
                     name = stringResource(id = R.string.bug_progress),
                     progress = bugProgress,
-                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG.ordinal) }
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG) }
                 )
                 CollectionProgress(
                     name = stringResource(id = R.string.fish_progress),
                     progress = fishProgress,
-                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH.ordinal) }
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH) }
                 )
                 CollectionProgress(
                     name = stringResource(id = R.string.sea_creature_progress),
                     progress = seaCreaturesProgress,
-                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE.ordinal) }
+                    onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE) }
                 )
                 Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
 

@@ -24,7 +24,10 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Check
 import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.DropdownMenu
+import androidx.compose.material3.DropdownMenuItem
 import androidx.compose.material3.Icon
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
@@ -71,6 +74,7 @@ import com.hanbikan.nook.core.domain.model.common.HasShadowSize
 import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
+import com.hanbikan.nook.feature.museum.util.formatTime
 import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
@@ -88,52 +92,14 @@ fun CollectibleScreen(
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
     val isHuntingMode = viewModel.isHuntingMode.collectAsStateWithLifecycle().value
+
     val collectibleToShowInDialog =
         viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
     val isInfoDialogShown = viewModel.isInfoDialogShown.collectAsStateWithLifecycle().value
 
-    val rightAppBarIcons: ArrayList<AppBarIcon> = arrayListOf()
-    if (uiState is CollectibleScreenUiState.MonthlyView) {
-        rightAppBarIcons.add(
-            if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
-                AppBarIcon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
-                    contentDescription = stringResource(id = R.string.general_view),
-                    onClick = viewModel::onClickMonthlyViewType
-                )
-            } else {
-                AppBarIcon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.time),
-                    contentDescription = stringResource(id = R.string.hour_view),
-                    onClick = viewModel::onClickMonthlyViewType
-                )
-            }
-        )
-    }
-    rightAppBarIcons.add(
-        AppBarIcon(
-            imageVector = ImageVector.vectorResource(id = if (!isHuntingMode) R.drawable.baseline_explore_off_24 else R.drawable.baseline_explore_24),
-            contentDescription = stringResource(id = R.string.hunting_mode),
-            onClick = viewModel::switchIsHuntingMode
-        )
-    )
-    rightAppBarIcons.add(
-        AppBarIcon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
-            contentDescription = stringResource(id = R.string.info),
-            onClick = viewModel::switchIsInfoDialogShown
-        )
-    )
-
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
-            // Top app bar
-            NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.backAppBarIcon(onClick = navigateUp)
-                ),
-                rightAppBarIcons = rightAppBarIcons
-            )
+            CollectibleScreenTopAppBar(navigateUp, viewModel, isHuntingMode, uiState)
 
             // Contents
             Column(
@@ -201,6 +167,82 @@ fun CollectibleScreen(
             hasOnlyConfirmationButton = true
         )
     }
+}
+
+@Composable
+private fun CollectibleScreenTopAppBar(
+    navigateUp: () -> Unit,
+    viewModel: CollectibleViewModel,
+    isHuntingMode: Boolean,
+    uiState: CollectibleScreenUiState
+) {
+    var isSortMenuExpanded by remember { mutableStateOf(false) }
+
+    val rightAppBarIcons: ArrayList<AppBarIcon> = arrayListOf()
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
+            contentDescription = stringResource(id = R.string.info),
+            onClick = viewModel::switchIsInfoDialogShown
+        )
+    )
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_sort_24),
+            contentDescription = stringResource(id = R.string.sort_by),
+            onClick = { isSortMenuExpanded = true },
+            DropDownMenu = {
+                DropdownMenu(
+                    expanded = isSortMenuExpanded,
+                    onDismissRequest = { isSortMenuExpanded = false },
+                    modifier = Modifier,
+                ) {
+                    viewModel.collectibleSorts.forEach {
+                        DropdownMenuItem(
+                            text = {
+                                Text(text = stringResource(id = it.nameResourceId))
+                            },
+                            onClick = {
+                                viewModel.setCurrentSort(it)
+                                isSortMenuExpanded = false
+                            }
+                        )
+                    }
+                }
+            }
+        )
+    )
+    if (uiState is CollectibleScreenUiState.MonthlyView) {
+        rightAppBarIcons.add(
+            if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
+                    contentDescription = stringResource(id = R.string.general_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            } else {
+                AppBarIcon(
+                    imageVector = ImageVector.vectorResource(id = R.drawable.time),
+                    contentDescription = stringResource(id = R.string.hour_view),
+                    onClick = viewModel::onClickMonthlyViewType
+                )
+            }
+        )
+    }
+    rightAppBarIcons.add(
+        AppBarIcon(
+            imageVector = ImageVector.vectorResource(id = if (!isHuntingMode) R.drawable.baseline_explore_off_24 else R.drawable.baseline_explore_24),
+            contentDescription = stringResource(id = R.string.hunting_mode),
+            onClick = viewModel::switchIsHuntingMode
+        )
+    )
+
+    NkTopAppBar(
+        leftAppBarIcons = listOf(
+            AppBarIcon.backAppBarIcon(onClick = navigateUp)
+        ),
+        rightAppBarIcons = rightAppBarIcons,
+    )
 }
 
 
@@ -440,7 +482,8 @@ fun HourViewContents(
                 .fillMaxWidth()
                 .onGloballyPositioned { containerWidth = it.size.width }
                 .pointerInteropFilter {
-                    isIndexScrollBarShown = it.action == MotionEvent.ACTION_DOWN || it.action == MotionEvent.ACTION_MOVE
+                    isIndexScrollBarShown =
+                        it.action == MotionEvent.ACTION_DOWN || it.action == MotionEvent.ACTION_MOVE
                     false
                 },
             state = lazyListState,
@@ -532,7 +575,8 @@ fun HourViewIndexScrollBar(
                         .padding(Dimens.SpacingExtraSmall)
                         .onGloballyPositioned { coordinates ->
                             // Text end Y 좌표 저장
-                            val centerY: Float = coordinates.positionInParent().y + coordinates.size.height
+                            val centerY: Float =
+                                coordinates.positionInParent().y + coordinates.size.height
                             if (index < endYListForIndex.size) {
                                 endYListForIndex[index] = centerY
                             } else {
@@ -611,9 +655,4 @@ fun LazyListScope.TimeAndCollectibleItems(
     item {
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
     }
-}
-
-// formatTime(3, 6) returns "03:00~05:59"
-private fun formatTime(startHour: Int, endHour: Int): String {
-    return String.format("%02d:00~%02d:59", startHour, endHour - 1)
 }

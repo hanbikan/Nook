@@ -39,4 +39,9 @@
     <string name="collection_rate_50_to_75_message">거의 다 왔어요! 조금만 더 힘내세요 :)</string>
     <string name="collection_rate_75_to_99_message">대단해요! 완성이 코앞이에요!</string>
     <string name="collection_rate_100_message">축하합니다! 모든 것을 수집했어요! :)</string>
+    <string name="sort_by">정렬</string>
+    <string name="sort_by_default">기본</string>
+    <string name="sort_by_is_collected">수집 여부</string>
+    <string name="sort_by_location">장소</string>
+    <string name="sort_by_shadow_size">그림자 크기</string>
 </resources>

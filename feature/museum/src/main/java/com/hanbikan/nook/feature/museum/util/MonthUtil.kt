@@ -41,3 +41,8 @@ fun TimeRange.display(): String {
         "$startMonthDisplay - $endMonthDisplay: $hourRangeDisplay"
     }
 }
+
+// formatTime(3, 6) returns "03:00~05:59"
+fun formatTime(startHour: Int, endHour: Int): String {
+    return String.format("%02d:00~%02d:59", startHour, endHour - 1)
+}

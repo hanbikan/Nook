@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.hanbikan.nook.feature.museum.CollectibleScreen
 import com.hanbikan.nook.feature.museum.MuseumScreen
+import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 
 const val museumGraphRoute = "museum_graph_route"
 
@@ -20,7 +21,7 @@ const val monthlyCollectibleScreenRoute = "$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BAS
 fun NavGraphBuilder.museumGraph(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
-    navigateToMonthlyCollectible: (Int) -> Unit,
+    navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
     navigateUp: () -> Unit,
 ) {
     navigation(
@@ -54,6 +55,6 @@ fun NavController.navigateToMuseum() {
     navigate(museumGraphRoute)
 }
 
-fun NavController.navigateToMonthlyCollectible(collectibleSequenceIndex: Int) {
-    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/$collectibleSequenceIndex")
+fun NavController.navigateToMonthlyCollectible(collectibleSequence: CollectibleSequence) {
+    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/${collectibleSequence.ordinal}")
 }
