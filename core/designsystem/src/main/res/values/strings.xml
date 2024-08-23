@@ -7,4 +7,6 @@
     <string name="back">Back</string>
     <string name="app_list">App List</string>
     <string name="user_dialog">Manage Account</string>
+    <string name="empty_name">Please enter a name.</string>
+    <string name="empty_island_name">Please enter an island name.</string>
 </resources>

@@ -8,6 +8,7 @@ import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserDataUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class ProfileViewModel @Inject constructor(
+    @ApplicationContext private val context: Context,
     getActiveUserUseCase: GetActiveUserUseCase,
     private val updateUserUseCase: UpdateUserUseCase,
     private val updateUserDataUseCase: UpdateUserDataUseCase,
@@ -53,21 +55,29 @@ class ProfileViewModel @Inject constructor(
 
     fun onConfirmUpdateName(name: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            activeUser.value?.let {
-                val newUser = it.copy(name = name)
-                updateUserUseCase(newUser)
+            if (name.isEmpty()) {
+                setToastMessage(context.getString(com.hanbikan.nook.core.designsystem.R.string.empty_name))
+            } else {
+                activeUser.value?.let {
+                    val newUser = it.copy(name = name)
+                    updateUserUseCase(newUser)
+                }
+                switchUpdateNameDialog()
             }
-            switchUpdateNameDialog()
         }
     }
 
     fun onConfirmUpdateIslandName(islandName: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            activeUser.value?.let {
-                val newUser = it.copy(islandName = islandName)
-                updateUserUseCase(newUser)
+            if (islandName.isEmpty()) {
+                setToastMessage(context.getString(com.hanbikan.nook.core.designsystem.R.string.empty_island_name))
+            } else {
+                activeUser.value?.let {
+                    val newUser = it.copy(islandName = islandName)
+                    updateUserUseCase(newUser)
+                }
+                switchUpdateIslandNameDialog()
             }
-            switchUpdateIslandNameDialog()
         }
     }
 
@@ -80,7 +90,7 @@ class ProfileViewModel @Inject constructor(
         }
     }
 
-    fun onClickUpdateUser(context: Context) {
+    fun onClickUpdateUser() {
         viewModelScope.launch(Dispatchers.IO) {
             activeUser.value?.let {
                 updateUserDataUseCase.invoke(it.id)
