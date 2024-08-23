@@ -48,5 +48,7 @@
     <string name="filter_by_default">No filter</string>
     <string name="filter_by_is_collected">Collected</string>
     <string name="filter_by_is_not_collected">Not collected</string>
-    <string name="register_collectible_items">Register collectible items</string>
+    <string name="register_collectible_items">Register collected critters</string>
+    <string name="register_collectible_title">Register collected critters</string>
+    <string name="register_collectible_description">Open the in-game critterpedia and register the creatures you\'ve collected.</string>
 </resources>

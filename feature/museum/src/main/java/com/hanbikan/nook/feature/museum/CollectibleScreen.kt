@@ -370,9 +370,8 @@ fun CollectibleItem(
             )
     ) {
         Column(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier.fillMaxWidth(),
             horizontalAlignment = Alignment.CenterHorizontally,
-            verticalArrangement = Arrangement.Center
         ) {
             GlideImage(
                 modifier = Modifier.size(CollectibleItemHeight * 0.5f),
