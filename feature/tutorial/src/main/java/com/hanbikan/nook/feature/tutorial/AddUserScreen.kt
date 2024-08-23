@@ -1,5 +1,6 @@
 package com.hanbikan.nook.feature.tutorial
 
+import android.widget.Toast
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -14,11 +15,13 @@ import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.focus.FocusRequester
 import androidx.compose.ui.focus.focusRequester
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.ImeAction
@@ -36,6 +39,7 @@ import com.hanbikan.nook.core.designsystem.component.NkTextField
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import kotlinx.coroutines.flow.collectLatest
 
 @Composable
 fun AddUserScreen(
@@ -43,10 +47,21 @@ fun AddUserScreen(
     navigateToTutorial: () -> Unit,
     viewModel: AddUserViewModel = hiltViewModel(),
 ) {
+    val context = LocalContext.current
+
     val name = viewModel.name.collectAsStateWithLifecycle().value
     val islandName = viewModel.islandName.collectAsStateWithLifecycle().value
     val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
+
+    LaunchedEffect(Unit) {
+        viewModel.toastMessage.collectLatest {
+            if (it != null) {
+                Toast.makeText(context, it, Toast.LENGTH_SHORT).show()
+                viewModel.setToastMessage(null)
+            }
+        }
+    }
 
     Column(modifier = Modifier.fillMaxSize()) {
         NkTopAppBar(leftAppBarIcons = listOf(AppBarIcon.backAppBarIcon(onClick = navigateUp)))
