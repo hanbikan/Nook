@@ -253,9 +253,6 @@ fun CollectiblesRow(
     onClick: (Collectible) -> Unit,
     onLongClick: (Collectible) -> Unit,
 ) {
-    val padding = Dimens.SpacingSmall
-    val height = padding * 2 + if (!isHuntingMode) CollectibleItemHeight else CollectibleItemHeightForHuntingMode
-
     LazyRow(
         modifier = Modifier
             .background(
@@ -263,8 +260,6 @@ fun CollectiblesRow(
                 RoundedCornerShape(Dimens.SpacingMedium)
             )
             .fillMaxWidth()
-            .height(height)
-            .padding(padding)
     ) {
         items(collectibles) {
             CollectibleItem(
