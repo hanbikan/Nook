@@ -80,38 +80,38 @@ class MuseumViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val bugProgress: StateFlow<Float> = bugs
+    val bugProgress: StateFlow<Float?> = bugs
         .mapLatest {
             withContext(Dispatchers.IO) {
                 it.calculateProgress()
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val fishProgress: StateFlow<Float> = fishes
+    val fishProgress: StateFlow<Float?> = fishes
         .mapLatest {
             withContext(Dispatchers.IO) {
                 it.calculateProgress()
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val seaCreatureProgress: StateFlow<Float> = seaCreatures
+    val seaCreatureProgress: StateFlow<Float?> = seaCreatures
         .mapLatest {
             withContext(Dispatchers.IO) {
                 it.calculateProgress()
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val overallProgress: StateFlow<Float?> = combine(
         bugProgress,
         fishProgress,
         seaCreatureProgress
     ) { bugProgress, fishProgress, seaCreatureProgress ->
-        if (bugProgress != 0f && fishProgress != 0f && seaCreatureProgress != 0f) {
+        if (bugProgress != null && fishProgress != null && seaCreatureProgress != null) {
             (bugProgress + fishProgress + seaCreatureProgress) / 3.0f
         } else {
             0f

@@ -80,6 +80,9 @@ fun MuseumScreen(
             )
 
             FadeAnimatedVisibility(visible = !isLoading) {
+                bugProgress!!
+                fishProgress!!
+                seaCreaturesProgress!!
                 overallProgress!!
                 currentlyCollectibleBugs!!
                 currentlyCollectibleFishes!!
