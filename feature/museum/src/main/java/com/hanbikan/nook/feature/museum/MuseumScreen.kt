@@ -7,7 +7,6 @@ import androidx.compose.animation.core.animateIntAsState
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.gestures.scrollable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -43,7 +42,6 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
-import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 import kotlinx.coroutines.Dispatchers
@@ -68,7 +66,7 @@ fun MuseumScreen(
     val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
     val collectiblesForMonth = viewModel.collectiblesForMonth.collectAsStateWithLifecycle().value
-    val uncollectedForMonth = viewModel.notCollectedForMonth.collectAsStateWithLifecycle().value
+    val uncollectedForMonth = viewModel.uncollectedForMonth.collectAsStateWithLifecycle().value
     val currentlyCollectibleBugs =
         viewModel.currentlyCollectibleBugs.collectAsStateWithLifecycle().value
     val currentlyCollectibleFishes =
@@ -82,11 +80,11 @@ fun MuseumScreen(
 
     val scrollState = rememberScrollState()
 
-    var bugProgress by remember { mutableFloatStateOf(0.0f) }
-    var fishProgress by remember { mutableFloatStateOf(0.0f) }
-    var seaCreaturesProgress by remember { mutableFloatStateOf(0.0f) }
+    val bugProgress = viewModel.bugProgress.collectAsStateWithLifecycle().value
+    val fishProgress = viewModel.fishProgress.collectAsStateWithLifecycle().value
+    val seaCreaturesProgress = viewModel.seaCreatureProgress.collectAsStateWithLifecycle().value
 
-    var overallProgress by remember { mutableFloatStateOf(0.0f) }
+    val overallProgress = viewModel.overallProgress.collectAsStateWithLifecycle().value
     var overallProgressToShow by remember { mutableFloatStateOf(0f) }
     val animatedOverallProgress by animateFloatAsState(
         targetValue = overallProgressToShow,
@@ -94,7 +92,7 @@ fun MuseumScreen(
         label = "OverallProgress"
     )
 
-    var uncollectedCountForMonth by remember { mutableIntStateOf(0) }
+    val uncollectedCountForMonth = viewModel.uncollectedCountForMonth.collectAsStateWithLifecycle().value
     var uncollectedCountForMonthToShow by remember { mutableIntStateOf(0) }
     val animatedUncollectedCountForMonth by animateIntAsState(
         targetValue = uncollectedCountForMonthToShow,
@@ -102,28 +100,9 @@ fun MuseumScreen(
         label = "MonthProgress"
     )
 
-    LaunchedEffect(bugs, fishes, seaCreatures) {
-        if (bugs.isNotEmpty() && fishes.isNotEmpty() && seaCreatures.isNotEmpty()) {
-            withContext(Dispatchers.IO) {
-                bugProgress = bugs.calculateProgress()
-                fishProgress = fishes.calculateProgress()
-                seaCreaturesProgress = seaCreatures.calculateProgress()
-                overallProgress = (bugProgress + fishProgress + seaCreaturesProgress) / 3.0f
-            }
-        }
-    }
-
     LaunchedEffect(overallProgress) {
         delay(ANIMATION_DELAY_MILLIS)
         overallProgressToShow = overallProgress
-    }
-
-    LaunchedEffect(collectiblesForMonth) {
-        if (collectiblesForMonth.isNotEmpty()) {
-            withContext(Dispatchers.IO) {
-                uncollectedCountForMonth = uncollectedForMonth.count()
-            }
-        }
     }
 
     LaunchedEffect(uncollectedCountForMonth) {
