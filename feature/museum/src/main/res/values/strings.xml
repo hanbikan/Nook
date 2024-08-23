@@ -48,4 +48,5 @@
     <string name="filter_by_default">No filter</string>
     <string name="filter_by_is_collected">Collected</string>
     <string name="filter_by_is_not_collected">Not collected</string>
+    <string name="register_collectible_items">Register collectible items</string>
 </resources>

@@ -21,8 +21,10 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -41,6 +43,7 @@ fun MuseumScreen(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
     navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
+    navigateToRegisterCollectible: () -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -75,6 +78,11 @@ fun MuseumScreen(
                     AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
                 ),
                 rightAppBarIcons = listOf(
+                    AppBarIcon(
+                        imageVector = ImageVector.vectorResource(R.drawable.baseline_app_registration_24),
+                        contentDescription = stringResource(id = R.string.register_collectible_items),
+                        onClick = navigateToRegisterCollectible
+                    ),
                     AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
             )

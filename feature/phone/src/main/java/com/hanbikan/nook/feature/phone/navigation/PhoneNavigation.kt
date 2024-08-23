@@ -10,6 +10,7 @@ import com.hanbikan.nook.feature.museum.navigation.museumGraph
 import com.hanbikan.nook.feature.museum.navigation.museumGraphRoute
 import com.hanbikan.nook.feature.museum.navigation.navigateToMonthlyCollectible
 import com.hanbikan.nook.feature.museum.navigation.navigateToMuseum
+import com.hanbikan.nook.feature.museum.navigation.navigateToRegisterCollectible
 import com.hanbikan.nook.feature.phone.PhoneScreen
 import com.hanbikan.nook.feature.profile.navigation.navigateToProfile
 import com.hanbikan.nook.feature.profile.navigation.profileScreen
@@ -70,6 +71,7 @@ fun NavGraphBuilder.phoneGraph(
             navigateToAddUser = navController::navigateToAddUser,
             navigateToPhone = navController::navigateToPhone,
             navigateToMonthlyCollectible = navController::navigateToMonthlyCollectible,
+            navigateToRegisterCollectible = navController::navigateToRegisterCollectible,
             navigateUp = navController::navigateUp
         )
     }

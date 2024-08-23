@@ -8,6 +8,7 @@ import androidx.navigation.navArgument
 import androidx.navigation.navigation
 import com.hanbikan.nook.feature.museum.CollectibleScreen
 import com.hanbikan.nook.feature.museum.MuseumScreen
+import com.hanbikan.nook.feature.museum.RegisterCollectibleScreen
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 
 const val museumGraphRoute = "museum_graph_route"
@@ -18,10 +19,13 @@ const val MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE = "monthly_collectible_screen_ro
 const val COLLECTIBLE_SEQUENCE_INDEX = "collectibleSequenceIndex"
 const val monthlyCollectibleScreenRoute = "$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/{$COLLECTIBLE_SEQUENCE_INDEX}"
 
+const val registerCollectibleScreenRoute = "register_collectible_screen_route"
+
 fun NavGraphBuilder.museumGraph(
     navigateToAddUser: () -> Unit,
     navigateToPhone: () -> Unit,
     navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
+    navigateToRegisterCollectible: () -> Unit,
     navigateUp: () -> Unit,
 ) {
     navigation(
@@ -35,6 +39,7 @@ fun NavGraphBuilder.museumGraph(
                 navigateToAddUser = navigateToAddUser,
                 navigateToPhone = navigateToPhone,
                 navigateToMonthlyCollectible = navigateToMonthlyCollectible,
+                navigateToRegisterCollectible = navigateToRegisterCollectible,
             )
         }
 
@@ -48,6 +53,12 @@ fun NavGraphBuilder.museumGraph(
                 navigateUp = navigateUp,
             )
         }
+
+        composable(
+            route = registerCollectibleScreenRoute,
+        ) {
+            RegisterCollectibleScreen(navigateUp = navigateUp)
+        }
     }
 }
 
@@ -57,4 +68,8 @@ fun NavController.navigateToMuseum() {
 
 fun NavController.navigateToMonthlyCollectible(collectibleSequence: CollectibleSequence) {
     navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/${collectibleSequence.ordinal}")
+}
+
+fun NavController.navigateToRegisterCollectible() {
+    navigate(registerCollectibleScreenRoute)
 }
