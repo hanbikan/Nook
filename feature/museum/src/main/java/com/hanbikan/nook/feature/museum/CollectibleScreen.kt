@@ -71,8 +71,11 @@ import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.HasShadowMovement
 import com.hanbikan.nook.core.domain.model.common.HasShadowSize
 import com.hanbikan.nook.core.domain.model.common.LocationBased
+import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
+import com.hanbikan.nook.core.domain.model.common.convertToTimeRanges
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
+import com.hanbikan.nook.feature.museum.util.displayMonth
 import com.hanbikan.nook.feature.museum.util.formatTime
 import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlinx.coroutines.delay
@@ -80,7 +83,7 @@ import kotlinx.coroutines.launch
 
 private val CollectibleItemWidth = 90.dp
 val CollectibleItemHeight = 80.dp
-val CollectibleItemHeightForHuntingMode = 90.dp
+val CollectibleItemHeightForHuntingMode = 110.dp
 private val GradientHeight = Dimens.SpacingMedium
 
 @Composable
@@ -136,6 +139,7 @@ fun CollectibleScreen(
                             onClickCollectibleItem = viewModel::onClickCollectibleItem,
                             onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
                             isHuntingMode = isHuntingMode,
+                            isNorth = isNorth,
                         )
                     }
 
@@ -282,6 +286,7 @@ fun OverallCollectibleContents(
     onClickCollectibleItem: (Collectible) -> Unit,
     onLongClickCollectibleItem: (Collectible) -> Unit,
     isHuntingMode: Boolean,
+    isNorth: Boolean,
 ) {
     var containerWidth by remember { mutableIntStateOf(0) }
     val itemWidth = with(LocalDensity.current) { CollectibleItemWidth.toPx() }
@@ -310,6 +315,7 @@ fun OverallCollectibleContents(
                         onLongClickCollectibleItem = onLongClickCollectibleItem,
                         itemsPerRow = itemsPerRow,
                         isHuntingMode = isHuntingMode,
+                        isNorth = isNorth,
                     )
                 }
             }
@@ -326,14 +332,16 @@ fun CollectibleItemsForRow(
     onLongClickCollectibleItem: (Collectible) -> Unit,
     itemsPerRow: Int,
     isHuntingMode: Boolean,
+    isNorth: Boolean,
 ) {
     Row {
         rowItems.forEach { item ->
             CollectibleItem(
                 item = item,
+                isHuntingMode = isHuntingMode,
+                isNorth = isNorth,
                 onClick = { onClickCollectibleItem(item) },
                 onLongClick = { onLongClickCollectibleItem(item) },
-                isHuntingMode = isHuntingMode,
             )
         }
         if (rowItems.count() < itemsPerRow) {
@@ -349,6 +357,7 @@ fun CollectibleItemsForRow(
 fun CollectibleItem(
     item: Collectible,
     isHuntingMode: Boolean,
+    isNorth: Boolean,
     onClick: () -> Unit,
     onLongClick: () -> Unit,
 ) {
@@ -380,6 +389,16 @@ fun CollectibleItem(
                 fontWeight = if (item.isCollected) FontWeight.Bold else FontWeight.Normal
             )
             if (isHuntingMode) {
+                if (item is Monthly) {
+                    val timeRanges = item.getCurrentMonthToTimes(isNorth).convertToTimeRanges()
+                    val displayMonths = timeRanges.map { it.displayMonth() }.joinToString(", ")
+                    NkText(
+                        text = displayMonths,
+                        style = NkTheme.typography.bodySmall,
+                        fontWeight = FontWeight.Normal,
+                        maxLines = 1,
+                    )
+                }
                 if (item is LocationBased) {
                     NkText(
                         text = item.location,
@@ -451,6 +470,7 @@ fun MonthlyCollectibleContents(
                     onClickCollectibleItem = onClickCollectibleItem,
                     onLongClickCollectibleItem = onLongClickCollectibleItem,
                     isHuntingMode = isHuntingMode,
+                    isNorth = uiState.isNorth
                 )
             }
 
@@ -662,6 +682,7 @@ fun LazyListScope.TimeAndCollectibleItems(
                 onLongClickCollectibleItem = onLongClickCollectibleItem,
                 itemsPerRow = itemsPerRow,
                 isHuntingMode = isHuntingMode,
+                isNorth = uiState.isNorth,
             )
         }
     } else {

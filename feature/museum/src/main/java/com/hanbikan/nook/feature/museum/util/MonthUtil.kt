@@ -24,6 +24,7 @@ fun getMonthList(): List<String> {
     )
 }
 
+// 예시: "2월 - 10월: 하루 종일"
 @Composable
 fun TimeRange.display(): String {
     val monthList = getMonthList()
@@ -39,6 +40,20 @@ fun TimeRange.display(): String {
         "$startMonthDisplay: $hourRangeDisplay"
     } else {
         "$startMonthDisplay - $endMonthDisplay: $hourRangeDisplay"
+    }
+}
+
+// 예시: "2월 - 10월"
+@Composable
+fun TimeRange.displayMonth(): String {
+    val monthList = getMonthList()
+    val startMonthDisplay = monthList.getOrElse(startMonth - 1) { "" }
+    val endMonthDisplay = monthList.getOrElse(endMonth - 1) { "" }
+
+    return if (startMonth == endMonth) {
+        "$startMonthDisplay"
+    } else {
+        "$startMonthDisplay - $endMonthDisplay"
     }
 }
 

@@ -63,6 +63,7 @@ fun MuseumScreen(
 ) {
     val context = LocalContext.current
 
+    val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
     val bugs = viewModel.bugs.collectAsStateWithLifecycle().value
     val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
     val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
@@ -197,18 +198,21 @@ fun MuseumScreen(
                     CollectiblesRow(
                         collectibles = currentlyCollectibleBugs,
                         isHuntingMode = true,
+                        isNorth = isNorth,
                         onClick = { viewModel.onClickCollectibleItem(it) },
                         onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                     )
                     CollectiblesRow(
                         collectibles = currentlyCollectibleFishes,
                         isHuntingMode = true,
+                        isNorth = isNorth,
                         onClick = { viewModel.onClickCollectibleItem(it) },
                         onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                     )
                     CollectiblesRow(
                         collectibles = currentlyCollectibleSeaCreature,
                         isHuntingMode = true,
+                        isNorth = isNorth,
                         onClick = { viewModel.onClickCollectibleItem(it) },
                         onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                     )
@@ -235,6 +239,7 @@ fun MuseumScreen(
                         CollectiblesRow(
                             collectibles = uncollectedForMonth,
                             isHuntingMode = false,
+                            isNorth = isNorth,
                             onClick = {},
                             onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                         )
@@ -308,6 +313,7 @@ fun CollectionProgress(
 fun CollectiblesRow(
     collectibles: List<Collectible>,
     isHuntingMode: Boolean,
+    isNorth: Boolean,
     onClick: (Collectible) -> Unit,
     onLongClick: (Collectible) -> Unit,
 ) {
@@ -328,7 +334,8 @@ fun CollectiblesRow(
             CollectibleItem(
                 item = it, isHuntingMode = isHuntingMode,
                 onClick = { onClick(it) },
-                onLongClick = { onLongClick(it) }
+                onLongClick = { onLongClick(it) },
+                isNorth = isNorth
             )
         }
     }

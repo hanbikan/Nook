@@ -45,6 +45,10 @@ class MuseumViewModel @Inject constructor(
     val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+    val isNorth: StateFlow<Boolean> = activeUser.mapLatest {
+        it?.isNorth ?: true
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
+
     @OptIn(ExperimentalCoroutinesApi::class)
     val fishes: StateFlow<List<Fish>> = activeUser
         .flatMapLatest {
