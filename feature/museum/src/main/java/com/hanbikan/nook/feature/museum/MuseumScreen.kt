@@ -2,9 +2,6 @@ package com.hanbikan.nook.feature.museum
 
 import android.content.Context
 import android.widget.Toast
-import androidx.compose.animation.core.animateFloatAsState
-import androidx.compose.animation.core.animateIntAsState
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -21,20 +18,14 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableFloatStateOf
-import androidx.compose.runtime.mutableIntStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.hanbikan.nook.core.designsystem.component.AnimatedLinearProgressIndicator
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkText
@@ -44,13 +35,6 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.withContext
-
-
-private const val ANIMATION_DURATION_MILLIS: Int = 750
-private const val ANIMATION_DELAY_MILLIS: Long = 0L
 
 @Composable
 fun MuseumScreen(
@@ -62,10 +46,6 @@ fun MuseumScreen(
     val context = LocalContext.current
 
     val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
-    val bugs = viewModel.bugs.collectAsStateWithLifecycle().value
-    val fishes = viewModel.fishes.collectAsStateWithLifecycle().value
-    val seaCreatures = viewModel.seaCreatures.collectAsStateWithLifecycle().value
-    val collectiblesForMonth = viewModel.collectiblesForMonth.collectAsStateWithLifecycle().value
     val uncollectedForMonth = viewModel.uncollectedForMonth.collectAsStateWithLifecycle().value
     val currentlyCollectibleBugs =
         viewModel.currentlyCollectibleBugs.collectAsStateWithLifecycle().value
@@ -85,30 +65,7 @@ fun MuseumScreen(
     val seaCreaturesProgress = viewModel.seaCreatureProgress.collectAsStateWithLifecycle().value
 
     val overallProgress = viewModel.overallProgress.collectAsStateWithLifecycle().value
-    var overallProgressToShow by remember { mutableFloatStateOf(0f) }
-    val animatedOverallProgress by animateFloatAsState(
-        targetValue = overallProgressToShow,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_MILLIS),
-        label = "OverallProgress"
-    )
-
     val uncollectedCountForMonth = viewModel.uncollectedCountForMonth.collectAsStateWithLifecycle().value
-    var uncollectedCountForMonthToShow by remember { mutableIntStateOf(0) }
-    val animatedUncollectedCountForMonth by animateIntAsState(
-        targetValue = uncollectedCountForMonthToShow,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_MILLIS),
-        label = "MonthProgress"
-    )
-
-    LaunchedEffect(overallProgress) {
-        delay(ANIMATION_DELAY_MILLIS)
-        overallProgressToShow = overallProgress
-    }
-
-    LaunchedEffect(uncollectedCountForMonth) {
-        delay(ANIMATION_DELAY_MILLIS)
-        uncollectedCountForMonthToShow = uncollectedCountForMonth
-    }
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -131,7 +88,7 @@ fun MuseumScreen(
                 NkText(
                     text = stringResource(
                         id = R.string.overall_progress_title,
-                        (animatedOverallProgress * 100).toInt()
+                        (overallProgress * 100).toInt()
                     ),
                     style = NkTheme.typography.titleLarge,
                     modifier = Modifier.clickable {
@@ -204,7 +161,7 @@ fun MuseumScreen(
                         NkText(
                             text = stringResource(
                                 id = R.string.uncollected_for_month_title,
-                                animatedUncollectedCountForMonth
+                                uncollectedCountForMonth
                             ),
                             style = NkTheme.typography.titleLarge,
                             modifier = Modifier.clickable {
@@ -248,19 +205,6 @@ fun CollectionProgress(
     progress: Float,
     onClick: () -> Unit,
 ) {
-    var progressToShow by remember { mutableFloatStateOf(0f) }
-    val animatedProgress by animateFloatAsState(
-        targetValue = progressToShow,
-        animationSpec = tween(durationMillis = ANIMATION_DURATION_MILLIS),
-        label = "CollectionProgress"
-    )
-    val progressAsPercent = "${(animatedProgress * 100).toInt()}%"
-
-    LaunchedEffect(progress) {
-        delay(ANIMATION_DELAY_MILLIS)
-        progressToShow = progress
-    }
-
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -277,12 +221,12 @@ fun CollectionProgress(
                 text = name,
                 maxLines = 1,
             )
-            NkText(text = progressAsPercent)
+            NkText(text = "${(progress * 100).toInt()}%")
         }
         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-        AnimatedLinearProgressIndicator(
+        LinearProgressIndicator(
             modifier = Modifier.fillMaxWidth(),
-            progress = animatedProgress,
+            progress = { progress },
             color = NkTheme.colorScheme.tertiary,
         )
     }

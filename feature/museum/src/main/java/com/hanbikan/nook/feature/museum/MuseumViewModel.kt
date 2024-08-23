@@ -77,15 +77,30 @@ class MuseumViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val bugProgress: StateFlow<Float> = bugs.mapLatest { it.calculateProgress() }
+    val bugProgress: StateFlow<Float> = bugs
+        .mapLatest {
+            withContext(Dispatchers.IO) {
+                it.calculateProgress()
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val fishProgress: StateFlow<Float> = fishes.mapLatest { it.calculateProgress() }
+    val fishProgress: StateFlow<Float> = fishes
+        .mapLatest {
+            withContext(Dispatchers.IO) {
+                it.calculateProgress()
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val seaCreatureProgress: StateFlow<Float> = seaCreatures.mapLatest { it.calculateProgress() }
+    val seaCreatureProgress: StateFlow<Float> = seaCreatures
+        .mapLatest {
+            withContext(Dispatchers.IO) {
+                it.calculateProgress()
+            }
+        }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
 
     val overallProgress: StateFlow<Float> = combine(
@@ -141,7 +156,6 @@ class MuseumViewModel @Inject constructor(
                         seaCreatures.filterForMonth(getCurrentMonth(), activeUser.isNorth)
                     fishesForMonth + bugsForMonth + seaCreaturesForMonth
                 }
-
             } else {
                 listOf()
             }
