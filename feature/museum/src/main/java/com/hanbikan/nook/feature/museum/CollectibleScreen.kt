@@ -188,7 +188,7 @@ private fun CollectibleScreenTopAppBar(
         rightAppBarIcons.add(
             if (uiState is CollectibleScreenUiState.MonthlyView.GeneralView) {
                 AppBarIcon(
-                    imageVector = ImageVector.vectorResource(id = R.drawable.ascending_sort),
+                    imageVector = ImageVector.vectorResource(id = R.drawable.baseline_grid_4x4_24),
                     contentDescription = stringResource(id = R.string.general_view),
                     onClick = viewModel::onClickMonthlyViewType
                 )
