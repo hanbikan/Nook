@@ -104,6 +104,7 @@ fun RegisterCollectibleItems(
                 RoundedCornerShape(Dimens.SpacingMedium)
             )
             .fillMaxWidth()
+            .padding(Dimens.SpacingSmall)
     ) {
         items(collectibles.chunked(5)) { collectiblesOnColumn ->
             Column {

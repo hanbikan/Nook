@@ -268,6 +268,7 @@ fun CollectiblesRow(
                 RoundedCornerShape(Dimens.SpacingMedium)
             )
             .fillMaxWidth()
+            .padding(Dimens.SpacingSmall)
     ) {
         items(collectibles) {
             CollectibleItem(
