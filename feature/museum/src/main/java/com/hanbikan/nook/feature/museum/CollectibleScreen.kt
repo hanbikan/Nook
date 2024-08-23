@@ -507,8 +507,7 @@ fun HourViewContents(
         if (itemsPerRow > 0) {
             val currentHourKey: Int = uiState.getCurrentHourKey()
             val scrollIndex = uiState.getScrollIndexForKey(currentHourKey, itemsPerRow)
-            delay(150)
-            lazyListState.animateScrollToItem(
+            lazyListState.scrollToItem(
                 index = scrollIndex,
                 scrollOffset = with(density) { -CollectibleItemHeight.toPx() }.toInt()
             )
