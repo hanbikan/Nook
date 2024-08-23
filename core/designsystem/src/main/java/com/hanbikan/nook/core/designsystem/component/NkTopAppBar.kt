@@ -1,6 +1,8 @@
 package com.hanbikan.nook.core.designsystem.component
 
 import androidx.annotation.StringRes
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Home
@@ -12,19 +14,16 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.vector.ImageVector
-import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import com.hanbikan.nook.core.designsystem.R
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+
+private val ICON_SIZE = 48.dp
 
 data class AppBarIcon(
     val imageVector: ImageVector,
@@ -66,7 +65,10 @@ fun NkTopAppBar(
     CenterAlignedTopAppBar(
         navigationIcon = {
             leftAppBarIcons.forEach {
-                IconButton(onClick = it.onClick) {
+                IconButton(
+                    onClick = it.onClick,
+                    modifier = Modifier.size(ICON_SIZE)
+                ) {
                     Icon(
                         imageVector = it.imageVector,
                         contentDescription = it.contentDescription,
@@ -88,22 +90,20 @@ fun NkTopAppBar(
         },
         actions = {
             rightAppBarIcons.forEach {
-                var buttonOffset by remember { mutableStateOf(Offset.Zero) }
-
-                IconButton(
-                    onClick = it.onClick,
-                    modifier = Modifier.onGloballyPositioned { coordinates ->
-                        buttonOffset = coordinates.localToWindow(Offset.Zero)
+                Box {
+                    IconButton(
+                        onClick = it.onClick,
+                        modifier = Modifier.size(ICON_SIZE)
+                    ) {
+                        Icon(
+                            imageVector = it.imageVector,
+                            contentDescription = it.contentDescription,
+                            tint = NkTheme.colorScheme.primary,
+                        )
                     }
-                ) {
-                    Icon(
-                        imageVector = it.imageVector,
-                        contentDescription = it.contentDescription,
-                        tint = NkTheme.colorScheme.primary,
-                    )
-                }
 
-                it.DropDownMenu()
+                    it.DropDownMenu()
+                }
             }
         },
         colors = TopAppBarDefaults.centerAlignedTopAppBarColors(

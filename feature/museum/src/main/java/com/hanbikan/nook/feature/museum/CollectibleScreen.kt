@@ -217,7 +217,6 @@ private fun CollectibleScreenTopAppBar(
                 DropdownMenu(
                     expanded = isSortMenuExpanded,
                     onDismissRequest = { isSortMenuExpanded = false },
-                    modifier = Modifier,
                 ) {
                     viewModel.collectibleSorts.forEach {
                         DropdownMenuItem(
@@ -243,7 +242,6 @@ private fun CollectibleScreenTopAppBar(
                 DropdownMenu(
                     expanded = isFilterMenuExpanded,
                     onDismissRequest = { isFilterMenuExpanded = false },
-                    modifier = Modifier,
                 ) {
                     viewModel.collectibleFilters.forEach {
                         DropdownMenuItem(
