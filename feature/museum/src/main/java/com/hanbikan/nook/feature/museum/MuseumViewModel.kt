@@ -17,6 +17,7 @@ import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
@@ -35,9 +36,11 @@ class MuseumViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     private val collectionRepository: CollectionRepository,
 ) : ViewModel() {
+
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
+    @OptIn(ExperimentalCoroutinesApi::class)
     val isNorth: StateFlow<Boolean> = activeUser.mapLatest {
         it?.isNorth ?: true
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
@@ -103,7 +106,7 @@ class MuseumViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
 
-    val overallProgress: StateFlow<Float> = combine(
+    val overallProgress: StateFlow<Float?> = combine(
         bugProgress,
         fishProgress,
         seaCreatureProgress
@@ -113,35 +116,35 @@ class MuseumViewModel @Inject constructor(
         } else {
             0f
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0f)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // 현재 수집 가능
     @OptIn(ExperimentalCoroutinesApi::class)
-    val currentlyCollectibleBugs: StateFlow<List<Collectible>> = bugs
+    val currentlyCollectibleBugs: StateFlow<List<Collectible>?> = bugs
         .mapLatest {
             withContext(Dispatchers.IO) {
                 filterCurrentlyCollectible(it).sortedBy { it.isCollected }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val currentlyCollectibleFishes: StateFlow<List<Collectible>> = fishes
+    val currentlyCollectibleFishes: StateFlow<List<Collectible>?> = fishes
         .mapLatest {
             withContext(Dispatchers.IO) {
                 filterCurrentlyCollectible(it).sortedBy { it.isCollected }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val currentlyCollectibleSeaCreature: StateFlow<List<Collectible>> = seaCreatures
+    val currentlyCollectibleSeaCreature: StateFlow<List<Collectible>?> = seaCreatures
         .mapLatest {
             withContext(Dispatchers.IO) {
                 filterCurrentlyCollectible(it).sortedBy { it.isCollected }
             }
         }
-        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // 이번 달 미수집
     val collectiblesForMonth: StateFlow<List<Collectible>> =
@@ -162,19 +165,29 @@ class MuseumViewModel @Inject constructor(
         }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uncollectedForMonth: StateFlow<List<Collectible>> =
+    val uncollectedForMonth: StateFlow<List<Collectible>?> =
         collectiblesForMonth.mapLatest { collectiblesForMonth ->
             withContext(Dispatchers.IO) {
                 collectiblesForMonth.filter { !it.isCollected }
             }
-        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), listOf())
+        }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val uncollectedCountForMonth: StateFlow<Int> = collectiblesForMonth.mapLatest {
+    val uncollectedCountForMonth: StateFlow<Int?> = collectiblesForMonth.mapLatest {
         withContext(Dispatchers.IO) {
             it.count()
         }
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), 0)
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
+
+    // loading
+    val isLoading: StateFlow<Boolean> = combine(overallProgress, currentlyCollectibleBugs, currentlyCollectibleFishes, currentlyCollectibleSeaCreature, collectiblesForMonth, uncollectedCountForMonth) { items ->
+        if (items.all { it != null }) {
+            delay(150)
+            false
+        } else {
+            true
+        }
+    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     // Dialogs
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
