@@ -40,6 +40,10 @@ Nook follows the Clean Architecture and completely modularizes each feature and 
 
 <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/5ade9cf8-544e-4814-b8b8-8d3c067aaf74"/> <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/83444537-55d5-409b-aa29-72fc92156ef4"/>
 
+<img height="600" src="https://github.com/user-attachments/assets/347bb3b3-967d-457f-856a-e8b9150ac9ae"/>
+
+<img height="600" src="https://github.com/user-attachments/assets/08d54fde-5f89-425c-a76b-83f83447f3f5"/> <img height="600" src="https://github.com/user-attachments/assets/b8fc0115-2cb4-474c-be44-ba92d3b59d64"/>
+
 <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/c75a38fc-d54d-4b93-9f34-edb022ea5ad3"/> <img height="600" src="https://github.com/hanbikan/Nook/assets/58168528/6cb91c24-41da-4ffa-8040-68f16e353ced"/>
 
 - Available on [Google Play](https://play.google.com/store/apps/details?id=com.hanbikan.nook&hl=en)
