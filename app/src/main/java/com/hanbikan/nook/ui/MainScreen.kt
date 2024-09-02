@@ -39,6 +39,7 @@ import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 
 @Composable
 fun MainScreen(
+    navigateToAddUser: () -> Unit,
     viewModel: MainViewModel = hiltViewModel(),
 ) {
     val navController = rememberNavController()
@@ -65,7 +66,7 @@ fun MainScreen(
                 navigateUp = navController::navigateUp
             )
             profileScreen(
-                navigateToAddUser = navController::navigateToAddUser,
+                navigateToAddUser = navigateToAddUser,
             )
         }
     }

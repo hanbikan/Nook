@@ -26,12 +26,14 @@ fun NavGraphBuilder.mainGraph(
         )
         addUserScreen(
             navigateUp = navController::navigateUp,
-            navigateToMain = navController::navigateToMainScreen
+            navigateToMain = navController::navigateToMainScreen,
         )
         composable(
             route = mainScreenRoute
         ) {
-            MainScreen()
+            MainScreen(
+                navigateToAddUser = navController::navigateToAddUser,
+            )
         }
     }
 }
