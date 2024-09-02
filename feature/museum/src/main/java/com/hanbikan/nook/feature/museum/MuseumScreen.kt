@@ -22,12 +22,15 @@ import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
+import com.bumptech.glide.integration.compose.GlideImage
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
@@ -39,6 +42,7 @@ import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 
+@OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MuseumScreen(
     navigateToAddUser: () -> Unit,
@@ -51,6 +55,7 @@ fun MuseumScreen(
 
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
     val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
+    val hasMuseumGuideShown = viewModel.hasMuseumGuideShown.collectAsStateWithLifecycle().value
     val uncollectedForMonth = viewModel.uncollectedForMonth.collectAsStateWithLifecycle().value
     val currentlyCollectibleBugs =
         viewModel.currentlyCollectibleBugs.collectAsStateWithLifecycle().value
@@ -228,6 +233,18 @@ fun MuseumScreen(
             onDismissRequest = viewModel::onDismissCollectDialog,
             onConfirmation = viewModel::onConfirmCollectDialog
         )
+
+        // 박물관 가이드 보여진 적이 없을 때만 표시
+        FadeAnimatedVisibility(visible = !hasMuseumGuideShown) {
+            val imageUrl = "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=9f4f2598-e988-4f87-a5fb-c209cbcf057d"
+            // TODO: i18n -> https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_ko.jpg?alt=media&token=61818672-2b2c-4ac5-aff7-7b45d9dde8f4
+            GlideImage(
+                modifier = Modifier.fillMaxSize(),
+                model = imageUrl,
+                contentDescription = null,
+                contentScale = ContentScale.FillBounds,
+            )
+        }
     }
 }
 

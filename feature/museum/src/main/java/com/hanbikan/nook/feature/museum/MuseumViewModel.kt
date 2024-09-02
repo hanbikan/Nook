@@ -12,6 +12,7 @@ import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.domain.model.common.filterForMonth
 import com.hanbikan.nook.core.domain.model.common.updateOnLocal
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -35,6 +36,7 @@ import javax.inject.Inject
 class MuseumViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     private val collectionRepository: CollectionRepository,
+    private val appStateRepository: AppStateRepository,
 ) : ViewModel() {
 
     private val activeUser: StateFlow<User?> = getActiveUserUseCase()
@@ -44,6 +46,9 @@ class MuseumViewModel @Inject constructor(
     val isNorth: StateFlow<Boolean> = activeUser.mapLatest {
         it?.isNorth ?: true
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
+
+    val hasMuseumGuideShown: StateFlow<Boolean> = appStateRepository.getHasMuseumGuideShown()
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     // collectible list
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -228,6 +233,12 @@ class MuseumViewModel @Inject constructor(
 
     fun getIsNorthForActiveUser(): Boolean {
         return activeUser.value?.isNorth ?: true
+    }
+
+    fun setHasMuseumGuideShownTrue() {
+        viewModelScope.launch(Dispatchers.IO) {
+            appStateRepository.setHasMuseumGuideShown(true)
+        }
     }
 
     private fun filterCurrentlyCollectible(collectibles: List<Collectible>): List<Collectible> {
