@@ -27,7 +27,6 @@ import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.intl.Locale
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.bumptech.glide.integration.compose.ExperimentalGlideComposeApi
@@ -102,9 +101,9 @@ fun MuseumScreen(
 
                 Column(
                     modifier = Modifier
-                        .padding(Dimens.SideMargin, Dimens.SideMargin, Dimens.SideMargin, 0.dp)
+                        .padding(horizontal = Dimens.SideMargin)
                         .verticalScroll(scrollState),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
+                    verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium),
                 ) {
                     // 전체 수집률
                     NkText(
