@@ -21,29 +21,26 @@ class NkDataStore @Inject constructor(
     val languageFlow: Flow<String?> = context.dataStore.data.map { it[LANGUAGE] }
     val versionNameFlow: Flow<String?> = context.dataStore.data.map { it[VERSION_NAME] }
     val hasMuseumGuideShown: Flow<Boolean> = context.dataStore.data.map { it[HAS_MUSEUM_GUIDE_SHOWN] ?: false }
+    val todoGraphRoute: Flow<String?> = context.dataStore.data.map { it[TODO_GRAPH_ROUTE] }
 
     suspend fun setActiveUserId(id: Int) {
-        context.dataStore.edit {
-            it[ACTIVE_USER_ID] = id
-        }
+        context.dataStore.edit { it[ACTIVE_USER_ID] = id }
     }
 
     suspend fun setLanguage(language: String) {
-        context.dataStore.edit {
-            it[LANGUAGE] = language
-        }
+        context.dataStore.edit { it[LANGUAGE] = language }
     }
 
     suspend fun setVersionName(versionName: String) {
-        context.dataStore.edit {
-            it[VERSION_NAME] = versionName
-        }
+        context.dataStore.edit { it[VERSION_NAME] = versionName }
     }
 
     suspend fun setHasMuseumGuideShown(flag: Boolean) {
-        context.dataStore.edit {
-            it[HAS_MUSEUM_GUIDE_SHOWN] = flag
-        }
+        context.dataStore.edit { it[HAS_MUSEUM_GUIDE_SHOWN] = flag }
+    }
+
+    suspend fun setTodoGraphRoute(route: String) {
+        context.dataStore.edit { it[TODO_GRAPH_ROUTE] = route }
     }
 
     companion object {
@@ -51,5 +48,6 @@ class NkDataStore @Inject constructor(
         val LANGUAGE = stringPreferencesKey("language")
         val VERSION_NAME = stringPreferencesKey("version_name")
         val HAS_MUSEUM_GUIDE_SHOWN = booleanPreferencesKey("has_museum_guide_shown")
+        val TODO_GRAPH_ROUTE = stringPreferencesKey("todo_graph_route")
     }
 }
