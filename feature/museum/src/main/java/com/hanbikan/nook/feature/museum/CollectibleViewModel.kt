@@ -46,14 +46,16 @@ class CollectibleViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     val collectibleSorts: List<CollectibleSort> = CollectibleSort.getCollectibleSorts(collectibleSequence)
-    private val sort: MutableStateFlow<CollectibleSort> = MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
+    private val _sort: MutableStateFlow<CollectibleSort> = MutableStateFlow(CollectibleSort.SORT_BY_DEFAULT)
+    val sort = _sort.asStateFlow()
 
     val collectibleFilters: List<CollectibleFilter> = CollectibleFilter.getCollectibleFilters()
-    private val filter: MutableStateFlow<CollectibleFilter> = MutableStateFlow(CollectibleFilter.FILTER_BY_DEFAULT)
+    private val _filter: MutableStateFlow<CollectibleFilter> = MutableStateFlow(CollectibleFilter.FILTER_BY_DEFAULT)
+    val filter = _filter.asStateFlow()
 
     @OptIn(ExperimentalCoroutinesApi::class)
     private val collectibleList: StateFlow<List<Collectible>> =
-        combine(activeUser, sort, filter) { activeUser, _, _ ->
+        combine(activeUser, sort, _filter) { activeUser, _, _ ->
             if (activeUser == null) {
                 flowOf(listOf())
             } else {
@@ -65,7 +67,7 @@ class CollectibleViewModel @Inject constructor(
             }
         }
             .flatMapLatest { it }
-            .mapLatest { filter.value.filter(it) }
+            .mapLatest { _filter.value.filter(it) }
             .mapLatest { sort.value.sort(it) }
             .stateIn(viewModelScope, SharingStarted.Eagerly, listOf())
 
@@ -90,17 +92,17 @@ class CollectibleViewModel @Inject constructor(
             }
             CollectibleScreenViewType.OVERALL -> {
                 _isHuntingMode.value = false
-                sort.value = CollectibleSort.SORT_BY_DEFAULT
+                _sort.value = CollectibleSort.SORT_BY_DEFAULT
                 CollectibleScreenUiState.OverallView(collectibleList)
             }
             CollectibleScreenViewType.MONTHLY_GENERAL -> {
                 _isHuntingMode.value = true
-                sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
+                _sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
                 CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList, month, isNorth)
             }
             CollectibleScreenViewType.MONTHLY_HOUR -> {
                 _isHuntingMode.value = true
-                sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
+                _sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
                 CollectibleScreenUiState.MonthlyView.HourView(collectibleList, month, isNorth)
             }
         }
@@ -175,10 +177,10 @@ class CollectibleViewModel @Inject constructor(
     }
 
     fun setSort(collectibleSort: CollectibleSort) {
-        sort.value = collectibleSort
+        _sort.value = collectibleSort
     }
 
     fun setFilter(collectibleFilter: CollectibleFilter) {
-        filter.value = collectibleFilter
+        _filter.value = collectibleFilter
     }
 }

@@ -232,7 +232,8 @@ private fun CollectibleScreenTopAppBar(
                             onClick = {
                                 viewModel.setSort(it)
                                 isSortMenuExpanded = false
-                            }
+                            },
+                            enabled = it != viewModel.sort.value
                         )
                     }
                 }
@@ -257,7 +258,8 @@ private fun CollectibleScreenTopAppBar(
                             onClick = {
                                 viewModel.setFilter(it)
                                 isFilterMenuExpanded = false
-                            }
+                            },
+                            enabled = it != viewModel.filter.value
                         )
                     }
                 }
