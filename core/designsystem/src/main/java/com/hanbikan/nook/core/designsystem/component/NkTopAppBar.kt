@@ -17,6 +17,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -40,16 +41,16 @@ data class AppBarIcon(
         )
 
         @Composable
-        fun appListAppBarIcon(onClick: () -> Unit) = AppBarIcon(
-            imageVector = Icons.Default.Home,
-            contentDescription = stringResource(id = R.string.app_list),
+        fun userDialogAppBarIcon(onClick: () -> Unit) = AppBarIcon(
+            imageVector = Icons.Default.Person,
+            contentDescription = stringResource(id = R.string.user_dialog),
             onClick = onClick
         )
 
         @Composable
-        fun userDialogAppBarIcon(onClick: () -> Unit) = AppBarIcon(
-            imageVector = Icons.Default.Person,
-            contentDescription = stringResource(id = R.string.user_dialog),
+        fun switchTodoAppBarIcon(onClick: () -> Unit) = AppBarIcon(
+            imageVector = ImageVector.vectorResource(R.drawable.baseline_autorenew_24),
+            contentDescription = stringResource(id = R.string.switch_todo),
             onClick = onClick
         )
     }

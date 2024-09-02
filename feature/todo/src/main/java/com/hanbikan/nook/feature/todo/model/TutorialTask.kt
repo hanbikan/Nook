@@ -1,9 +1,9 @@
-package com.hanbikan.nook.feature.tutorial.model
+package com.hanbikan.nook.feature.todo.model
 
 import android.content.Context
-import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
-import com.hanbikan.nook.feature.tutorial.R
+import com.hanbikan.nook.core.domain.model.common.Detail
+import com.hanbikan.nook.feature.todo.R
 
 fun TutorialTask.Companion.createInitialTutorialTasks(
     userId: Int,

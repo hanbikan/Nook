@@ -62,7 +62,7 @@ android {
 dependencies {
 
     implementation(project(mapOf("path" to ":feature:todo")))
-    implementation(project(mapOf("path" to ":feature:tutorial")))
+    implementation(project(mapOf("path" to ":feature:welcome")))
     implementation(project(mapOf("path" to ":feature:museum")))
     implementation(project(mapOf("path" to ":feature:profile")))
     implementation(project(mapOf("path" to ":core:designsystem")))

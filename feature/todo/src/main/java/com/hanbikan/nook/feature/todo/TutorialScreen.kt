@@ -1,4 +1,4 @@
-package com.hanbikan.nook.feature.tutorial
+package com.hanbikan.nook.feature.todo
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
@@ -29,22 +29,19 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
-import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.ui.DetailDialog
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 
 @Composable
 fun TutorialScreen(
-    navigateToAddUser: () -> Unit,
     navigateToTodo: () -> Unit,
     viewModel: TutorialViewModel = hiltViewModel(),
 ) {
-    val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val isProgressCardInfoDialogShown =
         viewModel.isProgressCardInfoDialogShown.collectAsStateWithLifecycle().value
     val isDetailDialogShown = viewModel.isDetailDialogShown.collectAsStateWithLifecycle().value
@@ -64,7 +61,7 @@ fun TutorialScreen(
         ) {
             NkTopAppBar(
                 rightAppBarIcons = listOf(
-                    AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
+                    AppBarIcon.switchTodoAppBarIcon(onClick = navigateToTodo)
                 ),
             )
             TutorialScreenContents(
@@ -80,12 +77,7 @@ fun TutorialScreen(
             )
         }
 
-        UserDialog(
-            visible = isUserDialogShown,
-            navigateToAddUser = navigateToAddUser,
-            onDismissRequest = viewModel::switchUserDialog
-        )
-
+        // dialogs
         NkDialog(
             visible = isProgressCardInfoDialogShown,
             description = stringResource(id = R.string.progress_card_description),
@@ -204,5 +196,5 @@ fun TutorialScreenContents(
 @Composable
 @Preview
 fun TutorialScreenPreview() {
-    TutorialScreen({}, {})
+    TutorialScreen({})
 }

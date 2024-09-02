@@ -7,6 +7,7 @@
     <string name="back">뒤로가기</string>
     <string name="app_list">앱 목록</string>
     <string name="user_dialog">계정 관리</string>
+    <string name="switch_todo">TODO 전환</string>
     <string name="empty_name">이름을 입력해주세요.</string>
     <string name="empty_island_name">섬 이름을 입력해주세요.</string>
 </resources>

@@ -1,10 +1,10 @@
-package com.hanbikan.nook.feature.tutorial.usecase
+package com.hanbikan.nook.feature.todo.usecase
 
 import android.content.Context
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksIfEmptyUseCase
-import com.hanbikan.nook.feature.tutorial.model.createInitialTutorialTasks
+import com.hanbikan.nook.feature.todo.model.createInitialTutorialTasks
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.flow.first
 import javax.inject.Inject

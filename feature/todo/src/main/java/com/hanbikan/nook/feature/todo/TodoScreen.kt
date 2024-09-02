@@ -47,19 +47,17 @@ import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.ui.DetailDialog
 import com.hanbikan.nook.core.ui.ProgressCard
 import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 
 @Composable
 fun TodoScreen(
-    navigateToAddUser: () -> Unit,
+    navigateToTutorial: () -> Unit,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val addOrUpdateTaskDialogStatus = viewModel.addOrUpdateTaskDialogStatus.collectAsStateWithLifecycle().value
     val isDeleteTaskDialogShown = viewModel.isDeleteTaskDialogShown.collectAsStateWithLifecycle().value
-    val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val isDetailDialogShown = viewModel.isDetailDialogShown.collectAsStateWithLifecycle().value
 
     val uiState = viewModel.uiState.collectAsStateWithLifecycle().value
@@ -73,7 +71,7 @@ fun TodoScreen(
         Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
                 rightAppBarIcons = listOf(
-                    AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
+                    AppBarIcon.switchTodoAppBarIcon(onClick = navigateToTutorial)
                 ),
             )
             Box {
@@ -129,12 +127,6 @@ fun TodoScreen(
             description = stringResource(id = R.string.sure_to_delete_task),
             onDismissRequest = viewModel::switchDeleteTaskDialog,
             onConfirmation = viewModel::onConfirmDeleteTask
-        )
-
-        UserDialog(
-            visible = isUserDialogShown,
-            navigateToAddUser = navigateToAddUser,
-            onDismissRequest = viewModel::switchUserDialog
         )
     }
 }

@@ -1,17 +1,15 @@
-package com.hanbikan.nook.feature.tutorial
+package com.hanbikan.nook.feature.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.executeIfBothNonNull
-import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
-import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
-import com.hanbikan.nook.feature.tutorial.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -32,7 +30,6 @@ class TutorialViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
     private val tutorialTaskRepository: TutorialTaskRepository,
-    private val appStateRepository: AppStateRepository,
     private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
 
@@ -75,9 +72,6 @@ class TutorialViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), TutorialUiState.Loading)
 
     // Dialog
-    private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isUserDialogShown = _isUserDialogShown.asStateFlow()
-
     private val _isProgressCardInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isProgressCardInfoDialogShown = _isProgressCardInfoDialogShown.asStateFlow()
 
@@ -108,10 +102,6 @@ class TutorialViewModel @Inject constructor(
                 }
             }
         }
-    }
-
-    fun switchUserDialog() {
-        _isUserDialogShown.value = !isUserDialogShown.value
     }
 
     fun switchProgressCardInfoDialog() {

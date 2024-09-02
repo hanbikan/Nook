@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="welcome_message_title">Welcome!</string>
+    <string name="welcome_message_body">We\'ll help you meticulously manage your AnimalCrossing life :)</string>
+    <string name="start">Get Started</string>
+    <string name="add_user_title">Add an Account</string>
+    <string name="add_user_body">The information you enter can be changed at any time.</string>
+    <string name="add">Add</string>
+    <string name="name">Name</string>
+    <string name="name_placeholder">Lily, Tommy, …</string>
+    <string name="island_name">Island Name</string>
+    <string name="island_name_placeholder">Atlantis, Batcave, …</string>
+</resources>

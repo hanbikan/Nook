@@ -2,14 +2,13 @@ package com.hanbikan.nook.feature.todo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.model.Task
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.TaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
-import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -80,9 +79,6 @@ class TodoViewModel @Inject constructor(
 
     private val _taskIdToDelete: MutableStateFlow<Int?> = MutableStateFlow(null)
 
-    private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isUserDialogShown = _isUserDialogShown.asStateFlow()
-
     // Detail dialog
     private val _isDetailDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isDetailDialogShown = _isDetailDialogShown.asStateFlow()
@@ -149,10 +145,6 @@ class TodoViewModel @Inject constructor(
 
     fun switchDeleteTaskDialog() {
         _isDeleteTaskDialogShown.value = !isDeleteTaskDialogShown.value
-    }
-
-    fun switchUserDialog() {
-        _isUserDialogShown.value = !isUserDialogShown.value
     }
 
     fun showDetailDialog(details: List<Detail>) {

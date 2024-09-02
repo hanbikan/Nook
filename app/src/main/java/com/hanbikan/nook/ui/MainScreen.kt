@@ -28,6 +28,7 @@ import com.hanbikan.nook.feature.museum.navigation.navigateToMonthlyCollectible
 import com.hanbikan.nook.feature.museum.navigation.navigateToRegisterCollectible
 import com.hanbikan.nook.feature.profile.navigation.profileScreen
 import com.hanbikan.nook.feature.profile.navigation.profileScreenRoute
+import com.hanbikan.nook.feature.todo.navigation.navigateToTutorial
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
 import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
@@ -47,7 +48,7 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             todoScreen(
-                navigateToAddUser = navController::navigateToAddUser
+                navigateToTutorial = navController::navigateToTutorial
             )
             museumGraph(
                 navigateToAddUser = navController::navigateToAddUser,

@@ -15,7 +15,7 @@ dependencyResolutionManagement {
 
 rootProject.name = "Nook"
 include(":app")
-include(":feature:tutorial")
+include(":feature:welcome")
 include(":feature:todo")
 include(":core:designsystem")
 include(":core:domain")

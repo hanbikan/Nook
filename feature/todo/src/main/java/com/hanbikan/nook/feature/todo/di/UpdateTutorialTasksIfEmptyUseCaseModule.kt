@@ -1,7 +1,7 @@
-package com.hanbikan.nook.feature.tutorial.di
+package com.hanbikan.nook.feature.todo.di
 
 import com.hanbikan.nook.core.domain.usecase.UpdateTutorialTasksIfEmptyUseCase
-import com.hanbikan.nook.feature.tutorial.usecase.UpdateTutorialTasksIfEmptyUseCaseImpl
+import com.hanbikan.nook.feature.todo.usecase.UpdateTutorialTasksIfEmptyUseCaseImpl
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn
@@ -12,6 +12,6 @@ import dagger.hilt.components.SingletonComponent
 interface UpdateTutorialTasksIfEmptyUseCaseModule {
     @Binds
     fun bindsUpdateTutorialTasksIfEmptyUseCase(
-        updateTutorialTasksIfEmptyUseCaseImpl: UpdateTutorialTasksIfEmptyUseCaseImpl,
+        updateTutorialTasksIfEmptyUseCaseImpl: com.hanbikan.nook.feature.todo.usecase.UpdateTutorialTasksIfEmptyUseCaseImpl,
     ): UpdateTutorialTasksIfEmptyUseCase
 }
