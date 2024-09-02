@@ -7,6 +7,7 @@ import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.UpdateUserDataUseCase
+import com.hanbikan.nook.feature.todo.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.Dispatchers
@@ -32,11 +33,15 @@ class MainViewModel @Inject constructor(
     private val _users: MutableStateFlow<List<User>> = MutableStateFlow(listOf())
     val users = _users.asStateFlow()
 
+    private val _todoGraphRoute: MutableStateFlow<String> = MutableStateFlow(tutorialScreenRoute)
+    val todoGraphRoute = _todoGraphRoute.asStateFlow()
+
     init {
         viewModelScope.launch(Dispatchers.IO) {
             listOf(
                 async { loadAllUsers() },
                 async { updateUserIfVersionHasChanged() },
+                async { loadTodoGraphRoute() }
             ).awaitAll()
 
             _isReady.value = true
@@ -58,6 +63,12 @@ class MainViewModel @Inject constructor(
 
     private suspend fun loadAllUsers() {
         _users.value = userRepository.getAllUsers().first()
+    }
+
+    private suspend fun loadTodoGraphRoute() {
+        appStateRepository.getTodoGraphRoute().first()?.let {
+            _todoGraphRoute.value = it
+        }
     }
 
     private suspend fun updateUserIfVersionHasChanged() {

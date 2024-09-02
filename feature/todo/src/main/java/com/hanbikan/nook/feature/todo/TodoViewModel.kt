@@ -9,6 +9,7 @@ import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.TaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
+import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -85,6 +86,12 @@ class TodoViewModel @Inject constructor(
 
     private val _detailsToShow: MutableStateFlow<List<Detail>> = MutableStateFlow(listOf())
     val detailsToShow = _detailsToShow.asStateFlow()
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            appStateRepository.setTodoGraphRoute(todoScreenRoute)
+        }
+    }
 
     fun addTask(name: String, isDaily: Boolean, isVisible: Boolean) {
         if (name.isEmpty()) return

@@ -6,10 +6,12 @@ import com.hanbikan.nook.core.common.executeIfBothNonNull
 import com.hanbikan.nook.core.domain.model.TutorialTask
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.model.common.Detail
+import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
 import com.hanbikan.nook.core.domain.usecase.GetTutorialDayRangeUseCase
 import com.hanbikan.nook.core.domain.usecase.UpdateUserUseCase
+import com.hanbikan.nook.feature.todo.navigation.tutorialScreenRoute
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -29,6 +31,7 @@ import javax.inject.Inject
 class TutorialViewModel @Inject constructor(
     getActiveUserUseCase: GetActiveUserUseCase,
     getTutorialDayRangeUseCase: GetTutorialDayRangeUseCase,
+    appStateRepository: AppStateRepository,
     private val tutorialTaskRepository: TutorialTaskRepository,
     private val updateUserUseCase: UpdateUserUseCase,
 ) : ViewModel() {
@@ -89,6 +92,10 @@ class TutorialViewModel @Inject constructor(
     val detailsToShow = _detailsToShow.asStateFlow()
 
     init {
+        viewModelScope.launch(Dispatchers.IO) {
+            appStateRepository.setTodoGraphRoute(tutorialScreenRoute)
+        }
+
         viewModelScope.launch(Dispatchers.IO) {
             tutorialTaskList.collectLatest { tutorialTaskList ->
                 if (tutorialTaskList.all { it.isDone }) {

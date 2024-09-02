@@ -15,10 +15,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hanbikan.nook.MainViewModel
 import com.hanbikan.nook.R
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.feature.museum.navigation.museumGraph
@@ -36,7 +38,9 @@ import com.hanbikan.nook.feature.todo.navigation.todoScreen
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 
 @Composable
-fun MainScreen() {
+fun MainScreen(
+    viewModel: MainViewModel = hiltViewModel(),
+) {
     val navController = rememberNavController()
 
     Scaffold(
@@ -50,6 +54,7 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             todoScreen(
+                startDestination = viewModel.todoGraphRoute.value,
                 navigateToTodo = navController::navigateToTodo,
                 navigateToTutorial = navController::navigateToTutorial,
             )

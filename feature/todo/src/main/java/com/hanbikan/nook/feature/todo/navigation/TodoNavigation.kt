@@ -15,12 +15,13 @@ const val tutorialScreenRoute = "tutorial_screen_route"
 val todoRoutes = listOf(todoScreenRoute, tutorialScreenRoute)
 
 fun NavGraphBuilder.todoScreen(
+    startDestination: String,
     navigateToTutorial: () -> Unit,
     navigateToTodo: () -> Unit,
 ) {
     navigation(
         route = todoGraphRoute,
-        startDestination = tutorialScreenRoute,
+        startDestination = startDestination,
     ) {
         composable(
             route = tutorialScreenRoute,
