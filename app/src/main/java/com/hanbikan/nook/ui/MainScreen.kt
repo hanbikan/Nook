@@ -35,7 +35,6 @@ import com.hanbikan.nook.feature.todo.navigation.navigateToTutorial
 import com.hanbikan.nook.feature.todo.navigation.todoGraphRoute
 import com.hanbikan.nook.feature.todo.navigation.todoRoutes
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
-import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 
 @Composable
 fun MainScreen(
@@ -60,7 +59,6 @@ fun MainScreen(
                 navigateToTutorial = navController::navigateToTutorial,
             )
             museumGraph(
-                navigateToAddUser = navController::navigateToAddUser,
                 navigateToMonthlyCollectible = navController::navigateToMonthlyCollectible,
                 navigateToRegisterCollectible = navController::navigateToRegisterCollectible,
                 navigateUp = navController::navigateUp

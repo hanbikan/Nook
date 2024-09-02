@@ -24,7 +24,6 @@ const val registerCollectibleScreenRoute = "register_collectible_screen_route"
 val museumRoutes = listOf(museumScreenRoute, monthlyCollectibleScreenRoute, registerCollectibleScreenRoute)
 
 fun NavGraphBuilder.museumGraph(
-    navigateToAddUser: () -> Unit,
     navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
     navigateToRegisterCollectible: () -> Unit,
     navigateUp: () -> Unit,
@@ -37,7 +36,6 @@ fun NavGraphBuilder.museumGraph(
             route = museumScreenRoute,
         ) {
             MuseumScreen(
-                navigateToAddUser = navigateToAddUser,
                 navigateToMonthlyCollectible = navigateToMonthlyCollectible,
                 navigateToRegisterCollectible = navigateToRegisterCollectible,
             )

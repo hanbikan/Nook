@@ -44,7 +44,6 @@ import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
 fun MuseumScreen(
-    navigateToAddUser: () -> Unit,
     navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
     navigateToRegisterCollectible: () -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
