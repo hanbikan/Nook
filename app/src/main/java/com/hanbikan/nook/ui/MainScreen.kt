@@ -28,9 +28,11 @@ import com.hanbikan.nook.feature.museum.navigation.navigateToMonthlyCollectible
 import com.hanbikan.nook.feature.museum.navigation.navigateToRegisterCollectible
 import com.hanbikan.nook.feature.profile.navigation.profileScreen
 import com.hanbikan.nook.feature.profile.navigation.profileScreenRoute
+import com.hanbikan.nook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nook.feature.todo.navigation.navigateToTutorial
+import com.hanbikan.nook.feature.todo.navigation.todoGraphRoute
+import com.hanbikan.nook.feature.todo.navigation.todoRoutes
 import com.hanbikan.nook.feature.todo.navigation.todoScreen
-import com.hanbikan.nook.feature.todo.navigation.todoScreenRoute
 import com.hanbikan.nook.feature.tutorial.navigation.navigateToAddUser
 
 @Composable
@@ -48,7 +50,8 @@ fun MainScreen() {
             modifier = Modifier.padding(innerPadding)
         ) {
             todoScreen(
-                navigateToTutorial = navController::navigateToTutorial
+                navigateToTodo = navController::navigateToTodo,
+                navigateToTutorial = navController::navigateToTutorial,
             )
             museumGraph(
                 navigateToAddUser = navController::navigateToAddUser,
@@ -78,10 +81,12 @@ fun BottomNavigationBar(navController: NavController) {
         val currentRoute = navBackStackEntry?.destination?.route
 
         items.forEach { item ->
-            val selected = when (item.route) {
-                todoScreenRoute -> item.route == currentRoute
-                profileScreenRoute -> item.route == currentRoute
-                else -> museumRoutes.contains(currentRoute)
+            val selected = if (item.route == todoGraphRoute) {
+                todoRoutes.contains(currentRoute)
+            } else if (item.route == museumGraphRoute) {
+                museumRoutes.contains(currentRoute)
+            } else {
+                item.route == currentRoute
             }
             NavigationBarItem(
                 icon = { Icon(item.icon(), contentDescription = null) },
@@ -101,7 +106,7 @@ fun BottomNavigationBar(navController: NavController) {
 }
 
 sealed class BottomNavItem(val icon: @Composable () -> ImageVector, val route: String) {
-    object Todo : BottomNavItem({ ImageVector.vectorResource(id = R.drawable.baseline_checklist_24) }, todoScreenRoute)
+    object Todo : BottomNavItem({ ImageVector.vectorResource(id = R.drawable.baseline_checklist_24) }, todoGraphRoute)
     object Museum : BottomNavItem({ ImageVector.vectorResource(id = R.drawable.baseline_museum_24) }, museumGraphRoute)
     object Profile : BottomNavItem({ Icons.Filled.AccountCircle }, profileScreenRoute)
 }
