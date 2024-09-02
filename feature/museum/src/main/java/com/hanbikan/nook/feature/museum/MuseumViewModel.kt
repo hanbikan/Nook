@@ -175,7 +175,7 @@ class MuseumViewModel @Inject constructor(
     @OptIn(ExperimentalCoroutinesApi::class)
     val uncollectedCountForMonth: StateFlow<Int?> = collectiblesForMonth.mapLatest {
         withContext(Dispatchers.IO) {
-            it.count()
+            it.count { !it.isCollected }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
