@@ -4,8 +4,8 @@ import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.hanbikan.nook.core.common.getCurrentMonth
-import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.User
+import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.domain.model.common.updateOnLocal
 import com.hanbikan.nook.core.domain.repository.CollectionRepository
 import com.hanbikan.nook.core.domain.usecase.GetActiveUserUseCase
@@ -102,8 +102,11 @@ class CollectibleViewModel @Inject constructor(
 
 
     // Dialogs
-    private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
-    val collectibleToShowInDialog = _collectibleToShowInDialog.asStateFlow()
+    private val _collectibleForDetailCollectibleDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleForDetailCollectibleDialog = _collectibleForDetailCollectibleDialog.asStateFlow()
+
+    private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleForCollectDialog = _collectibleForCollectDialog.asStateFlow()
 
     private val _isInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isInfoDialogShown = _isInfoDialogShown
@@ -135,17 +138,26 @@ class CollectibleViewModel @Inject constructor(
     }
 
     fun onClickCollectibleItem(collectible: Collectible) {
-        viewModelScope.launch(Dispatchers.IO + handler) {
-            collectible.updateOnLocal(collectionRepository)
-        }
+        _collectibleForCollectDialog.value = collectible
     }
 
     fun onLongClickCollectibleItem(collectible: Collectible) {
-        _collectibleToShowInDialog.value = collectible
+        _collectibleForDetailCollectibleDialog.value = collectible
     }
 
-    fun onDismissCollectibleDialog() {
-        _collectibleToShowInDialog.value = null
+    fun onDismissDetailCollectibleDialog() {
+        _collectibleForDetailCollectibleDialog.value = null
+    }
+
+    fun onConfirmCollectDialog() {
+        viewModelScope.launch(Dispatchers.IO + handler) {
+            collectibleForCollectDialog.value?.updateOnLocal(collectionRepository)
+            _collectibleForCollectDialog.value = null
+        }
+    }
+
+    fun onDismissCollectDialog() {
+        _collectibleForCollectDialog.value = null
     }
 
     fun switchIsInfoDialogShown() {

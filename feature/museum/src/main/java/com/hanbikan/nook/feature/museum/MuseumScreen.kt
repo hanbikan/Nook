@@ -209,6 +209,7 @@ fun MuseumScreen(
             }
         }
 
+        // Dialogs
         UserDialog(
             visible = isUserDialogShown,
             navigateToAddUser = navigateToAddUser,

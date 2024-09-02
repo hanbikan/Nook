@@ -95,8 +95,8 @@ fun CollectibleScreen(
     val isHuntingMode = viewModel.isHuntingMode.collectAsStateWithLifecycle().value
     val isNorth = viewModel.isNorth.collectAsStateWithLifecycle().value
 
-    val collectibleToShowInDialog =
-        viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
+    val collectibleForDetailCollectibleDialog = viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
+    val collectibleForCollectDialog = viewModel.collectibleForCollectDialog.collectAsStateWithLifecycle().value
     val isInfoDialogShown = viewModel.isInfoDialogShown.collectAsStateWithLifecycle().value
 
     Box {
@@ -155,10 +155,10 @@ fun CollectibleScreen(
             }
         }
 
-        // Dialog
+        // Dialogs
         DetailCollectibleDialog(
-            collectible = collectibleToShowInDialog,
-            onDismiss = viewModel::onDismissCollectibleDialog,
+            collectible = collectibleForDetailCollectibleDialog,
+            onDismiss = viewModel::onDismissDetailCollectibleDialog,
             isNorth = isNorth,
         )
 
@@ -168,6 +168,13 @@ fun CollectibleScreen(
             onDismissRequest = viewModel::switchIsInfoDialogShown,
             onConfirmation = viewModel::switchIsInfoDialogShown,
             hasOnlyConfirmationButton = true
+        )
+
+        NkDialog(
+            visible = collectibleForCollectDialog != null,
+            description = stringResource(id = R.string.collect_item, collectibleForCollectDialog?.name?:""),
+            onDismissRequest = viewModel::onDismissCollectDialog,
+            onConfirmation = viewModel::onConfirmCollectDialog
         )
     }
 }
