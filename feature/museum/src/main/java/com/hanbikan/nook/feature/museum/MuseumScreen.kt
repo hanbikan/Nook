@@ -243,7 +243,9 @@ fun MuseumScreen(
                 "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=9f4f2598-e988-4f87-a5fb-c209cbcf057d"
             }
             GlideImage(
-                modifier = Modifier.fillMaxSize(),
+                modifier = Modifier
+                    .fillMaxSize()
+                    .clickable { viewModel.setHasMuseumGuideShownTrue() },
                 model = imageUrl,
                 contentDescription = null,
                 contentScale = ContentScale.FillBounds,
