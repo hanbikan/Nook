@@ -30,6 +30,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
+import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
@@ -59,8 +60,10 @@ fun MuseumScreen(
         viewModel.currentlyCollectibleSeaCreature.collectAsStateWithLifecycle().value
 
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
-    val collectibleToShowInDialog =
-        viewModel.collectibleToShowInDialog.collectAsStateWithLifecycle().value
+    val collectibleForDetailCollectibleDialog =
+        viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
+    val collectibleForCollectDialog =
+        viewModel.collectibleForCollectDialog.collectAsStateWithLifecycle().value
 
     val scrollState = rememberScrollState()
 
@@ -196,7 +199,7 @@ fun MuseumScreen(
                                 collectibles = uncollectedForMonth,
                                 isHuntingMode = false,
                                 isNorth = isNorth,
-                                onClick = {},
+                                onClick = { viewModel.onClickCollectibleItem(it) },
                                 onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                             )
                             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
@@ -213,9 +216,16 @@ fun MuseumScreen(
         )
 
         DetailCollectibleDialog(
-            collectible = collectibleToShowInDialog,
-            onDismiss = viewModel::onDismissCollectibleDialog,
+            collectible = collectibleForDetailCollectibleDialog,
+            onDismiss = viewModel::onDismissDetailCollectibleDialog,
             isNorth = viewModel.getIsNorthForActiveUser(),
+        )
+
+        NkDialog(
+            visible = collectibleForCollectDialog != null,
+            description = stringResource(id = R.string.collect_item, collectibleForCollectDialog?.name?:""),
+            onDismissRequest = viewModel::onDismissCollectDialog,
+            onConfirmation = viewModel::onConfirmCollectDialog
         )
     }
 }

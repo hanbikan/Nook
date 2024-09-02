@@ -51,4 +51,5 @@
     <string name="register_collectible_items">생물 등록</string>
     <string name="register_collectible_title">수집한 생물 등록</string>
     <string name="register_collectible_description">게임 내 생물 도감을 열고 수집한 생물을 등록하세요!</string>
+    <string name="collect_item">[%s]를 수집합니다.</string>
 </resources>

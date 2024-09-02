@@ -193,25 +193,37 @@ class MuseumViewModel @Inject constructor(
     private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isUserDialogShown = _isUserDialogShown.asStateFlow()
 
-    private val _collectibleToShowInDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
-    val collectibleToShowInDialog = _collectibleToShowInDialog.asStateFlow()
+    private val _collectibleForDetailCollectibleDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleForDetailCollectibleDialog = _collectibleForDetailCollectibleDialog.asStateFlow()
+
+    private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    val collectibleForCollectDialog = _collectibleForCollectDialog.asStateFlow()
 
     fun switchUserDialog() {
         _isUserDialogShown.value = !isUserDialogShown.value
     }
 
     fun onClickCollectibleItem(collectible: Collectible) {
-        viewModelScope.launch(Dispatchers.IO) {
-            collectible.updateOnLocal(collectionRepository)
-        }
+        _collectibleForCollectDialog.value = collectible
     }
 
     fun onLongClickCollectibleItem(collectible: Collectible) {
-        _collectibleToShowInDialog.value = collectible
+        _collectibleForDetailCollectibleDialog.value = collectible
     }
 
-    fun onDismissCollectibleDialog() {
-        _collectibleToShowInDialog.value = null
+    fun onDismissDetailCollectibleDialog() {
+        _collectibleForDetailCollectibleDialog.value = null
+    }
+
+    fun onConfirmCollectDialog() {
+        viewModelScope.launch(Dispatchers.IO) {
+            collectibleForCollectDialog.value?.updateOnLocal(collectionRepository)
+            _collectibleForCollectDialog.value = null
+        }
+    }
+
+    fun onDismissCollectDialog() {
+        _collectibleForCollectDialog.value = null
     }
 
     fun getIsNorthForActiveUser(): Boolean {
