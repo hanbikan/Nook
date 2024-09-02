@@ -41,13 +41,14 @@ fun WelcomeScreen(
                     verticalArrangement = Arrangement.Center,
                 ) {
                     Image(
-                        imageVector = ImageVector.vectorResource(id = R.drawable.welcome_cats),
+                        imageVector = ImageVector.vectorResource(id = R.drawable.welcoming),
                         contentDescription = stringResource(id = R.string.welcome_message_title),
                         modifier = Modifier.size(Dimens.IconExtraLarge)
                     )
+                    Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
                     NkText(
                         text = stringResource(id = R.string.welcome_message_title),
-                        style = NkTheme.typography.titleLarge,
+                        style = NkTheme.typography.headlineMedium,
                     )
                     Spacer(modifier = Modifier.height(Dimens.SpacingExtraSmall))
                     NkText(

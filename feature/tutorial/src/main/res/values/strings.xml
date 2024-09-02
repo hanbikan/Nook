@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="welcome_message_title">Welcome to Nook Helper!</string>
+    <string name="welcome_message_title">Welcome!</string>
     <string name="welcome_message_body">We\'ll help you meticulously manage your AnimalCrossing life :)</string>
     <string name="start">Get Started</string>
     <string name="add_user_title">Add an Account</string>
