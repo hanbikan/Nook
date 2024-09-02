@@ -6,6 +6,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
@@ -151,7 +152,7 @@ fun TodoScreenSuccess(
     onClickInfo: (List<Detail>) -> Unit,
 ) {
     LazyColumn(
-        modifier = Modifier.padding(Dimens.SideMargin),
+        contentPadding = PaddingValues(Dimens.SideMargin),
     ) {
         item {
             WelcomeText(userName = userName)
