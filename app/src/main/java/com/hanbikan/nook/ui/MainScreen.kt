@@ -4,8 +4,6 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.AccountCircle
-import androidx.compose.material.icons.filled.Home
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.Icon
 import androidx.compose.material3.NavigationBar
 import androidx.compose.material3.NavigationBarItem
@@ -15,11 +13,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
+import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
+import com.hanbikan.nook.R
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.feature.museum.navigation.museumGraph
 import com.hanbikan.nook.feature.museum.navigation.museumGraphRoute
@@ -83,7 +83,7 @@ fun BottomNavigationBar(navController: NavController) {
                 else -> museumRoutes.contains(currentRoute)
             }
             NavigationBarItem(
-                icon = { Icon(item.icon, contentDescription = null) },
+                icon = { Icon(item.icon(), contentDescription = null) },
                 selected = selected,
                 onClick = {
                     navController.navigate(item.route) {
@@ -99,8 +99,8 @@ fun BottomNavigationBar(navController: NavController) {
     }
 }
 
-sealed class BottomNavItem(val icon: ImageVector, val route: String) {
-    object Todo : BottomNavItem(Icons.Filled.Home, todoScreenRoute)
-    object Museum : BottomNavItem(Icons.Filled.Search, museumGraphRoute)
-    object Profile : BottomNavItem(Icons.Filled.AccountCircle, profileScreenRoute)
+sealed class BottomNavItem(val icon: @Composable () -> ImageVector, val route: String) {
+    object Todo : BottomNavItem({ ImageVector.vectorResource(id = R.drawable.baseline_checklist_24) }, todoScreenRoute)
+    object Museum : BottomNavItem({ ImageVector.vectorResource(id = R.drawable.baseline_museum_24) }, museumGraphRoute)
+    object Profile : BottomNavItem({ Icons.Filled.AccountCircle }, profileScreenRoute)
 }
