@@ -34,11 +34,6 @@ class RegisterCollectibleViewModel @Inject constructor(
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     @OptIn(ExperimentalCoroutinesApi::class)
-    val isNorth: StateFlow<Boolean> = activeUser.mapLatest {
-        it?.isNorth ?: true
-    }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
-
-    @OptIn(ExperimentalCoroutinesApi::class)
     val bugs: StateFlow<List<Bug>?> = activeUser
         .flatMapLatest {
             if (it == null) {

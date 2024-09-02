@@ -81,7 +81,7 @@ import com.hanbikan.nook.feature.museum.util.getMonthList
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.launch
 
-private val CollectibleItemWidth = 90.dp
+val CollectibleItemWidth = 90.dp
 val CollectibleItemHeight = 80.dp
 private val GradientHeight = Dimens.SpacingMedium
 
