@@ -195,18 +195,11 @@ class MuseumViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     // Dialogs
-    private val _isUserDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isUserDialogShown = _isUserDialogShown.asStateFlow()
-
     private val _collectibleForDetailCollectibleDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
     val collectibleForDetailCollectibleDialog = _collectibleForDetailCollectibleDialog.asStateFlow()
 
     private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
     val collectibleForCollectDialog = _collectibleForCollectDialog.asStateFlow()
-
-    fun switchUserDialog() {
-        _isUserDialogShown.value = !isUserDialogShown.value
-    }
 
     fun onClickCollectibleItem(collectible: Collectible) {
         _collectibleForCollectDialog.value = collectible

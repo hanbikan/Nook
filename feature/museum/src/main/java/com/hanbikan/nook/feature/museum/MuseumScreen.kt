@@ -40,7 +40,6 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
-import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 
 @OptIn(ExperimentalGlideComposeApi::class)
@@ -64,7 +63,6 @@ fun MuseumScreen(
     val currentlyCollectibleSeaCreature =
         viewModel.currentlyCollectibleSeaCreature.collectAsStateWithLifecycle().value
 
-    val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
     val collectibleForDetailCollectibleDialog =
         viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
     val collectibleForCollectDialog =
@@ -88,7 +86,6 @@ fun MuseumScreen(
                         contentDescription = stringResource(id = R.string.register_collectible_items),
                         onClick = navigateToRegisterCollectible
                     ),
-                    AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
             )
 
@@ -212,12 +209,6 @@ fun MuseumScreen(
         }
 
         // Dialogs
-        UserDialog(
-            visible = isUserDialogShown,
-            navigateToAddUser = navigateToAddUser,
-            onDismissRequest = viewModel::switchUserDialog
-        )
-
         DetailCollectibleDialog(
             collectible = collectibleForDetailCollectibleDialog,
             onDismiss = viewModel::onDismissDetailCollectibleDialog,
