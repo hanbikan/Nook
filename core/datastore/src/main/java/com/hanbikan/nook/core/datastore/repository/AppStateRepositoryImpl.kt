@@ -24,6 +24,10 @@ class AppStateRepositoryImpl @Inject constructor(
         return nkDataStore.hasMuseumGuideShown
     }
 
+    override fun getTodoGraphRoute(): Flow<String?> {
+        return nkDataStore.todoGraphRoute
+    }
+
     override suspend fun setActiveUserId(id: Int) {
         nkDataStore.setActiveUserId(id)
     }
@@ -38,5 +42,9 @@ class AppStateRepositoryImpl @Inject constructor(
 
     override suspend fun setHasMuseumGuideShown(flag: Boolean) {
         nkDataStore.setHasMuseumGuideShown(flag)
+    }
+
+    override suspend fun setTodoGraphRoute(route: String) {
+        nkDataStore.setTodoGraphRoute(route)
     }
 }

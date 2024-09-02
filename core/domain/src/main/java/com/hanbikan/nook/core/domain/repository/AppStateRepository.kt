@@ -11,6 +11,8 @@ interface AppStateRepository {
 
     fun getHasMuseumGuideShown(): Flow<Boolean>
 
+    fun getTodoGraphRoute(): Flow<String?>
+
     suspend fun setActiveUserId(id: Int)
 
     suspend fun setLanguage(language: String)
@@ -18,4 +20,6 @@ interface AppStateRepository {
     suspend fun setVersionName(versionName: String)
 
     suspend fun setHasMuseumGuideShown(flag: Boolean)
+
+    suspend fun setTodoGraphRoute(route: String)
 }
