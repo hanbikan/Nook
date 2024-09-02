@@ -24,6 +24,10 @@ class AppStateRepositoryImpl @Inject constructor(
         return nkDataStore.versionNameFlow
     }
 
+    override fun getHasMuseumGuideShown(): Flow<Boolean> {
+        return nkDataStore.hasMuseumGuideShown
+    }
+
     override suspend fun setActiveUserId(id: Int) {
         nkDataStore.setActiveUserId(id)
     }
@@ -38,5 +42,9 @@ class AppStateRepositoryImpl @Inject constructor(
 
     override suspend fun setVersionName(versionName: String) {
         nkDataStore.setVersionName(versionName)
+    }
+
+    override suspend fun setHasMuseumGuideShown(flag: Boolean) {
+        nkDataStore.setHasMuseumGuideShown(flag)
     }
 }

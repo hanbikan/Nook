@@ -11,6 +11,8 @@ interface AppStateRepository {
 
     fun getVersionName(): Flow<String?>
 
+    fun getHasMuseumGuideShown(): Flow<Boolean>
+
     suspend fun setActiveUserId(id: Int)
 
     suspend fun setLastVisitedRoute(route: String)
@@ -18,4 +20,6 @@ interface AppStateRepository {
     suspend fun setLanguage(language: String)
 
     suspend fun setVersionName(versionName: String)
+
+    suspend fun setHasMuseumGuideShown(flag: Boolean)
 }
