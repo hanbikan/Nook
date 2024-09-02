@@ -26,6 +26,7 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.res.vectorResource
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -236,8 +237,11 @@ fun MuseumScreen(
 
         // 박물관 가이드 보여진 적이 없을 때만 표시
         FadeAnimatedVisibility(visible = !hasMuseumGuideShown) {
-            val imageUrl = "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=9f4f2598-e988-4f87-a5fb-c209cbcf057d"
-            // TODO: i18n -> https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_ko.jpg?alt=media&token=61818672-2b2c-4ac5-aff7-7b45d9dde8f4
+            val imageUrl = if (Locale.current.language == "ko") {
+                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_ko.jpg?alt=media&token=61818672-2b2c-4ac5-aff7-7b45d9dde8f4"
+            } else {
+                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=9f4f2598-e988-4f87-a5fb-c209cbcf057d"
+            }
             GlideImage(
                 modifier = Modifier.fillMaxSize(),
                 model = imageUrl,
