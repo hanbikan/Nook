@@ -224,9 +224,9 @@ fun MuseumScreen(
         // 박물관 가이드 보여진 적이 없을 때만 표시
         FadeAnimatedVisibility(visible = !hasMuseumGuideShown) {
             val imageUrl = if (Locale.current.language == "ko") {
-                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_ko.jpg?alt=media&token=61818672-2b2c-4ac5-aff7-7b45d9dde8f4"
+                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_ko.jpg?alt=media&token=20973767-5df0-4feb-ae2d-fb9db7695c12"
             } else {
-                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=9f4f2598-e988-4f87-a5fb-c209cbcf057d"
+                "https://firebasestorage.googleapis.com/v0/b/acnh-1be21.appspot.com/o/museum_guide_en.jpg?alt=media&token=b33d71e9-da8d-4105-b7e8-74d3414d1bea"
             }
             GlideImage(
                 modifier = Modifier
