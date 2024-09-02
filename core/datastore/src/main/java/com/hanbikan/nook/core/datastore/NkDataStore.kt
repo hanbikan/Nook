@@ -3,6 +3,7 @@ package com.hanbikan.nook.core.datastore
 import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
+import androidx.datastore.preferences.core.booleanPreferencesKey
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.intPreferencesKey
 import androidx.datastore.preferences.core.stringPreferencesKey
@@ -20,6 +21,7 @@ class NkDataStore @Inject constructor(
     val lastVisitedRouteFlow: Flow<String?> = context.dataStore.data.map { it[LAST_VISITED_ROUTE] }
     val languageFlow: Flow<String?> = context.dataStore.data.map { it[LANGUAGE] }
     val versionNameFlow: Flow<String?> = context.dataStore.data.map { it[VERSION_NAME] }
+    val hasMuseumGuideShown: Flow<Boolean> = context.dataStore.data.map { it[HAS_MUSEUM_GUIDE_SHOWN] ?: false }
 
     suspend fun setActiveUserId(id: Int) {
         context.dataStore.edit {
@@ -45,10 +47,17 @@ class NkDataStore @Inject constructor(
         }
     }
 
+    suspend fun setHasMuseumGuideShown(flag: Boolean) {
+        context.dataStore.edit {
+            it[HAS_MUSEUM_GUIDE_SHOWN] = flag
+        }
+    }
+
     companion object {
         val ACTIVE_USER_ID = intPreferencesKey("active_user_id")
         val LAST_VISITED_ROUTE = stringPreferencesKey("last_visited_route")
         val LANGUAGE = stringPreferencesKey("language")
         val VERSION_NAME = stringPreferencesKey("version_name")
+        val HAS_MUSEUM_GUIDE_SHOWN = booleanPreferencesKey("has_museum_guide_shown")
     }
 }
