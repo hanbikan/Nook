@@ -9,14 +9,12 @@ const val profileScreenRoute = "profile_screen_route"
 
 fun NavGraphBuilder.profileScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
 ) {
     composable(
         route = profileScreenRoute,
     ) {
         ProfileScreen(
             navigateToAddUser = navigateToAddUser,
-            navigateToPhone = navigateToPhone,
         )
     }
 }

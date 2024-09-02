@@ -41,7 +41,6 @@ import com.hanbikan.nook.core.ui.WelcomeText
 @Composable
 fun TutorialScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
     navigateToTodo: () -> Unit,
     viewModel: TutorialViewModel = hiltViewModel(),
 ) {
@@ -64,9 +63,6 @@ fun TutorialScreen(
             horizontalAlignment = Alignment.CenterHorizontally,
         ) {
             NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
-                ),
                 rightAppBarIcons = listOf(
                     AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
@@ -208,5 +204,5 @@ fun TutorialScreenContents(
 @Composable
 @Preview
 fun TutorialScreenPreview() {
-    TutorialScreen({}, {}, {})
+    TutorialScreen({}, {})
 }

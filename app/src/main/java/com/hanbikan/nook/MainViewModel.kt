@@ -3,7 +3,9 @@ package com.hanbikan.nook
 import android.content.Context
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
+import com.hanbikan.nook.core.domain.repository.UserRepository
 import com.hanbikan.nook.core.domain.usecase.UpdateUserDataUseCase
 import dagger.hilt.android.lifecycle.HiltViewModel
 import dagger.hilt.android.qualifiers.ApplicationContext
@@ -20,19 +22,20 @@ import javax.inject.Inject
 class MainViewModel @Inject constructor(
     private val appStateRepository: AppStateRepository,
     private val updateUserDataUseCase: UpdateUserDataUseCase,
+    private val userRepository: UserRepository,
     @ApplicationContext private val context: Context,
 ): ViewModel() {
 
     private val _isReady: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isReady = _isReady.asStateFlow()
 
-    private val _lastVisitedRoute: MutableStateFlow<String?> = MutableStateFlow(null)
-    val lastVisitedRoute = _lastVisitedRoute.asStateFlow()
+    private val _users: MutableStateFlow<List<User>> = MutableStateFlow(listOf())
+    val users = _users.asStateFlow()
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
             listOf(
-                async { loadLastVisitedRoute() },
+                async { loadAllUsers() },
                 async { updateUserIfVersionHasChanged() },
             ).awaitAll()
 
@@ -53,8 +56,8 @@ class MainViewModel @Inject constructor(
         }
     }
 
-    private suspend fun loadLastVisitedRoute() {
-        _lastVisitedRoute.value = appStateRepository.getLastVisitedRoute().first()
+    private suspend fun loadAllUsers() {
+        _users.value = userRepository.getAllUsers().first()
     }
 
     private suspend fun updateUserIfVersionHasChanged() {

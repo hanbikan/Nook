@@ -35,17 +35,17 @@ import com.hanbikan.nook.core.designsystem.component.FadeAnimatedVisibility
 import com.hanbikan.nook.core.designsystem.component.NkDialog
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
+import com.hanbikan.nook.core.designsystem.component.SwipeAction
+import com.hanbikan.nook.core.designsystem.component.SwipeActions
 import com.hanbikan.nook.core.designsystem.component.TitleTextWithSpacer
+import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.Task
-import com.hanbikan.nook.core.ui.ProgressCard
-import com.hanbikan.nook.core.ui.TaskCard
-import com.hanbikan.nook.core.designsystem.component.SwipeAction
-import com.hanbikan.nook.core.designsystem.component.SwipeActions
-import com.hanbikan.nook.core.designsystem.getAlphaByEnabled
 import com.hanbikan.nook.core.domain.model.common.Detail
 import com.hanbikan.nook.core.ui.DetailDialog
+import com.hanbikan.nook.core.ui.ProgressCard
+import com.hanbikan.nook.core.ui.TaskCard
 import com.hanbikan.nook.core.ui.UserDialog
 import com.hanbikan.nook.core.ui.WelcomeText
 import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialog
@@ -54,7 +54,6 @@ import com.hanbikan.nook.feature.todo.component.AddOrUpdateTaskDialogStatus
 @Composable
 fun TodoScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
     viewModel: TodoViewModel = hiltViewModel(),
 ) {
     val addOrUpdateTaskDialogStatus = viewModel.addOrUpdateTaskDialogStatus.collectAsStateWithLifecycle().value
@@ -72,9 +71,6 @@ fun TodoScreen(
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
-                ),
                 rightAppBarIcons = listOf(
                     AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
@@ -255,5 +251,5 @@ fun TodoScreenEmpty() {
 @Preview
 @Composable
 fun TodoScreenPreview() {
-    TodoScreen({}, {})
+    TodoScreen({})
 }

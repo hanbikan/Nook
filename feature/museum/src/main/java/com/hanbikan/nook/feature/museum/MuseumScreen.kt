@@ -47,7 +47,6 @@ import com.hanbikan.nook.feature.museum.model.CollectibleSequence
 @Composable
 fun MuseumScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
     navigateToMonthlyCollectible: (CollectibleSequence) -> Unit,
     navigateToRegisterCollectible: () -> Unit,
     viewModel: MuseumViewModel = hiltViewModel(),
@@ -83,9 +82,6 @@ fun MuseumScreen(
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
-                ),
                 rightAppBarIcons = listOf(
                     AppBarIcon(
                         imageVector = ImageVector.vectorResource(R.drawable.baseline_app_registration_24),

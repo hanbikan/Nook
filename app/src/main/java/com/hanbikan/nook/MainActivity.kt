@@ -14,6 +14,7 @@ import androidx.compose.ui.Modifier
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.feature.tutorial.navigation.welcomeScreenRoute
+import com.hanbikan.nook.navigation.mainScreenRoute
 import com.hanbikan.nook.ui.NkApp
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -30,10 +31,16 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             NkTheme {
-                val lastVisitedRoute = viewModel.lastVisitedRoute.collectAsStateWithLifecycle().value
                 val isReady = viewModel.isReady.collectAsStateWithLifecycle().value
+                val users = viewModel.users.collectAsStateWithLifecycle().value
                 if (isReady) {
-                    NkApp(startDestination = lastVisitedRoute ?: welcomeScreenRoute)
+                    NkApp(
+                        startDestination = if (users.isEmpty()) {
+                            welcomeScreenRoute
+                        } else {
+                            mainScreenRoute
+                        }
+                    )
                 } else {
                     Column(
                         modifier = Modifier

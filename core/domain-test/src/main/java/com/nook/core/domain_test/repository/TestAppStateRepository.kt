@@ -2,7 +2,6 @@ package com.nook.core.domain_test.repository
 
 import com.hanbikan.nook.core.domain.repository.AppStateRepository
 import com.nook.core.domain_test.data.activeUserIdTestData
-import com.nook.core.domain_test.data.lastVisitedRouteTestData
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flowOf
 
@@ -13,10 +12,6 @@ class TestAppStateRepository : AppStateRepository {
         return flowOf(activeUserIdTestData)
     }
 
-    override fun getLastVisitedRoute(): Flow<String?> {
-        return flowOf(lastVisitedRouteTestData)
-    }
-
     override fun getLanguage(): Flow<String?> {
         return flowOf("")
     }
@@ -25,12 +20,12 @@ class TestAppStateRepository : AppStateRepository {
         return flowOf("")
     }
 
-    override suspend fun setActiveUserId(id: Int) {
-        activeUserIdTestData = id
+    override fun getHasMuseumGuideShown(): Flow<Boolean> {
+        return flowOf(false)
     }
 
-    override suspend fun setLastVisitedRoute(route: String) {
-        lastVisitedRouteTestData = route
+    override suspend fun setActiveUserId(id: Int) {
+        activeUserIdTestData = id
     }
 
     override suspend fun setLanguage(language: String) {
@@ -38,6 +33,10 @@ class TestAppStateRepository : AppStateRepository {
     }
 
     override suspend fun setVersionName(versionName: String) {
+
+    }
+
+    override suspend fun setHasMuseumGuideShown(flag: Boolean) {
 
     }
 }

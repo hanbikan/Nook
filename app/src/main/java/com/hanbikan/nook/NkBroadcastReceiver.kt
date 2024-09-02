@@ -1,4 +1,4 @@
-package com.hanbikan.nook.feature.phone
+package com.hanbikan.nook
 
 import android.content.BroadcastReceiver
 import android.content.Context

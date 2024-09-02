@@ -34,7 +34,6 @@ android {
 }
 
 dependencies {
-    implementation(project(mapOf("path" to ":feature:phone")))
     implementation(project(mapOf("path" to ":feature:profile")))
     implementation(project(mapOf("path" to ":feature:todo")))
     implementation(project(mapOf("path" to ":feature:tutorial")))

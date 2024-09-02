@@ -44,7 +44,7 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun AddUserScreen(
     navigateUp: () -> Unit,
-    navigateToTutorial: () -> Unit,
+    navigateToMain: () -> Unit,
     viewModel: AddUserViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -76,7 +76,7 @@ fun AddUserScreen(
                 onClickAddButton = {
                     viewModel.setIsLoading(true)
                     viewModel.addUser {
-                        navigateToTutorial()
+                        navigateToMain()
                     }
                 },
                 isLoading = isLoading,

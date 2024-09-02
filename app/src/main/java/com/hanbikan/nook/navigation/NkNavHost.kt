@@ -2,8 +2,6 @@ package com.hanbikan.nook.navigation
 
 import androidx.compose.runtime.Composable
 import androidx.navigation.compose.NavHost
-import com.hanbikan.nook.feature.phone.navigation.phoneGraph
-import com.hanbikan.nook.feature.phone.navigation.phoneGraphRoute
 
 @Composable
 fun NkNavHost(
@@ -11,9 +9,9 @@ fun NkNavHost(
 ) {
     NavHost(
         navController = appState.navController,
-        startDestination = phoneGraphRoute,
+        startDestination = mainGraphRoute,
     ) {
-        phoneGraph(
+        mainGraph(
             navController = appState.navController,
             startDestination = appState.startDestination,
         )

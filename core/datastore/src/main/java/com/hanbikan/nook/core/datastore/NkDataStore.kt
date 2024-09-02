@@ -18,7 +18,6 @@ class NkDataStore @Inject constructor(
     private val context: Context,
 ) {
     val activeUserIdFlow: Flow<Int?> = context.dataStore.data.map { it[ACTIVE_USER_ID] }
-    val lastVisitedRouteFlow: Flow<String?> = context.dataStore.data.map { it[LAST_VISITED_ROUTE] }
     val languageFlow: Flow<String?> = context.dataStore.data.map { it[LANGUAGE] }
     val versionNameFlow: Flow<String?> = context.dataStore.data.map { it[VERSION_NAME] }
     val hasMuseumGuideShown: Flow<Boolean> = context.dataStore.data.map { it[HAS_MUSEUM_GUIDE_SHOWN] ?: false }
@@ -26,12 +25,6 @@ class NkDataStore @Inject constructor(
     suspend fun setActiveUserId(id: Int) {
         context.dataStore.edit {
             it[ACTIVE_USER_ID] = id
-        }
-    }
-
-    suspend fun setLastVisitedRoute(route: String) {
-        context.dataStore.edit {
-            it[LAST_VISITED_ROUTE] = route
         }
     }
 
@@ -55,7 +48,6 @@ class NkDataStore @Inject constructor(
 
     companion object {
         val ACTIVE_USER_ID = intPreferencesKey("active_user_id")
-        val LAST_VISITED_ROUTE = stringPreferencesKey("last_visited_route")
         val LANGUAGE = stringPreferencesKey("language")
         val VERSION_NAME = stringPreferencesKey("version_name")
         val HAS_MUSEUM_GUIDE_SHOWN = booleanPreferencesKey("has_museum_guide_shown")

@@ -96,10 +96,6 @@ class TutorialViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
-            appStateRepository.setLastVisitedRoute(tutorialScreenRoute)
-        }
-
-        viewModelScope.launch(Dispatchers.IO) {
             tutorialTaskList.collectLatest { tutorialTaskList ->
                 if (tutorialTaskList.all { it.isDone }) {
                     executeIfBothNonNull(activeUser.value, tutorialDayRange.value) { activeUser, tutorialDayRange ->

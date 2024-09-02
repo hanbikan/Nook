@@ -9,14 +9,12 @@ const val todoScreenRoute = "todo_screen_route"
 
 fun NavGraphBuilder.todoScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
 ) {
     composable(
         route = todoScreenRoute,
     ) {
         TodoScreen(
             navigateToAddUser = navigateToAddUser,
-            navigateToPhone = navigateToPhone,
         )
     }
 }

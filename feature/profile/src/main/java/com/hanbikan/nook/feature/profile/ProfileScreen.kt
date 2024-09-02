@@ -41,7 +41,6 @@ import kotlinx.coroutines.flow.collectLatest
 @Composable
 fun ProfileScreen(
     navigateToAddUser: () -> Unit,
-    navigateToPhone: () -> Unit,
     viewModel: ProfileViewModel = hiltViewModel(),
 ) {
     val context = LocalContext.current
@@ -68,9 +67,6 @@ fun ProfileScreen(
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.appListAppBarIcon(onClick = navigateToPhone)
-                ),
                 rightAppBarIcons = listOf(
                     AppBarIcon.userDialogAppBarIcon(onClick = viewModel::switchUserDialog)
                 ),
@@ -172,5 +168,5 @@ fun ProfileScreen(
 @Composable
 @Preview
 fun ProfileScreenPreview() {
-    ProfileScreen(navigateToAddUser = { /*TODO*/ }, navigateToPhone = { /*TODO*/ })
+    ProfileScreen(navigateToAddUser = {})
 }

@@ -5,8 +5,6 @@ import kotlinx.coroutines.flow.Flow
 interface AppStateRepository {
     fun getActiveUserId(): Flow<Int?>
 
-    fun getLastVisitedRoute(): Flow<String?>
-
     fun getLanguage(): Flow<String?>
 
     fun getVersionName(): Flow<String?>
@@ -14,8 +12,6 @@ interface AppStateRepository {
     fun getHasMuseumGuideShown(): Flow<Boolean>
 
     suspend fun setActiveUserId(id: Int)
-
-    suspend fun setLastVisitedRoute(route: String)
 
     suspend fun setLanguage(language: String)
 

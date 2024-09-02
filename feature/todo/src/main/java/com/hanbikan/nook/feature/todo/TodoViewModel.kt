@@ -90,12 +90,6 @@ class TodoViewModel @Inject constructor(
     private val _detailsToShow: MutableStateFlow<List<Detail>> = MutableStateFlow(listOf())
     val detailsToShow = _detailsToShow.asStateFlow()
 
-    init {
-        viewModelScope.launch(Dispatchers.IO) {
-            appStateRepository.setLastVisitedRoute(todoScreenRoute)
-        }
-    }
-
     fun addTask(name: String, isDaily: Boolean, isVisible: Boolean) {
         if (name.isEmpty()) return
 
