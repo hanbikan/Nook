@@ -39,4 +39,12 @@ class TestAppStateRepository : AppStateRepository {
     override suspend fun setHasMuseumGuideShown(flag: Boolean) {
 
     }
+
+    override fun getTodoGraphRoute(): Flow<String?> {
+        return flowOf("")
+    }
+
+    override suspend fun setTodoGraphRoute(route: String) {
+
+    }
 }

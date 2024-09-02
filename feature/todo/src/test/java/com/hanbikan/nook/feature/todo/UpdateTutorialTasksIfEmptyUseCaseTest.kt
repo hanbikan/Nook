@@ -1,4 +1,4 @@
-package com.hanbikan.nook.feature.tutorial
+package com.hanbikan.nook.feature.todo
 
 import android.content.Context
 import com.hanbikan.nook.core.domain.repository.TutorialTaskRepository
@@ -35,7 +35,7 @@ class UpdateTutorialTasksIfEmptyUseCaseTest {
         }
 
         testTutorialTaskRepository = TestTutorialTaskRepository()
-        useCase = com.hanbikan.nook.feature.todo.usecase.UpdateTutorialTasksIfEmptyUseCaseImpl(
+        useCase = UpdateTutorialTasksIfEmptyUseCaseImpl(
             testTutorialTaskRepository,
             context
         )
