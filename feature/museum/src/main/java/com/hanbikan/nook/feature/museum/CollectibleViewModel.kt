@@ -118,9 +118,6 @@ class CollectibleViewModel @Inject constructor(
     private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
     val collectibleForCollectDialog = _collectibleForCollectDialog.asStateFlow()
 
-    private val _isInfoDialogShown: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isInfoDialogShown = _isInfoDialogShown
-
 
     private val handler: CoroutineExceptionHandler =
         CoroutineExceptionHandler { _, _ ->
@@ -175,10 +172,6 @@ class CollectibleViewModel @Inject constructor(
 
     fun onDismissCollectDialog() {
         _collectibleForCollectDialog.value = null
-    }
-
-    fun switchIsInfoDialogShown() {
-        _isInfoDialogShown.value = !isInfoDialogShown.value
     }
 
     fun switchIsHuntingMode() {

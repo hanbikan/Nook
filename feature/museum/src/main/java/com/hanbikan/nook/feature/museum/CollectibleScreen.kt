@@ -97,7 +97,6 @@ fun CollectibleScreen(
 
     val collectibleForDetailCollectibleDialog = viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
     val collectibleForCollectDialog = viewModel.collectibleForCollectDialog.collectAsStateWithLifecycle().value
-    val isInfoDialogShown = viewModel.isInfoDialogShown.collectAsStateWithLifecycle().value
 
     Box {
         Column(modifier = Modifier.fillMaxSize()) {
@@ -163,14 +162,6 @@ fun CollectibleScreen(
         )
 
         NkDialog(
-            visible = isInfoDialogShown,
-            description = stringResource(id = R.string.collectible_screen_info),
-            onDismissRequest = viewModel::switchIsInfoDialogShown,
-            onConfirmation = viewModel::switchIsInfoDialogShown,
-            hasOnlyConfirmationButton = true
-        )
-
-        NkDialog(
             visible = collectibleForCollectDialog != null,
             description = stringResource(id = R.string.collect_item, collectibleForCollectDialog?.name?:""),
             onDismissRequest = viewModel::onDismissCollectDialog,
@@ -207,13 +198,6 @@ private fun CollectibleScreenTopAppBar(
             }
         )
     }
-    rightAppBarIcons.add(
-        AppBarIcon(
-            imageVector = ImageVector.vectorResource(id = R.drawable.baseline_info_24),
-            contentDescription = stringResource(id = R.string.info),
-            onClick = viewModel::switchIsInfoDialogShown
-        )
-    )
     rightAppBarIcons.add(
         AppBarIcon(
             imageVector = ImageVector.vectorResource(id = R.drawable.baseline_sort_24),
