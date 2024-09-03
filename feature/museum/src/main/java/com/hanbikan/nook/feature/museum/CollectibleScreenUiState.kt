@@ -36,7 +36,12 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
             }
         }
 
-        class HourView(collectibleList: List<Collectible>, month: Int, isNorth: Boolean) : MonthlyView(month, isNorth) {
+        class HourView(
+            collectibleList: List<Collectible>,
+            month: Int,
+            isNorth: Boolean,
+            private val minuteOffset: Int
+        ) : MonthlyView(month, isNorth) {
             val startHourToCollectibleListForMonth: Map<Int, List<Collectible>> =
                 getStartHourToCollectibleListForMonth(collectibleList, month)
 
@@ -51,7 +56,7 @@ sealed class CollectibleScreenUiState(val chipIndex: Int?) {
 
             fun isStartHourCurrentHourRange(startHour: Int): Boolean {
                 val endHour = getEndHourByStartHour(startHour)
-                val currentHour = getCurrentHour()
+                val currentHour = getCurrentHour(minuteOffset)
                 return currentHour in startHour until endHour
             }
 

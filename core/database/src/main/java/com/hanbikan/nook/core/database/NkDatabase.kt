@@ -7,8 +7,6 @@ import androidx.room.RenameColumn
 import androidx.room.RoomDatabase
 import androidx.room.TypeConverters
 import androidx.room.migration.AutoMigrationSpec
-import androidx.room.migration.Migration
-import androidx.sqlite.db.SupportSQLiteDatabase
 import com.hanbikan.nook.core.database.dao.CollectionDao
 import com.hanbikan.nook.core.database.dao.TaskDao
 import com.hanbikan.nook.core.database.dao.TutorialTaskDao
@@ -21,7 +19,7 @@ import com.hanbikan.nook.core.database.entity.TutorialTaskEntity
 import com.hanbikan.nook.core.database.entity.UserEntity
 
 @Database(
-    version = 22,
+    version = 23,
     entities = [
         TaskEntity::class,
         UserEntity::class,
@@ -52,6 +50,7 @@ import com.hanbikan.nook.core.database.entity.UserEntity
         AutoMigration (from = 19, to = 20),
         AutoMigration (from = 20, to = 21, spec = NkDatabase.AutoMigration_20_21::class),
         AutoMigration (from = 21, to = 22),
+        AutoMigration (from = 22, to = 23),
     ],
     exportSchema = true
 )

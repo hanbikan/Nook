@@ -67,6 +67,7 @@ class AddUserViewModel @Inject constructor(
                 name = name.value,
                 islandName = islandName.value,
                 isNorth = isNorth.value,
+                minuteOffset = 0,
             )
             addUserUseCase(user)
 

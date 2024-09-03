@@ -151,17 +151,26 @@ class MuseumViewModel @Inject constructor(
         }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
-    // 이번 달 미수집
-    val collectiblesForMonth: StateFlow<List<Collectible>> =
+    // 이번 달 컬렉션
+    private val collectiblesForMonth: StateFlow<List<Collectible>> =
         combine(fishes, bugs, seaCreatures) { fishes, bugs, seaCreatures ->
             val activeUser = activeUser.value
             if (fishes.isNotEmpty() && bugs.isNotEmpty() && seaCreatures.isNotEmpty() && activeUser != null) {
                 withContext(Dispatchers.IO) {
                     val fishesForMonth =
-                        fishes.filterForMonth(getCurrentMonth(), activeUser.isNorth)
-                    val bugsForMonth = bugs.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                        fishes.filterForMonth(
+                            getCurrentMonth(activeUser.minuteOffset),
+                            activeUser.isNorth
+                        )
+                    val bugsForMonth = bugs.filterForMonth(
+                        getCurrentMonth(activeUser.minuteOffset),
+                        activeUser.isNorth
+                    )
                     val seaCreaturesForMonth =
-                        seaCreatures.filterForMonth(getCurrentMonth(), activeUser.isNorth)
+                        seaCreatures.filterForMonth(
+                            getCurrentMonth(activeUser.minuteOffset),
+                            activeUser.isNorth
+                        )
                     fishesForMonth + bugsForMonth + seaCreaturesForMonth
                 }
             } else {
@@ -185,7 +194,14 @@ class MuseumViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), null)
 
     // loading
-    val isLoading: StateFlow<Boolean> = combine(overallProgress, currentlyCollectibleBugs, currentlyCollectibleFishes, currentlyCollectibleSeaCreature, collectiblesForMonth, uncollectedCountForMonth) { items ->
+    val isLoading: StateFlow<Boolean> = combine(
+        overallProgress,
+        currentlyCollectibleBugs,
+        currentlyCollectibleFishes,
+        currentlyCollectibleSeaCreature,
+        collectiblesForMonth,
+        uncollectedCountForMonth
+    ) { items ->
         if (items.all { it != null }) {
             delay(150)
             false
@@ -195,10 +211,12 @@ class MuseumViewModel @Inject constructor(
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
     // Dialogs
-    private val _collectibleForDetailCollectibleDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    private val _collectibleForDetailCollectibleDialog: MutableStateFlow<Collectible?> =
+        MutableStateFlow(null)
     val collectibleForDetailCollectibleDialog = _collectibleForDetailCollectibleDialog.asStateFlow()
 
-    private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> = MutableStateFlow(null)
+    private val _collectibleForCollectDialog: MutableStateFlow<Collectible?> =
+        MutableStateFlow(null)
     val collectibleForCollectDialog = _collectibleForCollectDialog.asStateFlow()
 
     fun onClickCollectibleItem(collectible: Collectible) {
@@ -237,7 +255,14 @@ class MuseumViewModel @Inject constructor(
     private fun filterCurrentlyCollectible(collectibles: List<Collectible>): List<Collectible> {
         val activeUser = activeUser.value
         return if (activeUser != null) {
-            collectibles.filter { if (it is Monthly) it.isCurrentlyCollectible(activeUser.isNorth) else false }
+            collectibles.filter {
+                if (it is Monthly) it.isCurrentlyCollectible(
+                    activeUser.isNorth,
+                    activeUser.minuteOffset
+                ) else {
+                    false
+                }
+            }
         } else {
             listOf()
         }

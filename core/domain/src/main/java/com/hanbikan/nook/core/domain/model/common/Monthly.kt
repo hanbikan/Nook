@@ -20,9 +20,9 @@ interface Monthly {
         return monthToTimes.value.containsKey(month) && monthToTimes.getTimesOrNull(month) != NOT_AVAILABLE
     }
 
-    fun isCurrentlyCollectible(isNorth: Boolean): Boolean {
-        val currentMonth = getCurrentMonth()
-        val currentHour = getCurrentHour()
+    fun isCurrentlyCollectible(isNorth: Boolean, minuteOffset: Int): Boolean {
+        val currentMonth = getCurrentMonth(minuteOffset)
+        val currentHour = getCurrentHour(minuteOffset)
         val monthToTimes = getCurrentMonthToTimes(isNorth)
         val times = monthToTimes.getTimesOrNull(currentMonth) ?: return false
         return currentHour in times.parseTimeRange()

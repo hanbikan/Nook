@@ -4,9 +4,9 @@ import com.hanbikan.nook.core.database.entity.UserEntity
 import com.hanbikan.nook.core.domain.model.User
 
 fun UserEntity.toDomain(): User {
-    return User(id, name, islandName, tutorialDay, isNorth)
+    return User(id, name, islandName, tutorialDay, isNorth, minuteOffset)
 }
 
 fun User.toData(): UserEntity {
-    return UserEntity(id, name, islandName, tutorialDay, isNorth)
+    return UserEntity(id, name, islandName, tutorialDay, isNorth, minuteOffset)
 }

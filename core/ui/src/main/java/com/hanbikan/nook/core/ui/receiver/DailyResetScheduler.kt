@@ -22,7 +22,6 @@ class DailyResetScheduler {
                 PendingIntent.FLAG_CANCEL_CURRENT or PendingIntent.FLAG_IMMUTABLE
             )
 
-            // TODO: 타임슬립 유저를 위한 데일리 리셋 시간 변경
             val calendar = Calendar.getInstance().apply {
                 timeInMillis = System.currentTimeMillis()
                 set(Calendar.HOUR_OF_DAY, 5)

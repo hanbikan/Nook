@@ -16,12 +16,18 @@ fun <T1, T2> Map<out T1, T2>.forEachIndexed(action: (Int, Pair<T1, T2>) -> Unit)
     }
 }
 
-fun getCurrentMonth(): Int {
-    val calendar: Calendar = Calendar.getInstance()
+fun getCurrentMonth(minuteOffset: Int): Int {
+    val calendar = getCalendar(minuteOffset)
     return calendar.get(Calendar.MONTH) + 1
 }
 
-fun getCurrentHour(): Int {
-    val calendar: Calendar = Calendar.getInstance()
+fun getCurrentHour(minuteOffset: Int): Int {
+    val calendar = getCalendar(minuteOffset)
     return calendar.get(Calendar.HOUR_OF_DAY)
+}
+
+private fun getCalendar(minuteOffset: Int): Calendar {
+    val calendar: Calendar = Calendar.getInstance()
+    calendar.add(Calendar.MINUTE, minuteOffset)
+    return calendar
 }

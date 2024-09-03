@@ -20,6 +20,8 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.mapLatest
@@ -75,7 +77,7 @@ class CollectibleViewModel @Inject constructor(
     val isNorth: StateFlow<Boolean> = activeUser.mapLatest { it?.isNorth ?: true }
         .stateIn(viewModelScope, SharingStarted.WhileSubscribed(), true)
 
-    private val month: MutableStateFlow<Int> = MutableStateFlow(getCurrentMonth())
+    private val month: MutableStateFlow<Int> = MutableStateFlow(0) // init에서 초기화
 
     private val viewType: MutableStateFlow<CollectibleScreenViewType> =
         MutableStateFlow(CollectibleScreenViewType.OVERALL)
@@ -103,7 +105,7 @@ class CollectibleViewModel @Inject constructor(
             CollectibleScreenViewType.MONTHLY_HOUR -> {
                 _isHuntingMode.value = true
                 _sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
-                CollectibleScreenUiState.MonthlyView.HourView(collectibleList, month, isNorth)
+                CollectibleScreenUiState.MonthlyView.HourView(collectibleList, month, isNorth, activeUser.value?.minuteOffset ?: 0)
             }
         }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(), CollectibleScreenUiState.Loading)
@@ -124,6 +126,13 @@ class CollectibleViewModel @Inject constructor(
         CoroutineExceptionHandler { _, _ ->
             // TODO: show error message
         }
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            val user = activeUser.filterNotNull().first()
+            month.value = getCurrentMonth(user.minuteOffset)
+        }
+    }
 
     fun onClickViewTypeChip(chipIndex: Int) {
         viewType.value = if (chipIndex == 0) {
