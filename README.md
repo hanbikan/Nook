@@ -27,7 +27,8 @@ Nook demonstrates Compose android app with Hilt, Coroutines, Flow, Room based on
 ## Architecture & Multi Module
 Nook follows the Clean Architecture and completely modularizes each feature and layer.
 
-<img width="813" alt="image" src="https://github.com/hanbikan/Nook/assets/58168528/55cc49be-256c-492f-b092-b2daad954169">
+<img width="775" alt="image" src="https://github.com/user-attachments/assets/d223cfb0-3643-4cea-8593-59256f13e1c5">
+
 
 ## Articles(KR)
 - [AnimatedVisibility 오버랩 이슈 해결](https://rccode.tistory.com/379)
