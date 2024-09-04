@@ -13,21 +13,34 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Edit
+import androidx.compose.material3.DatePicker
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.TimeInput
+import androidx.compose.material3.TimePickerDefaults
+import androidx.compose.material3.rememberDatePickerState
+import androidx.compose.material3.rememberTimePickerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.intl.Locale
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import com.hanbikan.nook.core.common.format
 import com.hanbikan.nook.core.designsystem.component.AppBarIcon
 import com.hanbikan.nook.core.designsystem.component.ChipGroup
 import com.hanbikan.nook.core.designsystem.component.ChipItem
 import com.hanbikan.nook.core.designsystem.component.NkChipGroup
 import com.hanbikan.nook.core.designsystem.component.NkDialogWithTextField
+import com.hanbikan.nook.core.designsystem.component.NkFullDialog
 import com.hanbikan.nook.core.designsystem.component.NkSmallButton
 import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
@@ -37,6 +50,7 @@ import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.User
 import com.hanbikan.nook.core.ui.UserDialog
 import kotlinx.coroutines.flow.collectLatest
+import java.util.Calendar
 
 @Composable
 fun ProfileScreen(
@@ -46,6 +60,8 @@ fun ProfileScreen(
     val context = LocalContext.current
 
     val isUserDialogShown = viewModel.isUserDialogShown.collectAsStateWithLifecycle().value
+    val isDateTimePickerDialogShown = viewModel.isDateTimePickerDialogShown.collectAsStateWithLifecycle().value
+    val islandTime = viewModel.islandTime.collectAsStateWithLifecycle().value
     val isUpdateNameDialogShown =
         viewModel.isUpdateNameDialogShown.collectAsStateWithLifecycle().value
     val isUpdateIslandNameDialogShown =
@@ -126,6 +142,18 @@ fun ProfileScreen(
                     }
                 )
 
+                // 타임슬립
+                TitleTextWithSpacer(title = stringResource(id = R.string.island_time)) {
+                    NkSmallButton(
+                        onClick = viewModel::switchDateTimePickerDialog,
+                        imageVector = Icons.Default.Edit,
+                    )
+                }
+                NkText(
+                    text = islandTime?.format(Locale.current.language) ?: "",
+                    style = NkTheme.typography.headlineMedium,
+                )
+
                 // 유저 데이터 업데이트
                 Spacer(modifier = Modifier.height(Dimens.SpacingExtraLarge))
                 NkText(
@@ -161,6 +189,71 @@ fun ProfileScreen(
             onDismissRequest = viewModel::switchUpdateIslandNameDialog,
             onConfirmation = viewModel::onConfirmUpdateIslandName,
             maxInputLength = User.ISLAND_NAME_MAX_LENGTH,
+        )
+
+        DateTimePickerDialog(
+            visible = isDateTimePickerDialogShown,
+            onDateTimeSelected = viewModel::onDateTimeSelected,
+            onDismiss = viewModel::switchDateTimePickerDialog,
+        )
+    }
+}
+
+@OptIn(ExperimentalMaterial3Api::class)
+@Composable
+fun DateTimePickerDialog(
+    visible: Boolean,
+    onDateTimeSelected: (Calendar) -> Unit,
+    onDismiss: () -> Unit
+) {
+    if (!visible) return
+
+    val selectedCalendar = remember { Calendar.getInstance() }
+
+    var showDatePicker by remember { mutableStateOf(true) }
+    var showTimePicker by remember { mutableStateOf(false) }
+
+    val datePickerState = rememberDatePickerState()
+    val timePickerState = rememberTimePickerState(is24Hour = true)
+
+    // 날짜 선택 다이얼로그
+    NkFullDialog(
+        visible = showDatePicker,
+        onDismissRequest = onDismiss,
+        onConfirmation = {
+            selectedCalendar.timeInMillis = datePickerState.selectedDateMillis ?: 0
+            showDatePicker = false
+            showTimePicker = true
+        }
+    ) {
+        DatePicker(
+            state = datePickerState,
+        )
+    }
+
+    // 시간 선택 다이얼로그
+    NkFullDialog(
+        visible = showTimePicker,
+        onDismissRequest = onDismiss,
+        onConfirmation = {
+            selectedCalendar.set(Calendar.HOUR_OF_DAY, timePickerState.hour)
+            selectedCalendar.set(Calendar.MINUTE, timePickerState.minute)
+            showTimePicker = false
+            onDateTimeSelected(selectedCalendar)
+        }
+    ) {
+        NkText(
+            modifier = Modifier.fillMaxWidth(),
+            text = stringResource(id = R.string.input_hour_minute),
+            style = NkTheme.typography.titleLarge,
+        )
+        Spacer(modifier = Modifier.height(Dimens.SpacingMedium))
+        TimeInput(
+            state = timePickerState,
+            colors = TimePickerDefaults.colors(
+                timeSelectorSelectedContainerColor = NkTheme.colorScheme.secondaryContainer,
+                timeSelectorUnselectedContainerColor = NkTheme.colorScheme.secondaryContainer,
+            )
         )
     }
 }
