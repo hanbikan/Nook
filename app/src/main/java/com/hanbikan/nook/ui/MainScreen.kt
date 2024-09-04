@@ -12,6 +12,8 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
@@ -79,7 +81,10 @@ fun BottomNavigationBar(navController: NavController) {
     )
 
     NavigationBar(
-        modifier = Modifier.height(64.dp)
+        modifier = Modifier
+            .height(64.dp)
+            .shadow(8.dp, shape = RectangleShape),
+        containerColor = NkTheme.colorScheme.background,
     ) {
         val navBackStackEntry by navController.currentBackStackEntryAsState()
         val currentRoute = navBackStackEntry?.destination?.route
@@ -93,7 +98,13 @@ fun BottomNavigationBar(navController: NavController) {
                 item.route == currentRoute
             }
             NavigationBarItem(
-                icon = { Icon(item.icon(), contentDescription = null) },
+                icon = {
+                    Icon(
+                        imageVector = item.icon(),
+                        contentDescription = null,
+                        tint = NkTheme.colorScheme.primary,
+                    )
+                },
                 selected = selected,
                 onClick = {
                     navController.navigate(item.route) {
