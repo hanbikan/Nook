@@ -221,9 +221,12 @@ fun DateTimePickerDialog(
         visible = showDatePicker,
         onDismissRequest = onDismiss,
         onConfirmation = {
-            selectedCalendar.timeInMillis = datePickerState.selectedDateMillis ?: 0
-            showDatePicker = false
-            showTimePicker = true
+            val selectedDateMillis = datePickerState.selectedDateMillis
+            if (selectedDateMillis != null) {
+                selectedCalendar.timeInMillis = selectedDateMillis
+                showDatePicker = false
+                showTimePicker = true
+            }
         }
     ) {
         DatePicker(
