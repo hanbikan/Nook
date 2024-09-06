@@ -37,6 +37,8 @@ import com.hanbikan.nook.core.designsystem.component.NkText
 import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import com.hanbikan.nook.core.domain.model.Bug
+import com.hanbikan.nook.core.domain.model.Fish
 import com.hanbikan.nook.core.domain.model.common.Collectible
 import com.hanbikan.nook.core.ui.TRANSITION_DURATION
 import kotlinx.coroutines.delay
@@ -129,6 +131,14 @@ fun RegisterCollectibleItems(
         items(collectibles.chunked(5)) { collectiblesOnColumn ->
             Column {
                 collectiblesOnColumn.forEach { item ->
+                    val iconId = if (item is Bug) {
+                        R.drawable.butterfly
+                    } else if (item is Fish) {
+                        R.drawable.shark
+                    } else {
+                        R.drawable.shrimp
+                    }
+
                     Box(
                         modifier = Modifier
                             .size(ITEM_SIZE)
@@ -143,7 +153,7 @@ fun RegisterCollectibleItems(
                             )
                         } else {
                             Image(
-                                imageVector = ImageVector.vectorResource(id = R.drawable.butterfly),
+                                imageVector = ImageVector.vectorResource(id = iconId),
                                 contentDescription = null,
                                 modifier = Modifier.size(ITEM_SIZE * 0.25f),
                                 colorFilter = ColorFilter.tint(NkTheme.colorScheme.primaryContainer),
