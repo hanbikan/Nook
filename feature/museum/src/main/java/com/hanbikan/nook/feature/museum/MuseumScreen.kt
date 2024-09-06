@@ -20,6 +20,11 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.LinearProgressIndicator
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
@@ -39,7 +44,9 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.ui.TRANSITION_DURATION
 import com.hanbikan.nook.feature.museum.model.CollectibleSequence
+import kotlinx.coroutines.delay
 
 @OptIn(ExperimentalGlideComposeApi::class)
 @Composable
@@ -75,73 +82,49 @@ fun MuseumScreen(
     val overallProgress = viewModel.overallProgress.collectAsStateWithLifecycle().value
     val uncollectedCountForMonth = viewModel.uncollectedCountForMonth.collectAsStateWithLifecycle().value
 
+    var showsScreen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(TRANSITION_DURATION.toLong())
+        showsScreen = true
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            NkTopAppBar(
-                rightAppBarIcons = listOf(
-                    AppBarIcon(
-                        imageVector = ImageVector.vectorResource(R.drawable.baseline_app_registration_24),
-                        contentDescription = stringResource(id = R.string.register_collectible_items),
-                        onClick = navigateToRegisterCollectible
-                    ),
-                ),
-            )
-
-            FadeAnimatedVisibility(visible = !isLoading) {
-                bugProgress!!
-                fishProgress!!
-                seaCreaturesProgress!!
-                overallProgress!!
-                currentlyCollectibleBugs!!
-                currentlyCollectibleFishes!!
-                currentlyCollectibleSeaCreature!!
-                uncollectedCountForMonth!!
-                uncollectedForMonth!!
-
-                Column(
-                    modifier = Modifier
-                        .padding(horizontal = Dimens.SideMargin)
-                        .verticalScroll(scrollState),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium),
-                ) {
-                    // 전체 수집률
-                    NkText(
-                        text = stringResource(
-                            id = R.string.overall_progress_title,
-                            (overallProgress * 100).toInt()
+        FadeAnimatedVisibility(visible = showsScreen) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                NkTopAppBar(
+                    rightAppBarIcons = listOf(
+                        AppBarIcon(
+                            imageVector = ImageVector.vectorResource(R.drawable.baseline_app_registration_24),
+                            contentDescription = stringResource(id = R.string.register_collectible_items),
+                            onClick = navigateToRegisterCollectible
                         ),
-                        style = NkTheme.typography.titleLarge,
-                        modifier = Modifier.clickable {
-                            Toast.makeText(
-                                context,
-                                getCollectionRateToastMessage(overallProgress, context),
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
-                    )
-                    CollectionProgress(
-                        name = stringResource(id = R.string.bug_progress),
-                        progress = bugProgress,
-                        onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG) }
-                    )
-                    CollectionProgress(
-                        name = stringResource(id = R.string.fish_progress),
-                        progress = fishProgress,
-                        onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH) }
-                    )
-                    CollectionProgress(
-                        name = stringResource(id = R.string.sea_creature_progress),
-                        progress = seaCreaturesProgress,
-                        onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE) }
-                    )
-                    Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                    ),
+                )
 
-                    // 현재 수집 가능
+                FadeAnimatedVisibility(visible = !isLoading) {
+                    bugProgress!!
+                    fishProgress!!
+                    seaCreaturesProgress!!
+                    overallProgress!!
+                    currentlyCollectibleBugs!!
+                    currentlyCollectibleFishes!!
+                    currentlyCollectibleSeaCreature!!
+                    uncollectedCountForMonth!!
+                    uncollectedForMonth!!
+
                     Column(
-                        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
+                        modifier = Modifier
+                            .padding(horizontal = Dimens.SideMargin)
+                            .verticalScroll(scrollState),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium),
                     ) {
+                        // 전체 수집률
                         NkText(
-                            text = stringResource(id = R.string.currently_collectibles),
+                            text = stringResource(
+                                id = R.string.overall_progress_title,
+                                (overallProgress * 100).toInt()
+                            ),
                             style = NkTheme.typography.titleLarge,
                             modifier = Modifier.clickable {
                                 Toast.makeText(
@@ -151,38 +134,29 @@ fun MuseumScreen(
                                 ).show()
                             }
                         )
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleBugs,
-                            isHuntingMode = true,
-                            isNorth = isNorth,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        CollectionProgress(
+                            name = stringResource(id = R.string.bug_progress),
+                            progress = bugProgress,
+                            onClick = { navigateToMonthlyCollectible(CollectibleSequence.BUG) }
                         )
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleFishes,
-                            isHuntingMode = true,
-                            isNorth = isNorth,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        CollectionProgress(
+                            name = stringResource(id = R.string.fish_progress),
+                            progress = fishProgress,
+                            onClick = { navigateToMonthlyCollectible(CollectibleSequence.FISH) }
                         )
-                        CollectiblesRow(
-                            collectibles = currentlyCollectibleSeaCreature,
-                            isHuntingMode = true,
-                            isNorth = isNorth,
-                            onClick = { viewModel.onClickCollectibleItem(it) },
-                            onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                        CollectionProgress(
+                            name = stringResource(id = R.string.sea_creature_progress),
+                            progress = seaCreaturesProgress,
+                            onClick = { navigateToMonthlyCollectible(CollectibleSequence.SEA_CREATURE) }
                         )
                         Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
-                    }
 
-                    // 이번 달 잡지 않은 아이템
-                    FadeAnimatedVisibility(visible = uncollectedForMonth.isNotEmpty()) {
-                        Column(verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)) {
+                        // 현재 수집 가능
+                        Column(
+                            verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
+                        ) {
                             NkText(
-                                text = stringResource(
-                                    id = R.string.uncollected_for_month_title,
-                                    uncollectedCountForMonth
-                                ),
+                                text = stringResource(id = R.string.currently_collectibles),
                                 style = NkTheme.typography.titleLarge,
                                 modifier = Modifier.clickable {
                                     Toast.makeText(
@@ -193,13 +167,55 @@ fun MuseumScreen(
                                 }
                             )
                             CollectiblesRow(
-                                collectibles = uncollectedForMonth,
-                                isHuntingMode = false,
+                                collectibles = currentlyCollectibleBugs,
+                                isHuntingMode = true,
+                                isNorth = isNorth,
+                                onClick = { viewModel.onClickCollectibleItem(it) },
+                                onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                            )
+                            CollectiblesRow(
+                                collectibles = currentlyCollectibleFishes,
+                                isHuntingMode = true,
+                                isNorth = isNorth,
+                                onClick = { viewModel.onClickCollectibleItem(it) },
+                                onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                            )
+                            CollectiblesRow(
+                                collectibles = currentlyCollectibleSeaCreature,
+                                isHuntingMode = true,
                                 isNorth = isNorth,
                                 onClick = { viewModel.onClickCollectibleItem(it) },
                                 onLongClick = { viewModel.onLongClickCollectibleItem(it) }
                             )
                             Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                        }
+
+                        // 이번 달 잡지 않은 아이템
+                        FadeAnimatedVisibility(visible = uncollectedForMonth.isNotEmpty()) {
+                            Column(verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)) {
+                                NkText(
+                                    text = stringResource(
+                                        id = R.string.uncollected_for_month_title,
+                                        uncollectedCountForMonth
+                                    ),
+                                    style = NkTheme.typography.titleLarge,
+                                    modifier = Modifier.clickable {
+                                        Toast.makeText(
+                                            context,
+                                            getCollectionRateToastMessage(overallProgress, context),
+                                            Toast.LENGTH_SHORT
+                                        ).show()
+                                    }
+                                )
+                                CollectiblesRow(
+                                    collectibles = uncollectedForMonth,
+                                    isHuntingMode = false,
+                                    isNorth = isNorth,
+                                    onClick = { viewModel.onClickCollectibleItem(it) },
+                                    onLongClick = { viewModel.onLongClickCollectibleItem(it) }
+                                )
+                                Spacer(modifier = Modifier.height(Dimens.SpacingSmall))
+                            }
                         }
                     }
                 }

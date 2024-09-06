@@ -15,6 +15,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
@@ -33,6 +38,8 @@ import com.hanbikan.nook.core.designsystem.component.NkTopAppBar
 import com.hanbikan.nook.core.designsystem.theme.Dimens
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
 import com.hanbikan.nook.core.domain.model.common.Collectible
+import com.hanbikan.nook.core.ui.TRANSITION_DURATION
+import kotlinx.coroutines.delay
 
 private val ITEM_SIZE = 60.dp
 
@@ -47,52 +54,60 @@ fun RegisterCollectibleScreen(
     val isLoading = viewModel.isLoading.collectAsStateWithLifecycle().value
 
     val scrollState = rememberScrollState()
+    var showsScreen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(TRANSITION_DURATION.toLong())
+        showsScreen = true
+    }
 
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .verticalScroll(scrollState)
-        ) {
-            NkTopAppBar(
-                leftAppBarIcons = listOf(
-                    AppBarIcon.backAppBarIcon(onClick = navigateUp)
-                ),
-            )
+        FadeAnimatedVisibility(visible = showsScreen) {
+            Column(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .verticalScroll(scrollState)
+            ) {
+                NkTopAppBar(
+                    leftAppBarIcons = listOf(
+                        AppBarIcon.backAppBarIcon(onClick = navigateUp)
+                    ),
+                )
 
-            FadeAnimatedVisibility(visible = !isLoading) {
-                bugs!!
-                fishes!!
-                seaCreatures!!
+                FadeAnimatedVisibility(visible = !isLoading) {
+                    bugs!!
+                    fishes!!
+                    seaCreatures!!
 
-                Column(
-                    modifier = Modifier.padding(Dimens.SideMargin),
-                    verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
-                ) {
-                    NkText(
-                        text = stringResource(id = R.string.register_collectible_title),
-                        style = NkTheme.typography.headlineLarge,
-                    )
+                    Column(
+                        modifier = Modifier.padding(Dimens.SideMargin),
+                        verticalArrangement = Arrangement.spacedBy(Dimens.SpacingMedium)
+                    ) {
+                        NkText(
+                            text = stringResource(id = R.string.register_collectible_title),
+                            style = NkTheme.typography.headlineLarge,
+                        )
 
-                    NkText(
-                        text = stringResource(id = R.string.register_collectible_description),
-                        style = NkTheme.typography.bodyLarge,
-                    )
+                        NkText(
+                            text = stringResource(id = R.string.register_collectible_description),
+                            style = NkTheme.typography.bodyLarge,
+                        )
 
-                    RegisterCollectibleItems(
-                        collectibles = bugs,
-                        onClickCollectibleItem = viewModel::onClickCollectibleItem
-                    )
+                        RegisterCollectibleItems(
+                            collectibles = bugs,
+                            onClickCollectibleItem = viewModel::onClickCollectibleItem
+                        )
 
-                    RegisterCollectibleItems(
-                        collectibles = fishes,
-                        onClickCollectibleItem = viewModel::onClickCollectibleItem
-                    )
+                        RegisterCollectibleItems(
+                            collectibles = fishes,
+                            onClickCollectibleItem = viewModel::onClickCollectibleItem
+                        )
 
-                    RegisterCollectibleItems(
-                        collectibles = seaCreatures,
-                        onClickCollectibleItem = viewModel::onClickCollectibleItem
-                    )
+                        RegisterCollectibleItems(
+                            collectibles = seaCreatures,
+                            onClickCollectibleItem = viewModel::onClickCollectibleItem
+                        )
+                    }
                 }
             }
         }

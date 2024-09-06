@@ -1,5 +1,8 @@
 package com.hanbikan.nook.ui
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material.icons.Icons
@@ -25,6 +28,7 @@ import androidx.navigation.compose.rememberNavController
 import com.hanbikan.nook.MainViewModel
 import com.hanbikan.nook.R
 import com.hanbikan.nook.core.designsystem.theme.NkTheme
+import com.hanbikan.nook.core.ui.TRANSITION_DURATION
 import com.hanbikan.nook.feature.museum.navigation.museumGraph
 import com.hanbikan.nook.feature.museum.navigation.museumGraphRoute
 import com.hanbikan.nook.feature.museum.navigation.museumRoutes
@@ -53,7 +57,11 @@ fun MainScreen(
         NavHost(
             navController = navController,
             startDestination = BottomNavItem.Todo.route,
-            modifier = Modifier.padding(innerPadding)
+            modifier = Modifier.padding(innerPadding),
+            enterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION)) },
+            exitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION)) },
+            popEnterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION)) },
+            popExitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION)) },
         ) {
             todoGraph(
                 startDestination = viewModel.todoGraphRoute.value,

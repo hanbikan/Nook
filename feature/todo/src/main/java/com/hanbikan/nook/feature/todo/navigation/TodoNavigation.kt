@@ -1,9 +1,13 @@
 package com.hanbikan.nook.feature.todo.navigation
 
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.navigation
+import com.hanbikan.nook.core.ui.TRANSITION_DURATION
 import com.hanbikan.nook.feature.todo.TodoScreen
 import com.hanbikan.nook.feature.todo.TutorialScreen
 
@@ -22,6 +26,10 @@ fun NavGraphBuilder.todoGraph(
     navigation(
         route = todoGraphRoute,
         startDestination = startDestination,
+        enterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION)) },
+        exitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION)) },
+        popEnterTransition = { fadeIn(animationSpec = tween(TRANSITION_DURATION)) },
+        popExitTransition = { fadeOut(animationSpec = tween(TRANSITION_DURATION)) },
     ) {
         composable(
             route = tutorialScreenRoute,

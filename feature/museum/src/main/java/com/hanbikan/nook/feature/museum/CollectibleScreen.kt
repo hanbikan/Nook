@@ -74,6 +74,7 @@ import com.hanbikan.nook.core.domain.model.common.LocationBased
 import com.hanbikan.nook.core.domain.model.common.Monthly
 import com.hanbikan.nook.core.domain.model.common.calculateProgress
 import com.hanbikan.nook.core.domain.model.common.convertToTimeRanges
+import com.hanbikan.nook.core.ui.TRANSITION_DURATION
 import com.hanbikan.nook.feature.museum.CollectibleScreenUiState.MonthlyView.HourView.Companion.ALL_DAY_KEY
 import com.hanbikan.nook.feature.museum.util.displayMonth
 import com.hanbikan.nook.feature.museum.util.formatTime
@@ -98,57 +99,66 @@ fun CollectibleScreen(
     val collectibleForDetailCollectibleDialog = viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
     val collectibleForCollectDialog = viewModel.collectibleForCollectDialog.collectAsStateWithLifecycle().value
 
+    var showsScreen by remember { mutableStateOf(false) }
+
+    LaunchedEffect(Unit) {
+        delay(TRANSITION_DURATION.toLong())
+        showsScreen = true
+    }
+
     Box(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier.fillMaxSize()) {
-            CollectibleScreenTopAppBar(navigateUp, viewModel, isHuntingMode, uiState)
+        FadeAnimatedVisibility(visible = showsScreen) {
+            Column(modifier = Modifier.fillMaxSize()) {
+                CollectibleScreenTopAppBar(navigateUp, viewModel, isHuntingMode, uiState)
 
-            // Contents
-            Column(
-                modifier = Modifier.fillMaxWidth()
-            ) {
-                if (uiState.chipIndex != null) {
-                    NkChipGroup(
-                        modifier = Modifier.padding(horizontal = Dimens.SideMargin),
-                        chipGroup = ChipGroup(
-                            chipItems = listOf(
-                                ChipItem(stringResource(id = R.string.overall)),
-                                ChipItem(stringResource(id = R.string.monthly))
+                // Contents
+                Column(
+                    modifier = Modifier.fillMaxWidth()
+                ) {
+                    if (uiState.chipIndex != null) {
+                        NkChipGroup(
+                            modifier = Modifier.padding(horizontal = Dimens.SideMargin),
+                            chipGroup = ChipGroup(
+                                chipItems = listOf(
+                                    ChipItem(stringResource(id = R.string.overall)),
+                                    ChipItem(stringResource(id = R.string.monthly))
+                                ),
+                                selectedIndex = uiState.chipIndex
                             ),
-                            selectedIndex = uiState.chipIndex
-                        ),
-                        isLarge = true,
-                        onClickItem = viewModel::onClickViewTypeChip,
-                    )
-                }
+                            isLarge = true,
+                            onClickItem = viewModel::onClickViewTypeChip,
+                        )
+                    }
 
-                when (uiState) {
-                    is CollectibleScreenUiState.Loading -> {
-                        Box(
-                            modifier = Modifier.fillMaxSize(),
-                            contentAlignment = Alignment.Center,
-                        ) {
-                            CircularProgressIndicator()
+                    when (uiState) {
+                        is CollectibleScreenUiState.Loading -> {
+                            Box(
+                                modifier = Modifier.fillMaxSize(),
+                                contentAlignment = Alignment.Center,
+                            ) {
+                                CircularProgressIndicator()
+                            }
                         }
-                    }
 
-                    is CollectibleScreenUiState.OverallView -> {
-                        OverallCollectibleContents(
-                            collectibles = uiState.collectibleList,
-                            onClickCollectibleItem = viewModel::onClickCollectibleItem,
-                            onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
-                            isHuntingMode = isHuntingMode,
-                            isNorth = isNorth,
-                        )
-                    }
+                        is CollectibleScreenUiState.OverallView -> {
+                            OverallCollectibleContents(
+                                collectibles = uiState.collectibleList,
+                                onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                                onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
+                                isHuntingMode = isHuntingMode,
+                                isNorth = isNorth,
+                            )
+                        }
 
-                    is CollectibleScreenUiState.MonthlyView -> {
-                        MonthlyCollectibleContents(
-                            uiState = uiState,
-                            onClickMonth = viewModel::onClickMonth,
-                            onClickCollectibleItem = viewModel::onClickCollectibleItem,
-                            onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
-                            isHuntingMode = isHuntingMode,
-                        )
+                        is CollectibleScreenUiState.MonthlyView -> {
+                            MonthlyCollectibleContents(
+                                uiState = uiState,
+                                onClickMonth = viewModel::onClickMonth,
+                                onClickCollectibleItem = viewModel::onClickCollectibleItem,
+                                onLongClickCollectibleItem = viewModel::onLongClickCollectibleItem,
+                                isHuntingMode = isHuntingMode,
+                            )
+                        }
                     }
                 }
             }
