@@ -388,6 +388,12 @@ fun CollectibleItem(
                 fontWeight = if (item.isCollected) FontWeight.Bold else FontWeight.Normal
             )
             if (isHuntingMode) {
+                NkText(
+                    text = stringResource(id = R.string.bells, item.sellNook),
+                    style = NkTheme.typography.bodySmall,
+                    fontWeight = FontWeight.Normal,
+                    maxLines = 1,
+                )
                 if (item is Monthly) {
                     val timeRanges = item.getCurrentMonthToTimes(isNorth).convertToTimeRanges()
                     val displayMonths = timeRanges.map { it.displayMonth() }.joinToString(", ")
