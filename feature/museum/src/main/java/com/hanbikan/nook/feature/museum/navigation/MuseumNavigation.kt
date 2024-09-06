@@ -75,9 +75,15 @@ fun NavController.navigateToMuseum() {
 }
 
 fun NavController.navigateToMonthlyCollectible(collectibleSequence: CollectibleSequence) {
-    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/${collectibleSequence.ordinal}")
+    navigate("$MONTHLY_COLLECTIBLE_SCREEN_ROUTE_BASE/${collectibleSequence.ordinal}") {
+        launchSingleTop = true
+        restoreState = true
+    }
 }
 
 fun NavController.navigateToRegisterCollectible() {
-    navigate(registerCollectibleScreenRoute)
+    navigate(registerCollectibleScreenRoute) {
+        launchSingleTop = true
+        restoreState = true
+    }
 }

@@ -22,6 +22,7 @@ import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -118,6 +119,9 @@ fun BottomNavigationBar(navController: NavController) {
                     navController.navigate(item.route) {
                         launchSingleTop = true
                         restoreState = true
+                        popUpTo(navController.graph.findStartDestination().id) {
+                            saveState = true // 내부 중첩 그래프 상태 유지
+                        }
                     }
                 },
                 colors = NavigationBarItemDefaults.colors(
