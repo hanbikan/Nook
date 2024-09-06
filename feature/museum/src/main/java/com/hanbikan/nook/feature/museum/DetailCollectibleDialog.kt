@@ -44,6 +44,7 @@ fun DetailCollectibleDialog(
             Column {
                 Spacer(modifier = Modifier.height(4.dp))
                 NkText(text = stringResource(id = R.string.collectible_name, collectible.name))
+                NkText(text = stringResource(id = R.string.bells_in_dialog, item.sellNook))
                 if (collectible is Monthly) {
                     NkText(text = stringResource(id = R.string.collectible_time))
                     Column {

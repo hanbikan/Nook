@@ -52,5 +52,6 @@
     <string name="register_collectible_title">Register collected critters</string>
     <string name="register_collectible_description">Open the in-game critterpedia and register the creatures you\'ve collected.</string>
     <string name="collect_item">Collect or uncollect [%s].</string>
-    <string name="bells">%dbells</string>
+    <string name="bells">%d bells</string>
+    <string name="bells_in_dialog">Price: %d bells</string>
 </resources>
