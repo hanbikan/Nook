@@ -65,6 +65,7 @@ fun DetailCollectibleDialog(
                 if (collectible is HasShadowMovement) {
                     NkText(text = stringResource(id = R.string.collectible_shadow_size, collectible.shadowMovement))
                 }
+                NkText(text = stringResource(id = R.string.total_catch, item.totalCatch))
             }
 
             NkTextButton(

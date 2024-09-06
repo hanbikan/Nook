@@ -54,4 +54,5 @@
     <string name="collect_item">[%s]를 수집 또는 수집 취소합니다.</string>
     <string name="bells">%d벨</string>
     <string name="bells_in_dialog">가격: %d벨</string>
+    <string name="total_catch">필요 채집수: %d</string>
 </resources>

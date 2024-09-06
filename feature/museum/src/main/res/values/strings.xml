@@ -54,4 +54,5 @@
     <string name="collect_item">Collect or uncollect [%s].</string>
     <string name="bells">%d bells</string>
     <string name="bells_in_dialog">Price: %d bells</string>
+    <string name="total_catch">Required catches: %d</string>
 </resources>
