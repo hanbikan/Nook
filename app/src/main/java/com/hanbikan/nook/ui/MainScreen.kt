@@ -34,9 +34,9 @@ import com.hanbikan.nook.feature.profile.navigation.profileScreen
 import com.hanbikan.nook.feature.profile.navigation.profileScreenRoute
 import com.hanbikan.nook.feature.todo.navigation.navigateToTodo
 import com.hanbikan.nook.feature.todo.navigation.navigateToTutorial
+import com.hanbikan.nook.feature.todo.navigation.todoGraph
 import com.hanbikan.nook.feature.todo.navigation.todoGraphRoute
 import com.hanbikan.nook.feature.todo.navigation.todoRoutes
-import com.hanbikan.nook.feature.todo.navigation.todoScreen
 
 @Composable
 fun MainScreen(
@@ -55,7 +55,7 @@ fun MainScreen(
             startDestination = BottomNavItem.Todo.route,
             modifier = Modifier.padding(innerPadding)
         ) {
-            todoScreen(
+            todoGraph(
                 startDestination = viewModel.todoGraphRoute.value,
                 navigateToTodo = navController::navigateToTodo,
                 navigateToTutorial = navController::navigateToTutorial,

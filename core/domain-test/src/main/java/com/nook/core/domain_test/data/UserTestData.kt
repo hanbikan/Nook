@@ -9,6 +9,7 @@ var userTestData: List<User> = listOf(
         islandName = "island0",
         tutorialDay = 0,
         isNorth = true,
+        minuteOffset = 0,
     ),
     User(
         id = 1,
@@ -16,6 +17,7 @@ var userTestData: List<User> = listOf(
         islandName = "island1",
         tutorialDay = 1,
         isNorth = true,
+        minuteOffset = 0,
     ),
     User(
         id = 2,
@@ -23,6 +25,7 @@ var userTestData: List<User> = listOf(
         islandName = "island2",
         tutorialDay = 2,
         isNorth = true,
+        minuteOffset = 0,
     ),
     User(
         id = 3,
@@ -30,5 +33,6 @@ var userTestData: List<User> = listOf(
         islandName = "island3",
         tutorialDay = 3,
         isNorth = true,
+        minuteOffset = 0,
     ),
 )

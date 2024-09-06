@@ -4,8 +4,8 @@ import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.NavType
 import androidx.navigation.compose.composable
+import androidx.navigation.compose.navigation
 import androidx.navigation.navArgument
-import androidx.navigation.navigation
 import com.hanbikan.nook.feature.museum.CollectibleScreen
 import com.hanbikan.nook.feature.museum.MuseumScreen
 import com.hanbikan.nook.feature.museum.RegisterCollectibleScreen
@@ -55,7 +55,9 @@ fun NavGraphBuilder.museumGraph(
         composable(
             route = registerCollectibleScreenRoute,
         ) {
-            RegisterCollectibleScreen(navigateUp = navigateUp)
+            RegisterCollectibleScreen(
+                navigateUp = navigateUp,
+            )
         }
     }
 }

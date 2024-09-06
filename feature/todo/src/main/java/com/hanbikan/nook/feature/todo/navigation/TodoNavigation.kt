@@ -3,7 +3,7 @@ package com.hanbikan.nook.feature.todo.navigation
 import androidx.navigation.NavController
 import androidx.navigation.NavGraphBuilder
 import androidx.navigation.compose.composable
-import androidx.navigation.navigation
+import androidx.navigation.compose.navigation
 import com.hanbikan.nook.feature.todo.TodoScreen
 import com.hanbikan.nook.feature.todo.TutorialScreen
 
@@ -14,7 +14,7 @@ const val tutorialScreenRoute = "tutorial_screen_route"
 
 val todoRoutes = listOf(todoScreenRoute, tutorialScreenRoute)
 
-fun NavGraphBuilder.todoScreen(
+fun NavGraphBuilder.todoGraph(
     startDestination: String,
     navigateToTutorial: () -> Unit,
     navigateToTodo: () -> Unit,
