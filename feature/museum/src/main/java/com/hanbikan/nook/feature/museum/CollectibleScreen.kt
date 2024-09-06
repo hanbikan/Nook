@@ -98,7 +98,7 @@ fun CollectibleScreen(
     val collectibleForDetailCollectibleDialog = viewModel.collectibleForDetailCollectibleDialog.collectAsStateWithLifecycle().value
     val collectibleForCollectDialog = viewModel.collectibleForCollectDialog.collectAsStateWithLifecycle().value
 
-    Box {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             CollectibleScreenTopAppBar(navigateUp, viewModel, isHuntingMode, uiState)
 

@@ -75,7 +75,7 @@ fun MuseumScreen(
     val overallProgress = viewModel.overallProgress.collectAsStateWithLifecycle().value
     val uncollectedCountForMonth = viewModel.uncollectedCountForMonth.collectAsStateWithLifecycle().value
 
-    Box {
+    Box(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier.fillMaxSize()) {
             NkTopAppBar(
                 rightAppBarIcons = listOf(
