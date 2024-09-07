@@ -249,7 +249,7 @@ fun MuseumScreen(
                     .clickable { viewModel.setHasMuseumGuideShownTrue() },
                 model = imageUrl,
                 contentDescription = null,
-                contentScale = ContentScale.FillBounds,
+                contentScale = ContentScale.Fit,
             )
         }
     }
