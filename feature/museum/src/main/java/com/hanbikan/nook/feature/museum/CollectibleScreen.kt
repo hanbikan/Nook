@@ -126,7 +126,14 @@ fun CollectibleScreen(
                                 selectedIndex = uiState.chipIndex
                             ),
                             isLarge = true,
-                            onClickItem = viewModel::onClickViewTypeChip,
+                            onClickItem = {
+                                if (it == 0) {
+                                    viewModel.setSort(CollectibleSort.SORT_BY_DEFAULT)
+                                } else {
+                                    viewModel.setSort(CollectibleSort.SORT_BY_IS_COLLECTED)
+                                }
+                                viewModel.onClickViewTypeChip(it)
+                            },
                         )
                     }
 

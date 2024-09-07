@@ -94,17 +94,14 @@ class CollectibleViewModel @Inject constructor(
             }
             CollectibleScreenViewType.OVERALL -> {
                 _isHuntingMode.value = false
-                _sort.value = CollectibleSort.SORT_BY_DEFAULT
                 CollectibleScreenUiState.OverallView(collectibleList)
             }
             CollectibleScreenViewType.MONTHLY_GENERAL -> {
                 _isHuntingMode.value = true
-                _sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
                 CollectibleScreenUiState.MonthlyView.GeneralView(collectibleList, month, isNorth)
             }
             CollectibleScreenViewType.MONTHLY_HOUR -> {
                 _isHuntingMode.value = true
-                _sort.value = CollectibleSort.SORT_BY_IS_COLLECTED
                 CollectibleScreenUiState.MonthlyView.HourView(collectibleList, month, isNorth, activeUser.value?.minuteOffset ?: 0)
             }
         }
